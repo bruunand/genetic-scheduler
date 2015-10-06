@@ -1,1 +1,9 @@
+# Bin folder
 bin/
+
+# Exe-files
+*.exe
+
+# OS junk files
+[Tt]humbs.db
+*.DS_Store
