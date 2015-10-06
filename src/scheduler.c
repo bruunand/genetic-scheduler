@@ -1,10 +1,10 @@
 #include <stdio.h>
 
-/* sync test */
+/* AAU Scheduler */
 
 int main(void)
 {
-	printf("Hello World!\n");
-	printf("Hello Other World\n");
+	printf("Hello AAU!\n");
+	getchar();
 	return 0;
 }
