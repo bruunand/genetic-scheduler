@@ -1,5 +1,7 @@
 #include <stdio.h>
 
+/* sync test */
+
 int main(void)
 {
 	printf("Hello World!\n");
