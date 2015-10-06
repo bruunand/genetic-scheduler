@@ -1,1 +1,2 @@
-Semesterplanlægning på AAU
+# P1 Projekt
+## Semesterplanlægning på AAU
