@@ -1,1 +1,1 @@
-# aau-scheduler
+Semesterplanlægning på AAU
