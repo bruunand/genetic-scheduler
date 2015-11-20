@@ -1,49 +1,27 @@
 #include <stdio.h>
 #include <stdlib.h>
+
+#include "scheduler.h"
+#include "config_reader.h"
 #include "structs.h"
 
-#define NUM_ENTRIES 10
-#define NUM_WEEKS 1
-#define NUM_PERIODS 2
-
 #define DAYS_PER_WEEK 5
+#define NUM_ENTRIES   100
+#define NUM_PERIODS   2
+#define NUM_WEEKS     3
 
 /* Global array of lectures */
-lecture* currentGeneration = 0;
-
-/* Allocates memory for our global arrays */
-void allocate_memory()
-{
-	currentGeneration = (lecture*) malloc(sizeof(lecture) * NUM_ENTRIES);
-}
-
-/* Generate initial population */
-void generate_population()
-{
-	int i;
-	for(i = 0; i < NUM_ENTRIES; i++)
-	{
-		lecture nextItem;
-		
-		nextItem.day = rand() % (NUM_WEEKS * DAYS_PER_WEEK);
-		nextItem.period = rand() % NUM_PERIODS;
-		/* To do: Assign random course and room */
-		
-		currentGeneration[i] = nextItem;
-	}
-}
+lecture *currentGeneration = 0, *nextGeneration = 0;
+unsigned int totalRooms = 0, totalTeachers = 0, totalCourses = 0;
 
 int main(void)
 {
-	/* To do: configuration file */
-	/* Get amount of courses */
-	/* Get amount of rooms */
-	
-	/* Allocate memory for the initial population */
-	allocate_memory();
-	
-	/* Generate initial population */
-	generate_population();
-	
-	free(currentGeneration);
+    /* Read configuration file */
+    if (!read_config())
+    {
+        printf("Error: Could not read configuration file.\n");
+        exit(1);
+    }
+    
+    free(currentGeneration);
 }
