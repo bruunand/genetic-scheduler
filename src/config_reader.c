@@ -9,14 +9,14 @@
 
 #define BUFFER_SIZE 256
 
-int read_config(char *fileName, semesterData *data)
+int read_config(char *fileName, semesterData *sd)
 {
     FILE* fp;
     char buffer[BUFFER_SIZE];
     int p;
     char c;
 
-    /* Open config file in read mode */
+    /* Open input file in read mode */
     fp = fopen(fileName, "r");
     
     /* Check if it opened correctly */
@@ -51,25 +51,36 @@ int read_config(char *fileName, semesterData *data)
         
         /* Ignore comments and empty lines */
         if (strlen(buffer) > 0 && buffer[0] != '#')
-            handle_line(buffer, data);
+            handle_line(buffer, sd);
     } while(c != EOF);
     
     fclose(fp);
        
-    return data;
+    return 1;
 }
 
-void handle_line(char* line, semesterData *data)
+void add_teacher(teacher *newTeacher, char* name)
+{
+    strcpy(newTeacher->name, name);
+}
+
+void add_room(room *newRoom, char* name, int seats)
+{
+    strcpy(newRoom->name, name);
+    newRoom->seats = seats;
+}
+
+void handle_line(char* line, semesterData *sd)
 {
     char command[16], typeName[16];
     int p = 0; /* p keeps track of our current position in the string */
     
-    /* Get command */
+    /* Read command */
     if (!sscanf(line + p, "%s", command))
         return;
     p += strlen(command) + 1;
     
-    /* Read object name*/
+    /* Read type */
     if (!sscanf(line + p, "%s", typeName))
         return;
     p += strlen(typeName) + 1;
@@ -77,22 +88,14 @@ void handle_line(char* line, semesterData *data)
     /* Handle based on command */
     if (!strcmp(command, "set"))
     {
-        /* Read object value */
-        char objectValue[16];
-        if (!sscanf(line + p, "%s", objectValue))
+        /* Get value */
+        int objectValue;
+        if (!read_int(line, &p, &objectValue))
             return;
-        p += strlen(objectValue) + 1;
         
-        /* Convert string to int */
-        int objectValueInt = atoi(objectValue);
-        
-        /* Return if atoi returns 0 and objectValue isn't 0 */
-        if (!objectValueInt && strcmp(objectValue, "0"))
-            return;
-
-        /* Set value to matching object name */
+        /* Set value of type */
         if (!strcmp(typeName, "WEEKS"))
-            data->numWeeks = objectValueInt;
+            sd->numWeeks = objectValue;
         else
             printf("Error: Unknown type name '%s'\n", typeName);
     }
@@ -106,7 +109,7 @@ void handle_line(char* line, semesterData *data)
             if (!read_multiple_words(line, &p, courseName))
                 return;
             
-            data->numCourses++;
+            sd->numCourses++;
             /* data->courses = realloc()... */
             
             printf("add course '%s'\n", courseName);
@@ -118,9 +121,10 @@ void handle_line(char* line, semesterData *data)
             if (!read_multiple_words(line, &p, teacherName))
                 return;
             
-            data->numTeachers++;
-            
-            printf("teacher '%s'\n", teacherName);
+            /* Increase num. of teachers and set its values */
+            sd->numTeachers++;
+            sd->teachers = (teacher*) realloc(sd->teachers, sd->numTeachers * sizeof(teacher));
+            add_teacher(&sd->teachers[sd->numTeachers - 1], teacherName);
         }
         else if(!strcmp(typeName, "ROOM"))
         {
@@ -129,17 +133,41 @@ void handle_line(char* line, semesterData *data)
             if (!read_multiple_words(line, &p, roomName))
                 return;
             
-            data->numRooms++;
+            /* Get value */
+            int seatsInRoom;
+            if (!read_int(line, &p, &seatsInRoom))
+                return;
             
-            printf("room '%s'\n", roomName);
+            sd->numRooms++;
+            sd->rooms = (room*) realloc(sd->rooms, sd->numRooms * sizeof(room));
+            add_room(&sd->rooms[sd->numRooms - 1], roomName, seatsInRoom);
         }
     }
 }
 
+/* Reads an int and adds the amount of digits to position */
+int read_int(char* line, int* position, int* out)
+{
+    char outStr[16];
+    if (!sscanf(line + *position, "%s", outStr))
+        return 0;
+    *position += strlen(outStr) + 1;
+    
+    /* Convert string to int */
+    *out = atoi(outStr);
+    
+    /* Return if atoi returns 0 and objectValue isn't 0 */
+    if (!(*out) && strcmp(outStr, "0"))
+        return 0;
+    else
+        return -1;
+}
+
+/* Reads an entire string between two apostrophes */
 int read_multiple_words(char* line, int* position, char* out)
 {
     if (!sscanf(line + *position, "'%[^']", out))
         return 0;
-    *position += strlen(out);
+    *position += strlen(out) + 2;
     return strlen(out) ? 1 : 0;
 }

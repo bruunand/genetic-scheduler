@@ -4,13 +4,15 @@ typedef unsigned int uint;
 typedef struct
 {
     char name[32];
-    uint size;
+    uint seats;
 } room;
 
 /* Teacher struct */
 typedef struct
 {
     char name[32];
+    
+    uint numOffDays;
     uint* offDays;
 } teacher;
 
@@ -37,10 +39,16 @@ typedef struct
 typedef struct
 {
     uint numWeeks;
+    
     uint numRooms;
     room *rooms;
+    
     uint numTeachers;
     teacher *teachers;
+    
     uint numCourses;
     course *courses;
+    
+    uint numLectures;
+    lecture *lectures;
 } semesterData;

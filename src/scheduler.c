@@ -11,14 +11,31 @@
 
 int main(void)
 {
-    semesterData data = {0, 0, NULL, 0, NULL, 0, NULL};
+    semesterData sd = {0, 0, NULL, 0, NULL, 0, NULL, 0, NULL};
     
     /* Read configuration file */
-    if (!read_config("scheduler.input", &data))
+    if (!read_config("scheduler.input", &sd))
     {
         printf("Error: Could not read configuration file.\n");
         exit(1);
     }
     
-    printf("Teachers %d, Courses %d, Rooms %d, Weeks %d\n", data.numTeachers, data.numCourses, data.numRooms, data.numWeeks);
+    printf("Teachers %d, Courses %d, Rooms %d, Weeks %d\n", sd.numTeachers, sd.numCourses, sd.numRooms, sd.numWeeks);
+    
+    int i;
+    for (i = 0; i < sd.numTeachers; i++)
+    {
+        printf("'%s'\n", sd.teachers[i].name);
+    }
+    
+    for (i = 0; i < sd.numRooms; i++)
+    {
+        printf("Room '%s' has %d seats\n", sd.rooms[i].name, sd.rooms[i].seats);
+    }
+    
+    while(1)
+    {
+        
+    }
+    
 }
