@@ -1,32 +1,46 @@
+typedef unsigned int uint;
+
 /* Room struct */
 typedef struct
 {
     char name[32];
-    unsigned int size;
+    uint size;
 } room;
 
 /* Teacher struct */
 typedef struct
 {
     char name[32];
-    unsigned int* offDays;
+    uint* offDays;
 } teacher;
 
 /* Course struct */
 typedef struct
 {
     char name[32];
-    unsigned int totalStudents;
-    unsigned int totalLectures;
+    uint totalStudents;
+    uint totalLectures;
     teacher* assignedTeacher;
 } course;
 
 /* Lecture struct */
 typedef struct
 {
-    unsigned int day;
-    unsigned int period;
-    unsigned int numLecture;
+    uint day;
+    uint period;
+    uint numLectures;
     course* assignedCourse;
     room* assignedRoom;
 } lecture;
+
+/* ?? data struct */
+typedef struct
+{
+    uint numWeeks;
+    uint numRooms;
+    room *rooms;
+    uint numTeachers;
+    teacher *teachers;
+    uint numCourses;
+    course *courses;
+} semesterData;

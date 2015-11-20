@@ -1,27 +1,24 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#include "structs.h"
 #include "scheduler.h"
 #include "config_reader.h"
-#include "structs.h"
 
 #define DAYS_PER_WEEK 5
 #define NUM_ENTRIES   100
 #define NUM_PERIODS   2
-#define NUM_WEEKS     3
-
-/* Global array of lectures */
-lecture *currentGeneration = 0, *nextGeneration = 0;
-unsigned int totalRooms = 0, totalTeachers = 0, totalCourses = 0;
 
 int main(void)
 {
+    semesterData data = {0, 0, NULL, 0, NULL, 0, NULL};
+    
     /* Read configuration file */
-    if (!read_config())
+    if (!read_config("scheduler.input", &data))
     {
         printf("Error: Could not read configuration file.\n");
         exit(1);
     }
     
-    free(currentGeneration);
+    printf("Teachers %d, Courses %d, Rooms %d, Weeks %d\n", data.numTeachers, data.numCourses, data.numRooms, data.numWeeks);
 }
