@@ -9,6 +9,24 @@
 #define NUM_ENTRIES   100
 #define NUM_PERIODS   2
 
+void free_all(semesterData *sd)
+{
+    if (sd->teachers)
+    {
+        free(sd->teachers->offDays);
+        free(sd->teachers);
+    }
+    
+    if (sd->rooms)
+        free(sd->rooms);
+    
+    if (sd->courses)
+        free(sd->courses);
+    
+    if (sd->lectures)
+        free(sd->lectures);
+}
+
 int main(void)
 {
     semesterData sd = {0, 0, NULL, 0, NULL, 0, NULL, 0, NULL};
@@ -20,7 +38,12 @@ int main(void)
         exit(1);
     }
     
-    printf("Teachers %d, Courses %d, Rooms %d, Weeks %d\n", sd.numTeachers, sd.numCourses, sd.numRooms, sd.numWeeks);
+    /* Debug */
+    printf("%d teachers\n", sd.numTeachers);
+    printf("%d rooms\n", sd.numRooms);
+    printf("%d courses\n", sd.numCourses);
+    printf("%d specializations\n", sd.numSpecializations);
+    printf("%d weeks\n", sd.numWeeks);
     
     int i;
     for (i = 0; i < sd.numTeachers; i++)
@@ -33,9 +56,5 @@ int main(void)
         printf("Room '%s' has %d seats\n", sd.rooms[i].name, sd.rooms[i].seats);
     }
     
-    while(1)
-    {
-        
-    }
-    
+    free_all(&sd);
 }

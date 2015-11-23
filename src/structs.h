@@ -1,3 +1,5 @@
+#pragma once
+
 typedef unsigned int uint;
 
 /* Room struct */
@@ -22,8 +24,17 @@ typedef struct
     char name[32];
     uint totalStudents;
     uint totalLectures;
-    teacher* assignedTeacher;
+    uint assignedTeacher; /* Teacher index */
 } course;
+
+/* Specialization (major) struct */
+typedef struct
+{
+    char name[32];
+    uint numStudents;
+    uint numCourses;
+    uint* courses;
+} specialization;
 
 /* Lecture struct */
 typedef struct
@@ -31,11 +42,11 @@ typedef struct
     uint day;
     uint period;
     uint numLectures;
-    course* assignedCourse;
-    room* assignedRoom;
+    uint assignedRoom;
+    uint* assignedCourse;
 } lecture;
 
-/* ?? data struct */
+/* SemesterData struct */
 typedef struct
 {
     uint numWeeks;
@@ -49,6 +60,10 @@ typedef struct
     uint numCourses;
     course *courses;
     
+    uint numSpecializations;
+    specialization *specializations;
+    
     uint numLectures;
-    lecture *lectures;
+    lecture *currentGeneration;
+    lecture *nextGeneration;
 } semesterData;

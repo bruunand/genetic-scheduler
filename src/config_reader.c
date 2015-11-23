@@ -109,10 +109,14 @@ void handle_line(char* line, semesterData *sd)
             if (!read_multiple_words(line, &p, courseName))
                 return;
             
-            sd->numCourses++;
-            /* data->courses = realloc()... */
+            /* Read num. lectures */
+            int numLectures;
+            if (!read_int(line, &p, &numLectures))
+                return;
             
-            printf("add course '%s'\n", courseName);
+            sd->numCourses++;
+            data->courses = (course*) realloc(sd->courses, sd->numCourses * sizeof(course));
+            add_course(&sd->courses[sd->numCourses - 1], courseName, numLectures);
         }
         else if(!strcmp(typeName, "TEACHER"))
         {
@@ -138,6 +142,7 @@ void handle_line(char* line, semesterData *sd)
             if (!read_int(line, &p, &seatsInRoom))
                 return;
             
+            /* Increase num. of rooms and set its values */
             sd->numRooms++;
             sd->rooms = (room*) realloc(sd->rooms, sd->numRooms * sizeof(room));
             add_room(&sd->rooms[sd->numRooms - 1], roomName, seatsInRoom);
@@ -157,7 +162,7 @@ int read_int(char* line, int* position, int* out)
     *out = atoi(outStr);
     
     /* Return if atoi returns 0 and objectValue isn't 0 */
-    if (!(*out) && strcmp(outStr, "0"))
+    if (!*out && strcmp(outStr, "0"))
         return 0;
     else
         return -1;
