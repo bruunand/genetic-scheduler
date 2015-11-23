@@ -7,7 +7,18 @@
 #include "config_reader.h"
 #include "scheduler.h"
 
-#define BUFFER_SIZE 256
+#define BUFFER_SIZE 512
+
+void add_teacher(teacher *newTeacher, char* name)
+{
+    strcpy(newTeacher->name, name);
+}
+
+void add_room(room *newRoom, char* name, int seats)
+{
+    strcpy(newRoom->name, name);
+    newRoom->seats = seats;
+}
 
 int read_config(char *fileName, semesterData *sd)
 {
@@ -59,17 +70,6 @@ int read_config(char *fileName, semesterData *sd)
     return 1;
 }
 
-void add_teacher(teacher *newTeacher, char* name)
-{
-    strcpy(newTeacher->name, name);
-}
-
-void add_room(room *newRoom, char* name, int seats)
-{
-    strcpy(newRoom->name, name);
-    newRoom->seats = seats;
-}
-
 void handle_line(char* line, semesterData *sd)
 {
     char command[16], typeName[16];
@@ -114,6 +114,7 @@ void handle_line(char* line, semesterData *sd)
             if (!read_int(line, &p, &numLectures))
                 return;
             
+            /* Add course to array */
             sd->numCourses++;
             data->courses = (course*) realloc(sd->courses, sd->numCourses * sizeof(course));
             add_course(&sd->courses[sd->numCourses - 1], courseName, numLectures);
@@ -125,7 +126,7 @@ void handle_line(char* line, semesterData *sd)
             if (!read_multiple_words(line, &p, teacherName))
                 return;
             
-            /* Increase num. of teachers and set its values */
+            /* Add teacher to array */
             sd->numTeachers++;
             sd->teachers = (teacher*) realloc(sd->teachers, sd->numTeachers * sizeof(teacher));
             add_teacher(&sd->teachers[sd->numTeachers - 1], teacherName);
@@ -137,12 +138,12 @@ void handle_line(char* line, semesterData *sd)
             if (!read_multiple_words(line, &p, roomName))
                 return;
             
-            /* Get value */
+            /* Get amount of seats in room */
             int seatsInRoom;
             if (!read_int(line, &p, &seatsInRoom))
                 return;
             
-            /* Increase num. of rooms and set its values */
+            /* Add room to array */
             sd->numRooms++;
             sd->rooms = (room*) realloc(sd->rooms, sd->numRooms * sizeof(room));
             add_room(&sd->rooms[sd->numRooms - 1], roomName, seatsInRoom);
@@ -165,7 +166,7 @@ int read_int(char* line, int* position, int* out)
     if (!*out && strcmp(outStr, "0"))
         return 0;
     else
-        return -1;
+        return 1;
 }
 
 /* Reads an entire string between two apostrophes */

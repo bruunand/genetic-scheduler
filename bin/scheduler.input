@@ -1,0 +1,22 @@
+# AAU Scheduler Configuration
+set	WEEKS 3
+
+# Add teachers
+# '[name]' 
+add TEACHER 'Lars Peter Jensen'
+add TEACHER 'Kurt Normark'
+
+# Add rooms
+# '[name]' numSeats
+add room 'Lokale 13'    
+add ROOM 'Auditorium 6' 170
+add ROOM 'Auditorium 7' 200
+
+# Add courses
+# '[name]' numCourses
+add COURSE 'Problembased Learning'  12
+add COURSE 'Linear Algebra'         22
+add COURSE 'Imperative Programming' 14
+
+# Add specialization
+# '[name]' numStudents numCourses
