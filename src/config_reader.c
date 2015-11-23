@@ -9,15 +9,36 @@
 
 #define BUFFER_SIZE 512
 
-void add_teacher(teacher *newTeacher, char* name)
+void add_teacher(semesterData *sd, char *name)
 {
-    strcpy(newTeacher->name, name);
+    /* Reallocate memory for the new count */
+    int teacherIndex = sd->numTeachers++;
+    sd->teachers = (teacher*) realloc(sd->teachers, sd->numTeachers * sizeof(teacher));
+    
+    /* Set values */
+    strcpy(sd->teachers[teacherIndex].name, name);
 }
 
-void add_room(room *newRoom, char* name, int seats)
+void add_room(semesterData *sd, char *name, int seats)
 {
-    strcpy(newRoom->name, name);
-    newRoom->seats = seats;
+    /* Reallocate memory for the new count */
+    int roomIndex = sd->numRooms++;
+    sd->rooms = (room*) realloc(sd->rooms, sd->numRooms * sizeof(room));
+    
+    /* Set values */
+    sd->rooms[roomIndex].seats = seats;
+    strcpy(sd->rooms[roomIndex].name, name);
+}
+
+void add_course(semesterData *sd, char *name, int totalLectures)
+{
+    /* Reallocate memory for the new count */
+    int courseIndex = sd->numCourses++;
+    sd->courses = (course*) realloc(sd->courses, sd->numCourses * sizeof(course));
+    
+    /* Set values */
+    strcpy(sd->courses[courseIndex].name, name);
+    sd->courses[courseIndex].totalLectures = totalLectures;
 }
 
 int read_config(char *fileName, semesterData *sd)
@@ -110,14 +131,11 @@ void handle_line(char* line, semesterData *sd)
                 return;
             
             /* Read num. lectures */
-            int numLectures;
-            if (!read_int(line, &p, &numLectures))
+            int totalLectures;
+            if (!read_int(line, &p, &totalLectures))
                 return;
             
-            /* Add course to array */
-            sd->numCourses++;
-            data->courses = (course*) realloc(sd->courses, sd->numCourses * sizeof(course));
-            add_course(&sd->courses[sd->numCourses - 1], courseName, numLectures);
+            add_course(sd, courseName, totalLectures);
         }
         else if(!strcmp(typeName, "TEACHER"))
         {
@@ -126,10 +144,7 @@ void handle_line(char* line, semesterData *sd)
             if (!read_multiple_words(line, &p, teacherName))
                 return;
             
-            /* Add teacher to array */
-            sd->numTeachers++;
-            sd->teachers = (teacher*) realloc(sd->teachers, sd->numTeachers * sizeof(teacher));
-            add_teacher(&sd->teachers[sd->numTeachers - 1], teacherName);
+            add_teacher(sd, teacherName);
         }
         else if(!strcmp(typeName, "ROOM"))
         {
@@ -143,10 +158,7 @@ void handle_line(char* line, semesterData *sd)
             if (!read_int(line, &p, &seatsInRoom))
                 return;
             
-            /* Add room to array */
-            sd->numRooms++;
-            sd->rooms = (room*) realloc(sd->rooms, sd->numRooms * sizeof(room));
-            add_room(&sd->rooms[sd->numRooms - 1], roomName, seatsInRoom);
+            add_room(sd, roomName, seatsInRoom);
         }
     }
 }

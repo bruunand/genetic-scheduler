@@ -1,8 +1,9 @@
 # Bin folder
 # bin/
 
-# Exe-files
+# Exe and object files
 *.exe
+*.o
 
 # OS junk files
 [Tt]humbs.db

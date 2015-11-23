@@ -1,5 +1,5 @@
 # AAU Scheduler Configuration
-set	WEEKS 3
+set WEEKS 3
 
 # Add teachers
 # '[name]' 
@@ -8,7 +8,7 @@ add TEACHER 'Kurt Normark'
 
 # Add rooms
 # '[name]' numSeats
-add room 'Lokale 13'    
+add ROOM 'Lokale 13'    30
 add ROOM 'Auditorium 6' 170
 add ROOM 'Auditorium 7' 200
 

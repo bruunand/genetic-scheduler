@@ -23,8 +23,11 @@ void free_all(semesterData *sd)
     if (sd->courses)
         free(sd->courses);
     
-    if (sd->lectures)
-        free(sd->lectures);
+    if (sd->currentGeneration)
+        free(sd->currentGeneration);
+    
+    if (sd->nextGeneration)
+        free(sd->nextGeneration);
 }
 
 int main(void)
