@@ -73,6 +73,5 @@ typedef struct
     specialization *specializations;
     
     uint numLectures;
-    lecture *currentGeneration;
-    lecture *nextGeneration;
+    lecture *lectures;
 } semesterData;
