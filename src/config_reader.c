@@ -2,15 +2,13 @@
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
-#include <math.h>
 
 #include "structs.h"
 #include "config_reader.h"
-#include "scheduler.h"
 
 #define BUFFER_SIZE 512
 
-void add_teacher(semesterData *sd, char *name)
+void add_teacher(semesterData *sd, char *name, int numOffTimes, offTime *offTimes)
 {
     /* Reallocate memory for the new count */
     int teacherIndex = sd->numTeachers++;
@@ -18,6 +16,7 @@ void add_teacher(semesterData *sd, char *name)
     
     /* Set values */
     strcpy(sd->teachers[teacherIndex].name, name);
+    sd->teachers[teacherIndex].offTimes = offTimes;
 }
 
 void add_room(semesterData *sd, char *name, int seats)
@@ -165,12 +164,27 @@ void handle_line(char* line, semesterData *sd)
         else if(!strcmp(typeName, "TEACHER"))
         {
             char teacherName[32];
+            int numOffTimes = 0, curOffDay, i;
+            offTime *offTimes = 0;
             
             /* Read name of teacher */
             if (!read_multiple_words(line, &p, teacherName))
                 return;
             
-            add_teacher(sd, teacherName);
+            /* Read offtimes for teacher */
+            /* Start by checking if we can read the next day */
+            while (read_int(line, &p, &curOffDay))
+            {
+                offTimes = (offTime*) realloc(offTimes, (numOffTimes + 1) * sizeof(offTime));
+                
+                /* Add MAX_PERIODS periods */
+                for (i = 0; i < MAX_PERIODS; i++)
+                    read_int(line, &p, &offTimes[numOffTimes].periods[i]);
+
+                numOffTimes++;
+            }
+            
+            add_teacher(sd, teacherName, numOffTimes, offTimes);
         }
         else if(!strcmp(typeName, "ROOM"))
         {
@@ -205,7 +219,9 @@ void handle_line(char* line, semesterData *sd)
             while (read_int(line, &p, &curCourseId))
             {
                 courses = (int*) realloc(courses, (numCourses + 1) * sizeof(int));
-                courses[numCourses++] = curCourseId;
+                courses[numCourses] = curCourseId;
+                
+                numCourses++;
             }
             
             add_specialization(sd, specName, numStudents, numCourses, courses); 
@@ -226,7 +242,7 @@ int read_int(char* line, int* position, int* out)
     if (!sscanf(line + *position, "%s", outStr))
         return 0;
     *position += strlen(outStr) + 1;
-
+    
     /* Convert string to int */
     *out = atoi(outStr);
     

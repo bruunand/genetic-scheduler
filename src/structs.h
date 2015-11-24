@@ -1,5 +1,7 @@
 #pragma once
 
+#define MAX_PERIODS 2
+
 /* Room struct */
 typedef struct
 {
@@ -8,17 +10,17 @@ typedef struct
 } room;
 
 /* OffTime struct */
+/* A day and time period (0 or 1) where the teacher isn't available */
 typedef struct
 {
     int day;
-    int periods[2];
+    int periods[MAX_PERIODS];
 } offTime;
 
 /* Teacher struct */
 typedef struct
 {
     char name[32];
-    
     int numOffTimes;
     offTime *offTimes;
 } teacher;
@@ -77,4 +79,4 @@ typedef struct
 {
     semesterData *currentGeneration;
     semesterData *newGeneration;
-} generations
+} generations;
