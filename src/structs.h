@@ -1,19 +1,17 @@
 #pragma once
 
-typedef unsigned int uint;
-
 /* Room struct */
 typedef struct
 {
     char name[32];
-    uint seats;
+    int seats;
 } room;
 
 /* OffTime struct */
 typedef struct
 {
-    uint day;
-    uint periods[2];
+    int day;
+    int periods[2];
 } offTime;
 
 /* Teacher struct */
@@ -21,57 +19,57 @@ typedef struct
 {
     char name[32];
     
-    uint numOffTimes;
-    uint *offDays;
+    int numOffTimes;
+    offTime *offTimes;
 } teacher;
 
 /* Course struct */
 typedef struct
 {
     char name[32];
-    /* uint totalStudents; */
-    uint totalLectures;
-    uint numTeachers;
-    uint *teachers; /* Teacher index */
+    /* int totStudents; */
+    int totLectures;
+    int numTeachers;
+    int *teachers; /* Array of associated teachers */
 } course;
 
 /* Specialization (major) struct */
 typedef struct
 {
     char name[32];
-    uint numStudents;
-    uint numCourses;
-    uint *courses;
+    int numStudents;
+    int numCourses;
+    int *courses;
 } specialization;
 
 /* Lecture struct */
 typedef struct
 {
-    uint day;
-    uint period;
-    uint numLectures;
-    uint assignedRoom;
-    uint assignedCourse;
+    int day;
+    int period;
+    int numLectures;
+    int assignedRoom;
+    int assignedCourse;
 } lecture;
 
 /* SemesterData struct */
 typedef struct
 {
-    uint numWeeks;
+    int numWeeks;
     
-    uint numRooms;
+    int numRooms;
     room *rooms;
     
-    uint numTeachers;
+    int numTeachers;
     teacher *teachers;
     
-    uint numCourses;
+    int numCourses;
     course *courses;
     
-    uint numSpecializations;
+    int numSpecializations;
     specialization *specializations;
     
-    uint numLectures;
+    int numLectures;
     lecture *currentGeneration;
     lecture *nextGeneration;
 } semesterData;

@@ -5,6 +5,11 @@ set WEEKS 3
 # '[name]' 
 add TEACHER 'Lars Peter Jensen'
 add TEACHER 'Kurt Normark'
+add TEACHER 'Lone Jensen'
+add TEACHER 'Jacob Broe'
+add TEACHER 'Mads Kylling'
+add TEACHER 'Mr. T'
+add TEACHER 'PC Principal'
 
 # Add rooms
 # '[name]' numSeats
@@ -13,10 +18,14 @@ add ROOM 'Auditorium 6' 170
 add ROOM 'Auditorium 7' 200
 
 # Add courses
-# '[name]' numCourses
-add COURSE 'Problembased Learning'  12 0 1
-add COURSE 'Linear Algebra'         22 1 0
-add COURSE 'Imperative Programming' 14 1 0
+# '[name]' numCourses [teachers...]
+add COURSE 'Problembased Learning'  12 0
+add COURSE 'Linear Algebra'         22 3
+add COURSE 'Imperative Programming' 14 1
+add COURSE 'Sport'                  20 4
+add COURSE 'Douchesnozzle'          50 5 6
 
 # Add specialization
-# '[name]' numStudents numCourses
+# '[name]' numStudents [courses...]
+add SPECIALIZATION 'SW1/DAT1' 160 0 1 2
+add SPECIALIZATION 'Physical Education' 50 3 4 

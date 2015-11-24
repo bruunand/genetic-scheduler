@@ -31,20 +31,30 @@ void add_room(semesterData *sd, char *name, int seats)
     strcpy(sd->rooms[roomIndex].name, name);
 }
 
-void add_course(semesterData *sd, char *name, int totalLectures)
+void add_course(semesterData *sd, char *name, int totLectures, int numTeachers, int *teachers)
 {
     /* Reallocate memory for the new count */
     int courseIndex = sd->numCourses++;
     sd->courses = (course*) realloc(sd->courses, sd->numCourses * sizeof(course));
     
     /* Set values */
+    sd->courses[courseIndex].totLectures = totLectures;
+    sd->courses[courseIndex].numTeachers = numTeachers;
+    sd->courses[courseIndex].teachers = teachers;
     strcpy(sd->courses[courseIndex].name, name);
-    sd->courses[courseIndex].totalLectures = totalLectures;
 }
 
-void add_teacher_to_course()
+void add_specialization(semesterData *sd, char *name, int numStudents, int numCourses, int *courses)
 {
-    /* todo */
+    /* Reallocate memory for the new count */
+    int specIndex = sd->numSpecializations++;
+    sd->specializations = (specialization*) realloc(sd->specializations, sd->numSpecializations * sizeof(specialization));
+    
+    /* Set values */
+    sd->specializations[specIndex].numStudents = numStudents;
+    sd->specializations[specIndex].numCourses = numCourses;
+    sd->specializations[specIndex].courses = courses;
+    strcpy(sd->specializations[specIndex].name, name);
 }
 
 int read_config(char *fileName, semesterData *sd)
@@ -132,27 +142,25 @@ void handle_line(char* line, semesterData *sd)
         if (!strcmp(typeName, "COURSE"))
         {
             char courseName[32];
-            int totalLectures, curTeacher, numTeachers = 0;
+            int totLectures, curTeacherId, numTeachers = 0;
+            int *teachers = 0;
             
             /* Read name of course */
             if (!read_multiple_words(line, &p, courseName))
                 return;
 
             /* Read num. lectures */
-            if (!read_int(line, &p, &totalLectures))
+            if (!read_int(line, &p, &totLectures))
                 return;
             
             /* Read teachers into an array */
-            while (read_int(line, &p, &nextTeacher))
+            while (read_int(line, &p, &curTeacherId))
             {
-                curTeacher = sd->numTeachers++;
-                sd->teachers = (uint*) realloc(sd->teachers, sd->numTeachers * sizeof(uint));
-                sd->teachers[curTeacher] = nextTeacher;
+                teachers = (int*) realloc(teachers, (numTeachers + 1) * sizeof(int));
+                teachers[numTeachers++] = curTeacherId;
             }
             
-            printf("%d teachers\n", numTeachers);
-            
-            add_course(sd, courseName, totalLectures);
+            add_course(sd, courseName, totLectures, numTeachers, teachers);
         }
         else if(!strcmp(typeName, "TEACHER"))
         {
@@ -166,8 +174,8 @@ void handle_line(char* line, semesterData *sd)
         }
         else if(!strcmp(typeName, "ROOM"))
         {
-            int seatsInRoom;
             char roomName[32];
+            int seatsInRoom;
             
             /* Read name of room */
             if (!read_multiple_words(line, &p, roomName))
@@ -178,6 +186,29 @@ void handle_line(char* line, semesterData *sd)
                 return;
             
             add_room(sd, roomName, seatsInRoom);
+        }
+        else if(!strcmp(typeName, "SPECIALIZATION"))
+        {
+            char specName[32];
+            int numStudents, curCourseId, numCourses = 0;
+            int *courses = 0;
+            
+            /* Read name of specialization */
+            if (!read_multiple_words(line, &p, specName))
+                return;
+            
+            /* Read number of students */
+            if (!read_int(line, &p, &numStudents))
+                return;
+            
+            /* Read all remaining integers */
+            while (read_int(line, &p, &curCourseId))
+            {
+                courses = (int*) realloc(courses, (numCourses + 1) * sizeof(int));
+                courses[numCourses++] = curCourseId;
+            }
+            
+            add_specialization(sd, specName, numStudents, numCourses, courses); 
         }
     }
 }

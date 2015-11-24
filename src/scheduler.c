@@ -32,7 +32,7 @@ void free_all(semesterData *sd)
 
 int main(void)
 {
-    semesterData sd = {0, 0, NULL, 0, NULL, 0, NULL, 0, NULL};
+    semesterData sd = {0, 0, NULL, 0, NULL, 0, NULL, 0, NULL, 0, NULL};
     
     /* Read configuration file */
     if (!read_config("scheduler.input", &sd))
@@ -48,15 +48,21 @@ int main(void)
     printf("%d specializations\n", sd.numSpecializations);
     printf("%d weeks\n", sd.numWeeks);
     
-    int i;
-    for (i = 0; i < sd.numTeachers; i++)
+    int i, j, k;
+    for (i = 0; i < sd.numSpecializations; i++)
     {
-        printf("'%s'\n", sd.teachers[i].name);
-    }
-    
-    for (i = 0; i < sd.numRooms; i++)
-    {
-        printf("Room '%s' has %d seats\n", sd.rooms[i].name, sd.rooms[i].seats);
+        printf("Specialization: '%s'\n", sd.specializations[i].name);
+        
+        for (j = 0; j < sd.specializations[i].numCourses; j++)
+        {
+            printf("\t Course: %s\n", sd.courses[sd.specializations[i].courses[j]].name);
+            
+            for (k = 0; k < sd.courses[sd.specializations[i].courses[j]].numTeachers; k++)
+            {
+                printf("\t\tTeacher: %s\n", sd.teachers[sd.courses[sd.specializations[i].courses[j]].teachers[k]].name);
+            }
+        }
+        printf("\n");
     }
     
     free_all(&sd);
