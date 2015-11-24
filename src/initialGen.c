@@ -1,6 +1,8 @@
+#include <unistd.h>
+
 void initialGen(void);
 {
-    /* Requires unistd.h */
+    /* access function requires unistd.h */
     /* Checks if scheduler.data exists */
     if (access("scheduler.data", F_OK) != -1)
     {
