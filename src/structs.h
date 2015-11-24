@@ -70,6 +70,10 @@ typedef struct
     specialization *specializations;
     
     int numLectures;
-    lecture *currentGeneration;
-    lecture *nextGeneration;
+    lecture *lectures;
 } semesterData;
+
+typedef struct
+{
+    
+} generation;
