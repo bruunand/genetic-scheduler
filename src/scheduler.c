@@ -12,22 +12,25 @@
 void free_all(semesterData *sd)
 {
     if (sd->teachers)
-    {
-        free(sd->teachers->offDays);
         free(sd->teachers);
-    }
+    /* TODO: Free offtimes for all teachers */
     
     if (sd->rooms)
         free(sd->rooms);
     
     if (sd->courses)
         free(sd->courses);
+    /* TODO: Free teacher arrays for all courses */
     
-    if (sd->currentGeneration)
+    if (sd->specializations)
+        free(sd->specializations);
+    /* TODO: Free course arrays for all specializations */
+    
+    /*if (sd->currentGeneration)
         free(sd->currentGeneration);
     
     if (sd->nextGeneration)
-        free(sd->nextGeneration);
+        free(sd->nextGeneration);*/
 }
 
 int main(void)
