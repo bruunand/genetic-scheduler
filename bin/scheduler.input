@@ -14,9 +14,9 @@ add ROOM 'Auditorium 7' 200
 
 # Add courses
 # '[name]' numCourses
-add COURSE 'Problembased Learning'  12
-add COURSE 'Linear Algebra'         22
-add COURSE 'Imperative Programming' 14
+add COURSE 'Problembased Learning'  12 0 1
+add COURSE 'Linear Algebra'         22 1 0
+add COURSE 'Imperative Programming' 14 1 0
 
 # Add specialization
 # '[name]' numStudents numCourses

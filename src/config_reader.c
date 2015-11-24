@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
+#include <math.h>
 
 #include "structs.h"
 #include "config_reader.h"
@@ -41,6 +42,11 @@ void add_course(semesterData *sd, char *name, int totalLectures)
     sd->courses[courseIndex].totalLectures = totalLectures;
 }
 
+void add_teacher_to_course()
+{
+    /* todo */
+}
+
 int read_config(char *fileName, semesterData *sd)
 {
     FILE* fp;
@@ -70,13 +76,13 @@ int read_config(char *fileName, semesterData *sd)
                 c = ' ';
             
             /* Ignore double spacing */
-            if(p > 0 && c == ' ' && buffer[p - 1] == ' ')
+            if (p > 0 && c == ' ' && buffer[p - 1] == ' ')
                 continue;
 
             /* Add if it's a printable char */
-            if(isprint(c))
+            if (isprint(c))
                 buffer[p++] = c;
-        } while(c != '\n' && c != EOF);
+        } while (c != '\n' && c != EOF);
             
         /* Set last char to null-terminator */
         buffer[p] = '\0';
@@ -84,7 +90,7 @@ int read_config(char *fileName, semesterData *sd)
         /* Ignore comments and empty lines */
         if (strlen(buffer) > 0 && buffer[0] != '#')
             handle_line(buffer, sd);
-    } while(c != EOF);
+    } while (c != EOF);
     
     fclose(fp);
        
@@ -94,7 +100,7 @@ int read_config(char *fileName, semesterData *sd)
 void handle_line(char* line, semesterData *sd)
 {
     char command[16], typeName[16];
-    int p = 0; /* p keeps track of our current position in the string */
+    int p = 0; /* Keeps track of our current position in the string */
     
     /* Read command */
     if (!sscanf(line + p, "%s", command))
@@ -125,22 +131,34 @@ void handle_line(char* line, semesterData *sd)
         /* Handle based on type */
         if (!strcmp(typeName, "COURSE"))
         {
-            /* Read course name */
             char courseName[32];
+            int totalLectures, curTeacher, numTeachers = 0;
+            
+            /* Read name of course */
             if (!read_multiple_words(line, &p, courseName))
                 return;
-            
+
             /* Read num. lectures */
-            int totalLectures;
             if (!read_int(line, &p, &totalLectures))
                 return;
+            
+            /* Read teachers into an array */
+            while (read_int(line, &p, &nextTeacher))
+            {
+                curTeacher = sd->numTeachers++;
+                sd->teachers = (uint*) realloc(sd->teachers, sd->numTeachers * sizeof(uint));
+                sd->teachers[curTeacher] = nextTeacher;
+            }
+            
+            printf("%d teachers\n", numTeachers);
             
             add_course(sd, courseName, totalLectures);
         }
         else if(!strcmp(typeName, "TEACHER"))
         {
-            /* Read teachers name */
             char teacherName[32];
+            
+            /* Read name of teacher */
             if (!read_multiple_words(line, &p, teacherName))
                 return;
             
@@ -148,13 +166,14 @@ void handle_line(char* line, semesterData *sd)
         }
         else if(!strcmp(typeName, "ROOM"))
         {
-            /* Read room name */
+            int seatsInRoom;
             char roomName[32];
+            
+            /* Read name of room */
             if (!read_multiple_words(line, &p, roomName))
                 return;
             
             /* Get amount of seats in room */
-            int seatsInRoom;
             if (!read_int(line, &p, &seatsInRoom))
                 return;
             
@@ -167,14 +186,20 @@ void handle_line(char* line, semesterData *sd)
 int read_int(char* line, int* position, int* out)
 {
     char outStr[16];
+
+    /* Do not go beyond the bounds of the string */
+    if (*position >= strlen(line))
+        return 0;
+    
+    /* Scan next string */
     if (!sscanf(line + *position, "%s", outStr))
         return 0;
     *position += strlen(outStr) + 1;
-    
+
     /* Convert string to int */
     *out = atoi(outStr);
     
-    /* Return if atoi returns 0 and objectValue isn't 0 */
+    /* The function fails if atoi returns 0 when the string doesn't equal 0 */
     if (!*out && strcmp(outStr, "0"))
         return 0;
     else
@@ -184,8 +209,14 @@ int read_int(char* line, int* position, int* out)
 /* Reads an entire string between two apostrophes */
 int read_multiple_words(char* line, int* position, char* out)
 {
+    /* Do not go beyond the bounds of the string */
+    if (*position >= strlen(line))
+        return 0;
+    
+    /* Scan everything until an apostrophe is found */
     if (!sscanf(line + *position, "'%[^']", out))
         return 0;
     *position += strlen(out) + 2;
+    
     return strlen(out) ? 1 : 0;
 }

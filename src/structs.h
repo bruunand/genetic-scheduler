@@ -13,7 +13,7 @@ typedef struct
 typedef struct
 {
     uint day;
-    uint period;
+    uint periods[2];
 } offTime;
 
 /* Teacher struct */
@@ -21,8 +21,8 @@ typedef struct
 {
     char name[32];
     
-    uint numOffDays;
-    uint* offDays;
+    uint numOffTimes;
+    uint *offDays;
 } teacher;
 
 /* Course struct */
@@ -31,7 +31,8 @@ typedef struct
     char name[32];
     /* uint totalStudents; */
     uint totalLectures;
-    uint assignedTeacher; /* Teacher index */
+    uint numTeachers;
+    uint *teachers; /* Teacher index */
 } course;
 
 /* Specialization (major) struct */
