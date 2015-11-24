@@ -52,6 +52,7 @@ typedef struct
     uint numLectures;
     uint assignedRoom;
     uint assignedCourse;
+    uint assignedSpecialization;
 } lecture;
 
 /* SemesterData struct */
