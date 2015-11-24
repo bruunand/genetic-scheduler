@@ -75,3 +75,9 @@ typedef struct
     uint numLectures;
     lecture *lectures;
 } semesterData;
+
+typedef struct
+{
+    semesterData *currentGeneration;
+    semesterData *newGeneration;
+} generations
