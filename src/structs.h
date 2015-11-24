@@ -75,11 +75,6 @@ typedef struct
 
 typedef struct
 {
-<<<<<<< HEAD
-    
-} generation;
-=======
     semesterData *currentGeneration;
     semesterData *newGeneration;
 } generations
->>>>>>> origin/master
