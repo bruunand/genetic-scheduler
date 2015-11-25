@@ -82,12 +82,18 @@ int main(void)
 */
 void generate_initial_schedule(semesterData *sd)
 {
-    int amountOfLectures, i, j;
+    int i, j;
 
-    /* Allocate memory for the total amount of lectures */
-    amountOfLectures = get_amount_of_lectures(sd);
-    sd->lectures = (lecture*) malloc(amountOfLectures * sizeof(lecture));
-    sd->numLectures = amountOfLectures;
+    /* Get total amount of lectures */
+    sd->numLectures = get_amount_of_lectures(sd);
+    
+    /* Allocate memory for the lectures */
+    sd->lectures = (lecture*) malloc(sd->numLectures * sizeof(lecture));
+    if (!sd->lectures)
+    {
+        printf("Error: Out of memory.\n");
+        exit(ERROR_OUT_OF_MEMORY);
+    }
     
     /* Go through all courses */
     for (i = 0; i < sd->numCourses; i++)
