@@ -8,54 +8,6 @@
 
 #define BUFFER_SIZE 512
 
-void add_teacher(semesterData *sd, char *name, int numOffTimes, offTime *offTimes)
-{
-    /* Reallocate memory for the new count */
-    int teacherIndex = sd->numTeachers++;
-    sd->teachers = (teacher*) realloc(sd->teachers, sd->numTeachers * sizeof(teacher));
-    
-    /* Set values */
-    strcpy(sd->teachers[teacherIndex].name, name);
-    sd->teachers[teacherIndex].offTimes = offTimes;
-}
-
-void add_room(semesterData *sd, char *name, int seats)
-{
-    /* Reallocate memory for the new count */
-    int roomIndex = sd->numRooms++;
-    sd->rooms = (room*) realloc(sd->rooms, sd->numRooms * sizeof(room));
-    
-    /* Set values */
-    sd->rooms[roomIndex].seats = seats;
-    strcpy(sd->rooms[roomIndex].name, name);
-}
-
-void add_course(semesterData *sd, char *name, int totLectures, int numTeachers, int *teachers)
-{
-    /* Reallocate memory for the new count */
-    int courseIndex = sd->numCourses++;
-    sd->courses = (course*) realloc(sd->courses, sd->numCourses * sizeof(course));
-    
-    /* Set values */
-    sd->courses[courseIndex].totLectures = totLectures;
-    sd->courses[courseIndex].numTeachers = numTeachers;
-    sd->courses[courseIndex].teachers = teachers;
-    strcpy(sd->courses[courseIndex].name, name);
-}
-
-void add_specialization(semesterData *sd, char *name, int numStudents, int numCourses, int *courses)
-{
-    /* Reallocate memory for the new count */
-    int specIndex = sd->numSpecializations++;
-    sd->specializations = (specialization*) realloc(sd->specializations, sd->numSpecializations * sizeof(specialization));
-    
-    /* Set values */
-    sd->specializations[specIndex].numStudents = numStudents;
-    sd->specializations[specIndex].numCourses = numCourses;
-    sd->specializations[specIndex].courses = courses;
-    strcpy(sd->specializations[specIndex].name, name);
-}
-
 int read_config(char *fileName, semesterData *sd)
 {
     FILE* fp;
@@ -266,4 +218,52 @@ int read_multiple_words(char* line, int* position, char* out)
     *position += strlen(out) + 2;
     
     return strlen(out) ? 1 : 0;
+}
+
+void add_teacher(semesterData *sd, char *name, int numOffTimes, offTime *offTimes)
+{
+    /* Reallocate memory for the new count */
+    int teacherIndex = sd->numTeachers++;
+    sd->teachers = (teacher*) realloc(sd->teachers, sd->numTeachers * sizeof(teacher));
+    
+    /* Set values */
+    strcpy(sd->teachers[teacherIndex].name, name);
+    sd->teachers[teacherIndex].offTimes = offTimes;
+}
+
+void add_room(semesterData *sd, char *name, int seats)
+{
+    /* Reallocate memory for the new count */
+    int roomIndex = sd->numRooms++;
+    sd->rooms = (room*) realloc(sd->rooms, sd->numRooms * sizeof(room));
+    
+    /* Set values */
+    sd->rooms[roomIndex].seats = seats;
+    strcpy(sd->rooms[roomIndex].name, name);
+}
+
+void add_course(semesterData *sd, char *name, int totLectures, int numTeachers, int *teachers)
+{
+    /* Reallocate memory for the new count */
+    int courseIndex = sd->numCourses++;
+    sd->courses = (course*) realloc(sd->courses, sd->numCourses * sizeof(course));
+    
+    /* Set values */
+    sd->courses[courseIndex].totLectures = totLectures;
+    sd->courses[courseIndex].numTeachers = numTeachers;
+    sd->courses[courseIndex].teachers = teachers;
+    strcpy(sd->courses[courseIndex].name, name);
+}
+
+void add_specialization(semesterData *sd, char *name, int numStudents, int numCourses, int *courses)
+{
+    /* Reallocate memory for the new count */
+    int specIndex = sd->numSpecializations++;
+    sd->specializations = (specialization*) realloc(sd->specializations, sd->numSpecializations * sizeof(specialization));
+    
+    /* Set values */
+    sd->specializations[specIndex].numStudents = numStudents;
+    sd->specializations[specIndex].numCourses = numCourses;
+    sd->specializations[specIndex].courses = courses;
+    strcpy(sd->specializations[specIndex].name, name);
 }
