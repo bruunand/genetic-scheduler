@@ -3,7 +3,10 @@ int test_doublebooking_lectures(semesterData *sd, lecture *lecture, int numLectu
     int fitness = 0, a, b, c, d = 0, e, f, g;
     specialization *specWithCurrentCourse;
     
-    specWithCurrentCourse = (specialization*) malloc(16*sizeof(specialization));
+    if(!specWithCurrentCourse = (specialization*) malloc(16*sizeof(specialization)))
+    {
+        exit(ERROR_OUT_OF_MEMORY);
+    }
     
     for(a = 0; a < numLectures-1; a++)
     {
@@ -13,34 +16,23 @@ int test_doublebooking_lectures(semesterData *sd, lecture *lecture, int numLectu
             {
                 printf("Lecture %d is conflicting with lecture %d. Reason: Both lectures are in the same room!\n", a, b);
                 fitness++;
+                /* return ERROR_OVERLAP_ROOM */
             }
         }
     }
     
     for(a = 0; a < numLectures-1; a++)
     {
-        for(b = a+1; b < numLectures-1; b++)
+        get_specializations_for_course(sd, lecture[a].assignedCourse, specWithCurrentCourse);
+        for(b = 0; b < numLectures-1; b++)
         {
-            for(c = 0; c < sd->specializations[b].numCourses; c++)
+            for(c = 0; c < specWithCurrentCourse[f].numCourses; c++)
             {
-                if(lecture[a].assignedCourse == sd->specializations[b].courses[c])
+                if(lecture[a].assignedCourse == specWithCurrentCourse[b].courses[c])
                 {
-                    specWithCurrentCourse[d++] = sd->specializations[b];
-                    
-                    for(e = 0; e < c-1; e++)
-                    {
-                        for(f = 0; f < c-1; f++)
-                        {
-                            for(g = 0; g < specWithCurrentCourse[f].numCourses; g++)
-                            {
-                                if(lecture[e].assignedCourse == specWithCurrentCourse[f].courses[g])
-                                {
-                                    printf("Lecture %d is conflicting with lecture %d. Reason: Specialization %d contains both lectures!\n", e, g, f);
-                                    fitness++;
-                                }
-                            }
-                        }
-                    }
+                    printf("Lecture %d is conflicting with lecture %d. Reason: Specialization %d contains both lectures!\n", a, c, b);
+                    fitness++;
+                    /* return ERROR_OVERLAP_SPECIALIZATION */
                 }
             }
         }
@@ -58,6 +50,7 @@ int test_doublebooking_lectures(semesterData *sd, lecture *lecture, int numLectu
                     {
                         printf("Lecture %d is conflicting with lecture %d. Reason: Teacher %d has both lectures!\n", a, c, b);
                         fitness++;
+                        /* return ERROR_OVERLAP_TEACHER */
                     }
                 }
             }

@@ -126,3 +126,19 @@ const char* get_name_of_day(int dayId)
 {
     return dayNames[dayId % DAYS_PER_WEEK];
 }
+
+void get_specializations_for_course(semesterData *sd, int courseIndex, specialization *spec)
+{
+    int i, j, h;
+    
+    for(i = 0; i < sd->numSpecializations; i++)
+    {
+        for(j = 0; j < sd->specializations[i].numCourses; j++)
+        {
+            if(courceIndex == sd->specializations[i].courses[j])
+            {
+                spec[h++] = sd->specializations[i];
+            }
+        }
+    }
+}
