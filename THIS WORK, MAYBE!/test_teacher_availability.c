@@ -1,23 +1,22 @@
-int test_teacher_availability(semesterData *sd){
-   int a, b, c, d;
+int test_teacher_availability(semesterData *sd)
+{
+   int a, b;
    int fitnessscore = 0;
    
-   for (a = 0; a <= sd.numCourses; a++ ){
-      
-      for (b = 0; b <= sd.numLectures; b++){
-         
-         if (sd.courses[a].teachers.offTimes.day == sd.lectures[b].day){
+   for(a = 0; a <= sd->numCourses; a++ )
+   {   
+        for(b = 0; b <= sd->numLectures; b++)
+        {
+            if(sd->courses[a].teachers.offTimes.day == sd->lectures[b].day)
+            {
+                fitnessscore++;
+            }
             
-            fitnessscore++;
-            
-         }
-         
-         if (sd.courses[a].teachers.offTimes.periods == sd.lectures[b].periods){
-            
-            fitnessscore++;
-            
-         }     
-      }
+            if(sd->courses[a].teachers.offTimes.periods == sd->lectures[b].periods)
+            {
+                fitnessscore++;
+            }     
+        }
    }
    return fitnessscore;
 }
