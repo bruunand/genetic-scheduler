@@ -5,7 +5,7 @@ int is_teacher_available(int day, int period, teacher teachers)
    
    for (a = 0; a < (sizeof(teachers.offTimes)/offTime); a++)
    {
-      if (teachers.offTimes[a].day == day && (teachers.offTimes[a].periods[0] == period || teachers.offTimes[a].periods[1] == period))
+      if (teachers.offTimes[a].day == day && teachers.offTimes[a].periods[period] == 1)
       {  
          return 0;
       }
