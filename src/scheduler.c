@@ -21,6 +21,7 @@ int main(void)
 
     /* TEST LECTURE */
     add_lecture(&sd, 0, 0, 0, 0);
+    printf("severity %d\n", test_lecture_capacity(&sd, 0));
     
     /* Debug */
     printf("%d teachers\n", sd.numTeachers);

@@ -1,0 +1,1 @@
+int test_lecture_capacity(semesterData *sd, int lecture);
