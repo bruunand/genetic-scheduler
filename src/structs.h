@@ -33,8 +33,9 @@ typedef struct
 {
     char name[64];
     int totLectures;
-    int numTeachers;
-    int *teachers; /* Array of associated teachers */
+    
+    int numTeachers; /* Number of teachers associated */
+    int *teachers;   /* Array of associated teachers */
 } course;
 
 /* Specialization (major) struct */

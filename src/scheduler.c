@@ -5,6 +5,7 @@
 #include "scheduler.h"
 #include "config_reader.h"
 #include "data_utility.h"
+#include "data_test.h"
 
 int main(void)
 {
@@ -17,20 +18,9 @@ int main(void)
         printf("Error: Could not read configuration file.\n");
         exit(1);
     }
-    
-    /* Lecture struct */
-typedef struct
-{
-    int day;
-    int period;
-    int numLectures;
-    int assignedRoom;
-    int assignedCourse;
-} lecture;
 
     /* TEST LECTURE */
     add_lecture(&sd, 0, 0, 0, 0);
-    
     
     /* Debug */
     printf("%d teachers\n", sd.numTeachers);
@@ -66,10 +56,6 @@ typedef struct
         
         printf("\n");
     }
-    
-    printf("students on imp: %d\n", get_students_on_course(&sd, 2));
-    printf("students on algebra: %d\n", get_students_on_course(&sd, 1));
-    
     
     free_all(&sd);
     

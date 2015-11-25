@@ -1,6 +1,6 @@
 #include "structs.h"
 
-void add_lecture(semesterData *sd, int day, int period, int roomId, int courseId)
+void add_lecture(semesterData *sd, int day, int period, int roomId, int courseId);
 
 room* get_room(semesterData *sd, int index);
 teacher* get_teacher(semesterData *sd, int index);

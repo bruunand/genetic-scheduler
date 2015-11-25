@@ -1,8 +1,9 @@
 # AAU Scheduler Configuration
-set WEEKS 3
+#   [type] [value]
+set WEEKS  3
 
 # Add teachers
-# '[name]' [offDay period1 period2...]
+#           '[name]'            [offDay period1 period2...]
 add TEACHER 'Lars Peter Jensen' 0 1 1 2 0 1 4 0 1
 add TEACHER 'Kurt Normark' 24 1 1
 add TEACHER 'Jacob Broe'
@@ -10,13 +11,13 @@ add TEACHER 'Mr. Robot'
 add TEACHER 'Olav Geil'
 
 # Add rooms
-# '[name]' numSeats
+#        '[name]'       [#numSeats]
 add ROOM 'Lokale 13'    30
 add ROOM 'Auditorium 6' 170
 add ROOM 'Auditorium 7' 200
 
 # Add courses
-# '[name]' numCourses [teachers...]
+#          '[name]'                 [#numCourses] [teachers...]
 add COURSE 'Problem Based Learning' 12 0
 add COURSE 'Linear Algebra'         22 2
 add COURSE 'Imperative Programming' 14 1
@@ -24,8 +25,6 @@ add COURSE 'Robot mechanics, Modelling, and Simulation' 30 3
 add COURSE 'Robot Programming' 22 4
 
 # Add specialization
-# '[name]' numStudents [courses
-# Datalogi og Software
+#                  '[name]'   [#numStudents] [courses...]
 add SPECIALIZATION 'SW1/DAT1' 160 0 1 2
-# Idræt/Sport
 add SPECIALIZATION 'Robotics' 40 3 4 1

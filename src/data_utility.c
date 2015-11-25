@@ -1,4 +1,5 @@
 #include "structs.h"
+#include <stdlib.h>
 
 const char* periodNames[] = {"08:15 - 12:00", "12:30 - 16:15"};
 const char* dayNames[] = {"Monday", "Tuesday", "Wednesday", "Thursday", "Friday"};
@@ -10,7 +11,7 @@ void add_lecture(semesterData *sd, int day, int period, int roomId, int courseId
     int lectIndex = sd->numLectures++;
     sd->lectures = (lecture*) realloc(sd->lectures, sd->numLectures * sizeof(lecture));
     
-    /* Set values */
+    /* Set lecture values */
     sd->lectures[lectIndex].day = day;
     sd->lectures[lectIndex].period = period;
     sd->lectures[lectIndex].assignedRoom = roomId;
