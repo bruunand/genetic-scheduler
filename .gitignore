@@ -1,5 +1,5 @@
-# Bin folder
-# bin/
+# Object folder
+obj/
 
 # Exe and object files
 *.exe

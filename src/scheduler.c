@@ -4,6 +4,7 @@
 #include "structs.h"
 #include "scheduler.h"
 #include "config_reader.h"
+#include "data_utility.h"
 
 #define DAYS_PER_WEEK 5
 #define NUM_ENTRIES   100
@@ -11,30 +12,42 @@
 
 void free_all(semesterData *sd)
 {
+    int i;
+    
     if (sd->teachers)
+    {
+        /* Free offtimes arrays inside teachers */
+        for (i = 0; i < sd->numTeachers; i++)
+            free(get_teacher(sd, i).offTimes);
+        
         free(sd->teachers);
-    /* TODO: Free offtimes for all teachers */
+    }
     
     if (sd->rooms)
         free(sd->rooms);
     
     if (sd->courses)
+    {
+        /* Free teacher arrays inside courses */
+        for (i = 0; i < sd->numCourses; i++)
+            free(get_course(sd, i).teachers);
+        
         free(sd->courses);
-    /* TODO: Free teacher arrays for all courses */
-    
+    }
+
     if (sd->specializations)
+    {
+        /* Free course arrays inside specializations */
+        for (i = 0; i < sd->numSpecializations; i++)
+            free(get_specialization(sd, i).courses);
+        
         free(sd->specializations);
-    /* TODO: Free course arrays for all specializations */
-    
-    /*if (sd->currentGeneration)
-        free(sd->currentGeneration);
-    
-    if (sd->nextGeneration)
-        free(sd->nextGeneration);*/
+    }
 }
 
 int main(void)
 {
+    int i, j, k;
     semesterData sd = {0, 0, NULL, 0, NULL, 0, NULL, 0, NULL, 0, NULL};
     
     /* Read configuration file */
@@ -51,7 +64,6 @@ int main(void)
     printf("%d specializations\n", sd.numSpecializations);
     printf("%d weeks\n", sd.numWeeks);
     
-    int i, j, k;
     for (i = 0; i < sd.numSpecializations; i++)
     {
         printf("Specialization: '%s'\n", sd.specializations[i].name);
@@ -69,4 +81,6 @@ int main(void)
     }
     
     free_all(&sd);
+    
+    return 0;
 }
