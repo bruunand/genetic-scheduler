@@ -18,6 +18,20 @@ int main(void)
         exit(1);
     }
     
+    /* Lecture struct */
+typedef struct
+{
+    int day;
+    int period;
+    int numLectures;
+    int assignedRoom;
+    int assignedCourse;
+} lecture;
+
+    /* TEST LECTURE */
+    add_lecture(&sd, 0, 0, 0, 0);
+    
+    
     /* Debug */
     printf("%d teachers\n", sd.numTeachers);
     printf("%d rooms\n", sd.numRooms);

@@ -3,6 +3,20 @@
 const char* periodNames[] = {"08:15 - 12:00", "12:30 - 16:15"};
 const char* dayNames[] = {"Monday", "Tuesday", "Wednesday", "Thursday", "Friday"};
 
+/* Adds lecture to the semesterData struct */
+void add_lecture(semesterData *sd, int day, int period, int roomId, int courseId)
+{
+    /* Reallocate memory for the new count */
+    int lectIndex = sd->numLectures++;
+    sd->lectures = (lecture*) realloc(sd->lectures, sd->numLectures * sizeof(lecture));
+    
+    /* Set values */
+    sd->lectures[lectIndex].day = day;
+    sd->lectures[lectIndex].period = period;
+    sd->lectures[lectIndex].assignedRoom = roomId;
+    sd->lectures[lectIndex].assignedCourse = courseId;
+}
+
 /* Returns the room pointer specified by the index parameter */
 /*!
     Name: get_room
@@ -71,7 +85,7 @@ int get_students_on_course(semesterData *sd, int courseIndex)
         /* Go through all the courses for this specialization */
         for (j = 0; j < spec->numCourses; j++)
         {
-            /* Check if they have the same course index */
+            /* Increase totStudents if this course matches courseIndex */
             if (spec->courses[j] == courseIndex)
                 totStudents += spec->numStudents;
         }

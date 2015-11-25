@@ -7,6 +7,7 @@
 typedef struct
 {
     char name[32];
+    
     int seats;
 } room;
 
@@ -22,6 +23,7 @@ typedef struct
 typedef struct
 {
     char name[32];
+    
     int numOffTimes;
     offTime *offTimes;
 } teacher;
@@ -29,8 +31,7 @@ typedef struct
 /* Course struct */
 typedef struct
 {
-    char name[32];
-    /* int totStudents; */
+    char name[64];
     int totLectures;
     int numTeachers;
     int *teachers; /* Array of associated teachers */
@@ -40,7 +41,9 @@ typedef struct
 typedef struct
 {
     char name[32];
+    
     int numStudents;
+    
     int numCourses;
     int *courses;
 } specialization;
@@ -50,7 +53,9 @@ typedef struct
 {
     int day;
     int period;
-    int numLectures;
+    
+    /* int numLectures; */
+    
     int assignedRoom;
     int assignedCourse;
 } lecture;
