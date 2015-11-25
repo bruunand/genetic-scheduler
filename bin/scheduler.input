@@ -3,7 +3,7 @@ set WEEKS 3
 
 # Add teachers
 # '[name]' [offDay period1 period2...]
-add TEACHER 'Lars Peter Jensen' 0 1 1 2 0 0 4 0 0
+add TEACHER 'Lars Peter Jensen' 0 1 1 2 0 1 4 0 1
 add TEACHER 'Kurt Normark' 24 1 1
 add TEACHER 'Jacob Broe'
 add TEACHER 'Mr. Robot'
