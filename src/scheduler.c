@@ -10,41 +10,6 @@
 #define NUM_ENTRIES   100
 #define NUM_PERIODS   2
 
-void free_all(semesterData *sd)
-{
-    int i;
-    
-    if (sd->teachers)
-    {
-        /* Free offtimes arrays inside teachers */
-        for (i = 0; i < sd->numTeachers; i++)
-            free(get_teacher(sd, i).offTimes);
-        
-        free(sd->teachers);
-    }
-    
-    if (sd->rooms)
-        free(sd->rooms);
-    
-    if (sd->courses)
-    {
-        /* Free teacher arrays inside courses */
-        for (i = 0; i < sd->numCourses; i++)
-            free(get_course(sd, i).teachers);
-        
-        free(sd->courses);
-    }
-
-    if (sd->specializations)
-    {
-        /* Free course arrays inside specializations */
-        for (i = 0; i < sd->numSpecializations; i++)
-            free(get_specialization(sd, i).courses);
-        
-        free(sd->specializations);
-    }
-}
-
 int main(void)
 {
     int i, j, k;
@@ -63,6 +28,7 @@ int main(void)
     printf("%d courses\n", sd.numCourses);
     printf("%d specializations\n", sd.numSpecializations);
     printf("%d weeks\n", sd.numWeeks);
+    printf("\n");
     
     for (i = 0; i < sd.numSpecializations; i++)
     {
@@ -83,4 +49,47 @@ int main(void)
     free_all(&sd);
     
     return 0;
+}
+
+/* Free all memory associated with the semesterData struct */
+void free_all(semesterData *sd)
+{
+    int i;
+    
+    /* Free teachers */
+    if (sd->teachers)
+    {
+        /* Free offtimes arrays inside teachers */
+        for (i = 0; i < sd->numTeachers; i++)
+            free(get_teacher(sd, i).offTimes);
+        
+        free(sd->teachers);
+    }
+    
+    /* Free rooms */
+    if (sd->rooms)
+        free(sd->rooms);
+    
+    /* Free courses */
+    if (sd->courses)
+    {
+        /* Free teacher arrays inside courses */
+        for (i = 0; i < sd->numCourses; i++)
+            free(get_course(sd, i).teachers);
+        
+        free(sd->courses);
+    }
+
+    /* Free specializations */
+    if (sd->specializations)
+    {
+        /* Free course arrays inside specializations */
+        for (i = 0; i < sd->numSpecializations; i++)
+            free(get_specialization(sd, i).courses);
+        
+        free(sd->specializations);
+    }
+    
+    /* Free semesterData */
+    free(sd);
 }
