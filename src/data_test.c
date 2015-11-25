@@ -13,7 +13,7 @@ int test_lecture_capacity(semesterData *sd, int lectureId)
     numStudents = get_students_on_course(sd, lect->assignedCourse);
     
     if (roomCap < numStudents)
-        severity += 1 + ((numStudents - roomCap) / (roomCap - roomSeats));
+        severity += 1 + ((numStudents - roomCap) / ((roomCap > roomSeats)?(roomCap - roomSeats):1));
     else if ((roomCap / numStudents) >= 2)
         severity++;
     
