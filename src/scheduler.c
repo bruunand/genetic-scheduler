@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
 
 #include "structs.h"
 #include "scheduler.h"
@@ -8,9 +9,11 @@
 #include "data_test.h"
 
 int main(void)
-{
+{   
     int i, j, k, l;
     semesterData sd = {0, 0, NULL, 0, NULL, 0, NULL, 0, NULL, 0, NULL};
+ 
+    srand(time(NULL));
     
     /* Read configuration file */
     if (!read_config("scheduler.input", &sd))
@@ -18,11 +21,10 @@ int main(void)
         printf("Error: Could not read configuration file.\n");
         exit(1);
     }
-
-    /* TEST LECTURE */
-    add_lecture(&sd, 0, 0, 0, 0);
-    printf("severity %d\n", test_lecture_capacity(&sd, 0));
     
+    /* Generate schedule */
+    generate_initial_schedule(&sd);
+
     /* Debug */
     printf("%d teachers\n", sd.numTeachers);
     printf("%d rooms\n", sd.numRooms);
@@ -58,12 +60,51 @@ int main(void)
         printf("\n");
     }
     
+    /* DEBUG: Go through all lectures, test their capacity */
+    for (i = 0; i < sd.numLectures; i++)
+    {
+        lecture *lect = get_lecture(&sd, i);
+        course *crs = get_course(&sd, lect->assignedCourse);
+        room *rm = get_room(&sd, lect->assignedRoom);
+        
+        printf("Lecture %d: %s in %s\n", i + 1, crs->name, rm->name);
+    }
+    
     free_all(&sd);
     
     return 0;
 }
 
-/* Free all memory associated with the semesterData struct */
+/*
+ * Generate a 'dumb' schedule (array of lectures)
+ * The only fulfilled requirement is the amount of lectures per course
+*/
+void generate_initial_schedule(semesterData *sd)
+{
+    int amountOfLectures, i, j;
+
+    /* Allocate memory for the total amount of lectures */
+    amountOfLectures = get_amount_of_lectures(sd);
+    sd->lectures = (lecture*) malloc(amountOfLectures * sizeof(lecture));
+    sd->numLectures = amountOfLectures;
+    
+    /* Go through all courses */
+    for (i = 0; i < sd->numCourses; i++)
+    {
+        course *crs = get_course(sd, i);
+        
+        /* Go through the amount of lectures in this course */
+        for (j = 0; j < crs->totLectures; j++)
+        {
+            add_lecture(sd, j, rand() % (DAYS_PER_WEEK * sd->numWeeks), rand() % MAX_PERIODS, rand() % sd->numRooms, i);
+        }
+    }
+}
+
+/*
+ * Free all memory associated with the semesterData struct
+ * Dynamically allocated arrays inside the structs are also freed
+*/
 void free_all(semesterData *sd)
 {
     int i;

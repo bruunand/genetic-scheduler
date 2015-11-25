@@ -9,9 +9,9 @@ int calculateLectureAmount(semesterData *sd)
     /* For each specialization and each course the number
      * of lectures is added to lectureAmount 
      */
-    for (i = 0;i < sd->numSpecializations;i++)
+    for (i = 0; i < sd->numSpecializations; i++)
     {
-        for (j = 0;j < sd->specializations[i].numCourses;j++)
+        for (j = 0; j < sd->specializations[i].numCourses; j++)
         {
             lectureAmount += sd->specializations[i].courses[j].totalLectures;
         }

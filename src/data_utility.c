@@ -1,15 +1,19 @@
 #include "structs.h"
 #include <stdlib.h>
+#include <stdio.h>
 
 const char* periodNames[] = {"08:15 - 12:00", "12:30 - 16:15"};
 const char* dayNames[] = {"Monday", "Tuesday", "Wednesday", "Thursday", "Friday"};
 
 /* Adds lecture to the semesterData struct */
-void add_lecture(semesterData *sd, int day, int period, int roomId, int courseId)
+void add_lecture(semesterData *sd, int lectIndex, int day, int period, int roomId, int courseId)
 {
-    /* Reallocate memory for the new count */
-    int lectIndex = sd->numLectures++;
-    sd->lectures = (lecture*) realloc(sd->lectures, sd->numLectures * sizeof(lecture));
+    /* Check if the index goes beyond the bounds of the lecture array */
+    if (lectIndex >= sd->numLectures)
+    {
+        printf("Error: Lecture index %d exceeds the bounds of the lecture array.\n");
+        exit(1);
+    }
     
     /* Set lecture values */
     sd->lectures[lectIndex].day = day;
@@ -93,6 +97,18 @@ int get_students_on_course(semesterData *sd, int courseIndex)
     }
     
     return totStudents;
+}
+
+/* Returns the total amount of lectures in the semester */
+int get_amount_of_lectures(semesterData *sd)
+{
+    int totLectureAmount = 0, i;
+    
+    /* Add amount of lectures from each course */
+    for (i = 0; i < sd->numCourses; i++)
+        totLectureAmount += get_course(sd, i)->totLectures;
+    
+    return totLectureAmount;
 }
 
 /* Returns the name of a period specified by the periodId parameter */
