@@ -2,17 +2,29 @@
 
 int test_capacity(semesterData *sd)
 {
-    int i, numStudents, roomCap, infractions = 0;
+    int i, numStudents, roomCap, severity = 0;
     
     for(i = 0; i < numLectures;i++)
     {
-        lecture *lect = get_lecture(sd, i);
-        roomCap = MAX_OVER_CAPACITY * room[lect->assignedRoom].seats
-        numStudents = get_students_on_course(sd, lect->assignedCourse)
-        if(roomCap < numStudents)
-            infractions += 1 + ((numStudents - roomCap) / (roomCap - room[lect->assignedRoom].seats))
+        severity += test_lecture_capacity(sd, i);
     }
     
-    return infractions;
+    return severity;
     
 }
+int test_lecture_capacity(semesterData *sd, int lecture)
+{
+    lecture *lect = get_lecture(sd, lecture);
+    int roomCap, numStudents, severity = 0;
+    
+    roomCap = MAX_OVER_CAPACITY * room[lect->assignedRoom].seats
+    numStudents = get_students_on_course(sd, lect->assignedCourse)
+    
+    if(roomCap < numStudents)
+        severity += 1 + ((numStudents - roomCap) / (roomCap - room[lect->assignedRoom].seats))
+    else if((roomCap / numStudents) >= 2)
+        severity++
+    
+    return severity;
+}
+        
