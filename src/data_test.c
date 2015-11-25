@@ -1,5 +1,6 @@
 #include "structs.h"
 #include "data_utility.h"
+
 /* MAX_OVER_CAPACITY is the amount a room is allowed to be over capacity. In this case 5% */
 #define MAX_OVER_CAPACITY 1.05
 
