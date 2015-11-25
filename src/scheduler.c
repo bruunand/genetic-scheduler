@@ -68,7 +68,7 @@ int main(void)
         course *crs = get_course(&sd, lect->assignedCourse);
         room *rm = get_room(&sd, lect->assignedRoom);
         
-        printf("Lecture %d: %s in %s\n", i + 1, crs->name, rm->name);
+        printf("Lecture %d: %s in %s (severity %d)\n", i + 1, crs->name, rm->name, test_lecture_capacity(&sd, i));
     }
     
     free_all(&sd);
@@ -82,7 +82,7 @@ int main(void)
 */
 void generate_initial_schedule(semesterData *sd)
 {
-    int i, j;
+    int i, j, k = 0;
 
     /* Get total amount of lectures */
     sd->numLectures = get_amount_of_lectures(sd);
@@ -90,10 +90,7 @@ void generate_initial_schedule(semesterData *sd)
     /* Allocate memory for the lectures */
     sd->lectures = (lecture*) malloc(sd->numLectures * sizeof(lecture));
     if (!sd->lectures)
-    {
-        printf("Error: Out of memory.\n");
         exit(ERROR_OUT_OF_MEMORY);
-    }
     
     /* Go through all courses */
     for (i = 0; i < sd->numCourses; i++)
@@ -103,7 +100,8 @@ void generate_initial_schedule(semesterData *sd)
         /* Go through the amount of lectures in this course */
         for (j = 0; j < crs->totLectures; j++)
         {
-            add_lecture(sd, j, rand() % (DAYS_PER_WEEK * sd->numWeeks), rand() % MAX_PERIODS, rand() % sd->numRooms, i);
+            /* Pass sd pointer, lectureIndex, day, period, roomId, courseId */
+            add_lecture(sd, k++, rand() % (DAYS_PER_WEEK * sd->numWeeks), rand() % MAX_PERIODS, rand() % sd->numRooms, i);
         }
     }
 }
