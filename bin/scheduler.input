@@ -12,7 +12,7 @@ add TEACHER 'Olav Geil'
 
 # Add rooms
 #        '[name]'       [#numSeats]
-add ROOM 'Lokale 13'    10
+add ROOM 'Lokale 3.14'  50
 add ROOM 'Auditorium 6' 170
 add ROOM 'Auditorium 7' 200
 

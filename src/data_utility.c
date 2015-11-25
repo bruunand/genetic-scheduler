@@ -12,10 +12,9 @@ void add_lecture(semesterData *sd, int lectIndex, int day, int period, int roomI
 {
     /* Check if the index goes beyond the bounds of the lecture array */
     if (lectIndex >= sd->numLectures)
-    {
-        printf("Error: Lecture index %d exceeds the bounds of the lecture array.\n");
-        exit(1);
-    }
+        exit(ERROR_ARRAY_BOUNDS_EXCEEDED);
+    
+    printf("set item %d course to %d\n", lectIndex, courseId);
     
     /* Set lecture values */
     sd->lectures[lectIndex].day = day;
@@ -33,7 +32,10 @@ void add_lecture(semesterData *sd, int lectIndex, int day, int period, int roomI
 room* get_room(semesterData *sd, int index)
 {
     if (index < 0 || index >= sd->numTeachers)
+    {
+        exit(ERROR_ARRAY_BOUNDS_EXCEEDED);
         return 0;
+    }
     return &(sd->rooms[index]);
 }
 
@@ -41,7 +43,10 @@ room* get_room(semesterData *sd, int index)
 teacher* get_teacher(semesterData *sd, int index)
 {
     if (index < 0 || index >= sd->numTeachers)
+    {
+        exit(ERROR_ARRAY_BOUNDS_EXCEEDED);
         return 0;
+    }
     return &(sd->teachers[index]);
 }
 
@@ -49,7 +54,10 @@ teacher* get_teacher(semesterData *sd, int index)
 course* get_course(semesterData *sd, int index)
 {
     if (index < 0 || index >= sd->numCourses)
+    {
+        exit(ERROR_ARRAY_BOUNDS_EXCEEDED);
         return 0;
+    }
     return &(sd->courses[index]);
 }
 
@@ -57,7 +65,10 @@ course* get_course(semesterData *sd, int index)
 specialization* get_specialization(semesterData *sd, int index)
 {
     if (index < 0 || index >= sd->numSpecializations)
+    {
+        exit(ERROR_ARRAY_BOUNDS_EXCEEDED);
         return 0;
+    }
     return &(sd->specializations[index]);
 }
 
@@ -65,7 +76,10 @@ specialization* get_specialization(semesterData *sd, int index)
 lecture* get_lecture(semesterData *sd, int index)
 {
     if (index < 0 || index >= sd->numLectures)
+    {
+        exit(ERROR_ARRAY_BOUNDS_EXCEEDED);
         return 0;
+    }
     else
         return &(sd->lectures[index]);
 }
@@ -74,7 +88,10 @@ lecture* get_lecture(semesterData *sd, int index)
 offTime* get_offTime(teacher *t, int index)
 {
     if (index < 0 || index >= t->numOffTimes)
+    {
+        exit(ERROR_ARRAY_BOUNDS_EXCEEDED);
         return 0;
+    }
     else
         return &(t->offTimes[index]);
 }

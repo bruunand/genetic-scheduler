@@ -110,10 +110,7 @@ void handle_line(char* line, semesterData *sd)
             {
                 teachers = (int*) realloc(teachers, (numTeachers + 1) * sizeof(int));
                 if (!teachers)
-                {
-                    printf("Error: Out of memory.\n");
                     exit(ERROR_OUT_OF_MEMORY);
-                }
                 
                 teachers[numTeachers] = curTeacherId;
                 numTeachers++;
@@ -137,10 +134,7 @@ void handle_line(char* line, semesterData *sd)
             {
                 offTimes = (offTime*) realloc(offTimes, (numOffTimes + 1) * sizeof(offTime));
                 if (!offTimes)
-                {
-                    printf("Error: Out of memory.\n");
                     exit(ERROR_OUT_OF_MEMORY);
-                }
                 
                 /* Set day for this offTime */
                 offTimes[numOffTimes].day = curOffDay;
@@ -188,10 +182,7 @@ void handle_line(char* line, semesterData *sd)
             {
                 courses = (int*) realloc(courses, (numCourses + 1) * sizeof(int));
                 if (!courses)
-                {
-                    printf("Error: Out of memory.\n");
                     exit(ERROR_OUT_OF_MEMORY);
-                }
                 
                 courses[numCourses] = curCourseId;
                 numCourses++;
@@ -247,10 +238,7 @@ void add_teacher(semesterData *sd, char *name, int numOffTimes, offTime *offTime
     int teacherIndex = sd->numTeachers++;
     sd->teachers = (teacher*) realloc(sd->teachers, sd->numTeachers * sizeof(teacher));
     if (!sd->teachers)
-    {
-        printf("Error: Out of memory.\n");
         exit(ERROR_OUT_OF_MEMORY);
-    }
     
     /* Set values */
     strcpy(sd->teachers[teacherIndex].name, name);
@@ -264,10 +252,7 @@ void add_room(semesterData *sd, char *name, int seats)
     int roomIndex = sd->numRooms++;
     sd->rooms = (room*) realloc(sd->rooms, sd->numRooms * sizeof(room));
     if (!sd->rooms)
-    {
-        printf("Error: Out of memory.\n");
         exit(ERROR_OUT_OF_MEMORY);
-    }
     
     /* Set values */
     sd->rooms[roomIndex].seats = seats;
@@ -280,10 +265,7 @@ void add_course(semesterData *sd, char *name, int totLectures, int numTeachers, 
     int courseIndex = sd->numCourses++;
     sd->courses = (course*) realloc(sd->courses, sd->numCourses * sizeof(course));
     if (!sd->courses)
-    {
-        printf("Error: Out of memory.\n");
         exit(ERROR_OUT_OF_MEMORY);
-    }
     
     /* Set values */
     sd->courses[courseIndex].totLectures = totLectures;
@@ -298,10 +280,7 @@ void add_specialization(semesterData *sd, char *name, int numStudents, int numCo
     int specIndex = sd->numSpecializations++;
     sd->specializations = (specialization*) realloc(sd->specializations, sd->numSpecializations * sizeof(specialization));
     if (!sd->specializations)
-    {
-        printf("Error: Out of memory.\n");
         exit(ERROR_OUT_OF_MEMORY);
-    }
     
     /* Set values */
     sd->specializations[specIndex].numStudents = numStudents;
