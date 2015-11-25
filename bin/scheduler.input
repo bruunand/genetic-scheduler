@@ -28,4 +28,4 @@ add COURSE 'Anatomy and Physiology' 50 4
 # Datalogi og Software
 add SPECIALIZATION 'SW1/DAT1' 160 0 1 2
 # Idræt/Sport
-add SPECIALIZATION 'IDR1' 50 3 4 
+add SPECIALIZATION 'IDR1' 50 3 4 2

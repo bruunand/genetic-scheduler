@@ -52,7 +52,10 @@ int main(void)
         
         printf("\n");
     }
-   
+    
+    printf("students on imp: %d\n", get_students_on_course(&sd, 2));
+    printf("students on algebra: %d\n", get_students_on_course(&sd, 1));
+    
     
     free_all(&sd);
     

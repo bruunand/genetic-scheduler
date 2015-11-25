@@ -7,5 +7,7 @@ specialization* get_specialization(semesterData *sd, int index);
 lecture* get_lecture(semesterData *sd, int index);
 offTime* get_offTime(teacher *tchr, int index);
 
+int get_students_on_course(semesterData *sd, int courseIndex);
+
 const char* get_name_of_period(int periodId);
 const char* get_name_of_day(int dayId);

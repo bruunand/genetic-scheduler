@@ -50,12 +50,34 @@ lecture* get_lecture(semesterData *sd, int index)
 }
 
 /* Returns the offtime pointer specified by the index parameter */
-offTime* get_offTime(teacher *tchr, int index)
+offTime* get_offTime(teacher *t, int index)
 {
-    if (index < 0 || index >= tchr->numOffTimes)
+    if (index < 0 || index >= t->numOffTimes)
         return 0;
     else
-        return &(tchr->offTimes[index]);
+        return &(t->offTimes[index]);
+}
+
+/* Returns the amount of students on a specific course */
+int get_students_on_course(semesterData *sd, int courseIndex)
+{
+    int i, j, totStudents = 0;
+    
+    /* Go through all specializations */
+    for (i = 0; i < sd->numSpecializations; i++)
+    {
+        specialization *spec = get_specialization(sd, i);
+        
+        /* Go through all the courses for this specialization */
+        for (j = 0; j < spec->numCourses; j++)
+        {
+            /* Check if they have the same course index */
+            if (spec->courses[j] == courseIndex)
+                totStudents += spec->numStudents;
+        }
+    }
+    
+    return totStudents;
 }
 
 /* Returns the name of a period specified by the periodId parameter */
