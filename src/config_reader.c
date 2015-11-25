@@ -129,6 +129,9 @@ void handle_line(char* line, semesterData *sd)
             {
                 offTimes = (offTime*) realloc(offTimes, (numOffTimes + 1) * sizeof(offTime));
                 
+                /* Set day for this offTime */
+                offTimes[numOffTimes].day = curOffDay;
+                
                 /* Add MAX_PERIODS periods */
                 for (i = 0; i < MAX_PERIODS; i++)
                     read_int(line, &p, &offTimes[numOffTimes].periods[i]);
@@ -229,6 +232,7 @@ void add_teacher(semesterData *sd, char *name, int numOffTimes, offTime *offTime
     /* Set values */
     strcpy(sd->teachers[teacherIndex].name, name);
     sd->teachers[teacherIndex].offTimes = offTimes;
+    sd->teachers[teacherIndex].numOffTimes = numOffTimes;
 }
 
 void add_room(semesterData *sd, char *name, int seats)

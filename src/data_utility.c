@@ -1,5 +1,8 @@
 #include "structs.h"
 
+const char* periodNames[] = {"08:15 - 12:00", "12:30 - 16:15"};
+const char* dayNames[] = {"Monday", "Tuesday", "Wednesday", "Thursday", "Friday"};
+
 /* Returns the room pointer specified by the index parameter */
 /*!
     Name: get_room
@@ -44,4 +47,27 @@ lecture* get_lecture(semesterData *sd, int index)
         return 0;
     else
         return &(sd->lectures[index]);
+}
+
+/* Returns the offtime pointer specified by the index parameter */
+offTime* get_offTime(teacher *tchr, int index)
+{
+    if (index < 0 || index >= tchr->numOffTimes)
+        return 0;
+    else
+        return &(tchr->offTimes[index]);
+}
+
+/* Returns the name of a period specified by the periodId parameter */
+const char* get_name_of_period(int periodId)
+{
+    if (periodId < 0 || periodId > MAX_PERIODS - 1)
+        return "UNKNOWN";
+    return periodNames[periodId];
+}
+
+/* Returns the name of a day specified by the dayId parameter */
+const char* get_name_of_day(int dayId)
+{
+    return dayNames[dayId % DAYS_PER_WEEK];
 }

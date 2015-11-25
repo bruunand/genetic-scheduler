@@ -6,13 +6,9 @@
 #include "config_reader.h"
 #include "data_utility.h"
 
-#define DAYS_PER_WEEK 5
-#define NUM_ENTRIES   100
-#define NUM_PERIODS   2
-
 int main(void)
 {
-    int i, j, k;
+    int i, j, k, l;
     semesterData sd = {0, 0, NULL, 0, NULL, 0, NULL, 0, NULL, 0, NULL};
     
     /* Read configuration file */
@@ -30,21 +26,33 @@ int main(void)
     printf("%d weeks\n", sd.numWeeks);
     printf("\n");
     
+    /* DEBUG: Go through all specializations, their courses, their teachers and their offtimes */
     for (i = 0; i < sd.numSpecializations; i++)
     {
-        printf("Specialization: '%s'\n", sd.specializations[i].name);
+        specialization* spec = get_specialization(&sd, i);
+        printf("Specialization: %s\n", spec->name);
         
-        for (j = 0; j < sd.specializations[i].numCourses; j++)
+        for (j = 0; j < spec->numCourses; j++)
         {
-            printf("\t Course: %s\n", sd.courses[sd.specializations[i].courses[j]].name);
+            course* cour = get_course(&sd, spec->courses[j]);
+            printf("\t Course: %s\n", cour->name);
             
-            for (k = 0; k < sd.courses[sd.specializations[i].courses[j]].numTeachers; k++)
+            for (k = 0; k < cour->numTeachers; k++)
             {
-                printf("\t\tTeacher: %s\n", sd.teachers[sd.courses[sd.specializations[i].courses[j]].teachers[k]].name);
+                teacher* teach = get_teacher(&sd, cour->teachers[k]);
+                printf("\t\tTeacher: %s\n", teach->name);
+
+                for (l = 0; l < teach->numOffTimes; l++)
+                {
+                    offTime* offt = get_offTime(teach, l);
+                    printf("\t\t\tOfftime on day %d (%s): %d, %d\n", offt->day, get_name_of_day(offt->day), offt->periods[0], offt->periods[1]);
+                }
             }
         }
+        
         printf("\n");
     }
+   
     
     free_all(&sd);
     
@@ -61,7 +69,7 @@ void free_all(semesterData *sd)
     {
         /* Free offtimes arrays inside teachers */
         for (i = 0; i < sd->numTeachers; i++)
-            free(get_teacher(sd, i).offTimes);
+            free(get_teacher(sd, i)->offTimes);
         
         free(sd->teachers);
     }
@@ -75,7 +83,7 @@ void free_all(semesterData *sd)
     {
         /* Free teacher arrays inside courses */
         for (i = 0; i < sd->numCourses; i++)
-            free(get_course(sd, i).teachers);
+            free(get_course(sd, i)->teachers);
         
         free(sd->courses);
     }
@@ -85,11 +93,8 @@ void free_all(semesterData *sd)
     {
         /* Free course arrays inside specializations */
         for (i = 0; i < sd->numSpecializations; i++)
-            free(get_specialization(sd, i).courses);
+            free(get_specialization(sd, i)->courses);
         
         free(sd->specializations);
     }
-    
-    /* Free semesterData */
-    free(sd);
 }
