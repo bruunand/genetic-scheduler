@@ -1,6 +1,11 @@
 #include "structs.h"
 
 /* Returns the room specified by the index parameter */
+/*!
+    Name: get_room
+    Input: semesterData *sd, int index
+    Output: room struct from index
+ */
 room get_room(semesterData *sd, int index)
 {
     if (index < 0 || index >= sd->numTeachers)
