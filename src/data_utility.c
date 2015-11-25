@@ -1,51 +1,47 @@
 #include "structs.h"
 
-/* Returns the room specified by the index parameter */
+/* Returns the room pointer specified by the index parameter */
 /*!
     Name: get_room
     Input: semesterData *sd, int index
     Output: room struct from index
  */
-room get_room(semesterData *sd, int index)
+room* get_room(semesterData *sd, int index)
 {
     if (index < 0 || index >= sd->numTeachers)
-        return NULL;
-    else
-        return sd->teachers[index];
+        return 0;
+    return &(sd->rooms[index]);
 }
 
-/* Returns the teacher specified by the index parameter */
-teacher get_teacher(semesterData *sd, int index)
+/* Returns the teacher pointer specified by the index parameter */
+teacher* get_teacher(semesterData *sd, int index)
 {
     if (index < 0 || index >= sd->numTeachers)
-        return NULL;
-    else
-        return sd->teachers[index];
+        return 0;
+    return &(sd->teachers[index]);
 }
 
-/* Returns the course specified by the index parameter */
-course get_course(semesterData *sd, int index)
+/* Returns the course pointer specified by the index parameter */
+course* get_course(semesterData *sd, int index)
 {
     if (index < 0 || index >= sd->numCourses)
-        return NULL;
-    else
-        return sd->courses[index];
+        return 0;
+    return &(sd->courses[index]);
 }
 
-/* Returns the specialization specified by the index parameter */
-specialization get_specialization(semesterData *sd, int index)
+/* Returns the specialization pointer specified by the index parameter */
+specialization* get_specialization(semesterData *sd, int index)
 {
     if (index < 0 || index >= sd->numSpecializations)
-        return NULL;
-    else
-        return sd->specializations[index];
+        return 0;
+    return &(sd->specializations[index]);
 }
 
-/* Returns the lecture specified by the index parameter */
-lecture get_lecture(semesterData *sd, int index)
+/* Returns the lecture pointer specified by the index parameter */
+lecture* get_lecture(semesterData *sd, int index)
 {
     if (index < 0 || index >= sd->numLectures)
-        return NULL;
+        return 0;
     else
-        return sd->lectures[index];
+        return &(sd->lectures[index]);
 }
