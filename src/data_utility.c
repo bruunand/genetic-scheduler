@@ -1,6 +1,8 @@
-#include "structs.h"
 #include <stdlib.h>
 #include <stdio.h>
+
+#include "structs.h"
+#include "defs.h"
 
 const char* periodNames[] = {"08:15 - 12:00", "12:30 - 16:15"};
 const char* dayNames[] = {"Monday", "Tuesday", "Wednesday", "Thursday", "Friday"};

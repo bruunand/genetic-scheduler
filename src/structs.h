@@ -1,5 +1,7 @@
 #pragma once
 
+#include "defs.h"
+
 /* Room struct */
 typedef struct
 {

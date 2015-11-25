@@ -7,6 +7,7 @@
 #include "config_reader.h"
 #include "data_utility.h"
 #include "data_test.h"
+#include "defs.h"
 
 int main(void)
 {   
