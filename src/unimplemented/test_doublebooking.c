@@ -4,8 +4,14 @@ int test_doublebooking(semesterData *sd)
     lecture *lecture0, *lecture1;
     
     /* Size may be changed */
-    lecture0 = (lecture*) malloc(16*sizeof(lecture));
-    lecture1 = (lecture*) malloc(16*sizeof(lecture));
+    if(!lecture0 = (lecture*) malloc(16*sizeof(lecture)))
+    {
+        exit(ERROR_OUT_OF_MEMORY);
+    }
+    if(!lecture1 = (lecture*) malloc(16*sizeof(lecture)))
+    {
+        exit(ERROR_OUT_OF_MEMORY);
+    }
     
     for(a = 0; a < sd->numWeeks*DAYS_PER_WEEK; a++)
     {
