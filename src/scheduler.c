@@ -53,7 +53,11 @@ int main(void)
                 for (l = 0; l < teach->numOffTimes; l++)
                 {
                     offTime* offt = get_offTime(teach, l);
-                    printf("\t\t\tOfftime on day %d (%s): %d, %d\n", offt->day, get_name_of_day(offt->day), offt->periods[0], offt->periods[1]);
+                    printf("\t\t\tOfftime on day %d (%s): %d, %d\n",
+						offt->day,
+						get_name_of_day(offt->day),
+						offt->periods[0],
+						offt->periods[1]);
                 }
             }
         }
@@ -68,7 +72,11 @@ int main(void)
         course *crs = get_course(&sd, lect->assignedCourse);
         room *rm = get_room(&sd, lect->assignedRoom);
         
-        printf("Lecture %d: %s in %s (severity %d)\n", i + 1, crs->name, rm->name, test_lecture_capacity(&sd, i));
+        printf("Lecture %d: %s in %s (severity %d)\n",
+			i + 1,
+			crs->name,
+			rm->name,
+			est_lecture_capacity(&sd, i));
     }
     
     free_all(&sd);
