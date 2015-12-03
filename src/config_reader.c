@@ -63,7 +63,7 @@ void handle_line(char* line, SemesterData *sd)
 {
     char command[16], typeName[16];
     int p = 0; /* Keeps track of our current position in the string */
-    
+
     /* Read command */
     if (!sscanf(line + p, "%s", command))
         return;
@@ -112,7 +112,7 @@ void handle_line(char* line, SemesterData *sd)
                 if (!teachers)
                     exit(ERROR_OUT_OF_MEMORY);
                 
-                teachers[numTeachers] = sd->teachers[curTeacherId];
+                teachers[numTeachers] = &sd->teachers[curTeacherId];
                 numTeachers++;
             }
             
@@ -183,8 +183,8 @@ void handle_line(char* line, SemesterData *sd)
                 courses = realloc(courses, (numCourses + 1) * sizeof(Course*));
                 if (!courses)
                     exit(ERROR_OUT_OF_MEMORY);
-                
-                courses[numCourses] = sd->courses[curCourseId];
+                printf("%d\n", curCourseId);
+                courses[numCourses] = &sd->courses[curCourseId];
                 numCourses++;
             }
             
@@ -255,8 +255,8 @@ void add_room(SemesterData *sd, char *name, int seats)
         exit(ERROR_OUT_OF_MEMORY);
     
     /* Set values */
-	strcpy(sd->rooms[roomIndex]->name, name);
-    sd->rooms[roomIndex]->seats = seats;
+	strcpy(sd->rooms[roomIndex].name, name);
+    sd->rooms[roomIndex].seats = seats;
 }
 
 void add_course(SemesterData *sd, char *name, int totLectures, int numTeachers, Teacher **teachers)
@@ -269,6 +269,7 @@ void add_course(SemesterData *sd, char *name, int totLectures, int numTeachers, 
     
     /* Set values */
     strcpy(sd->courses[courseIndex].name, name);
+	printf("'%s'\n", sd->courses[courseIndex].name);
     sd->courses[courseIndex].totLectures = totLectures;
     sd->courses[courseIndex].numTeachers = numTeachers;
     sd->courses[courseIndex].teachers = teachers;
@@ -278,13 +279,13 @@ void add_specialization(SemesterData *sd, char *name, int numStudents, int numCo
 {
     /* Reallocate memory for the new count */
     int specIndex = sd->numSpecializations++;
-    sd->specializations = realloc(sd->specializations, sd->numSpecializations * sizeof(Specialization*));
+    sd->specializations = realloc(sd->specializations, sd->numSpecializations * sizeof(Specialization));
     if (!sd->specializations)
         exit(ERROR_OUT_OF_MEMORY);
     
     /* Set values */
-    strcpy(sd->specializations[specIndex]->name, name);
-    sd->specializations[specIndex]->numStudents = numStudents;
-    sd->specializations[specIndex]->numCourses = numCourses;
-    sd->specializations[specIndex]->courses = courses;
+    strcpy(sd->specializations[specIndex].name, name);
+    sd->specializations[specIndex].numStudents = numStudents;
+    sd->specializations[specIndex].numCourses = numCourses;
+    sd->specializations[specIndex].courses = courses;
 }

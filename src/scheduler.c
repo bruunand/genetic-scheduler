@@ -35,24 +35,27 @@ int main(void)
     printf("\n");
     
     /* DEBUG: Go through all specializations, their courses, their teachers and their offtimes */
-    /*for (i = 0; i < sd.numSpecializations; i++)
+    for (i = 0; i < sd.numSpecializations; i++)
     {
-        specialization* spec = get_specialization(&sd, i);
+        Specialization *spec = &sd.specializations[i];
         printf("Specialization: %s\n", spec->name);
         
         for (j = 0; j < spec->numCourses; j++)
         {
-            course* cour = get_course(&sd, spec->courses[j]);
+            Course *cour = spec->courses[j];
+			
             printf("\t Course: %s\n", cour->name);
             
             for (k = 0; k < cour->numTeachers; k++)
             {
-                teacher* teach = get_teacher(&sd, cour->teachers[k]);
+                Teacher* teach = cour->teachers[k];
+				
                 printf("\t\tTeacher: %s\n", teach->name);
 
                 for (l = 0; l < teach->numOffTimes; l++)
                 {
-                    offTime* offt = get_offTime(teach, l);
+                    OffTime *offt = &teach->offTimes[l];
+					
                     printf("\t\t\tOfftime on day %d (%s): %d, %d\n",
 						offt->day,
 						get_name_of_day(offt->day),
@@ -63,21 +66,21 @@ int main(void)
         }
         
         printf("\n");
-    }*/
+    }
     
     /* DEBUG: Go through all lectures, test their capacity */
-    /*for (i = 0; i < sd.numLectures; i++)
+    for (i = 0; i < sd.numLectures; i++)
     {
-        Lecture *lect = get_lecture(&sd, i);
-        Course *crs = get_course(&sd, lect->assignedCourse);
-        Room *rm = get_room(&sd, lect->assignedRoom);
+        Lecture *lect = &sd.lectures[i];
+        Course *crs = lect->assignedCourse;
+        Room *rm = lect->assignedRoom;
         
         printf("Lecture %d: %s in %s (severity %d)\n",
 			i + 1,
 			crs->name,
 			rm->name,
 			test_lecture_capacity(&sd, i));
-    }*/
+    }
     
     free_all(&sd);
     
@@ -103,7 +106,7 @@ void generate_initial_schedule(SemesterData *sd)
     /* Go through all courses */
     for (i = 0; i < sd->numCourses; i++)
     {
-        Course *crs = sd->courses[i];
+        Course *crs = &sd->courses[i];
         
         /* Go through the amount of lectures in this course */
         for (j = 0; j < crs->totLectures; j++)
@@ -127,7 +130,7 @@ void free_all(SemesterData *sd)
     {
         /* Free offtimes arrays inside teachers */
         for (i = 0; i < sd->numTeachers; i++)
-            free(sd->teachers[i]->offTimes);
+            free(sd->teachers[i].offTimes);
         
         free(sd->teachers);
     }
@@ -141,7 +144,7 @@ void free_all(SemesterData *sd)
     {
         /* Free teacher arrays inside courses */
         for (i = 0; i < sd->numCourses; i++)
-            free(sd->courses[i]->teachers);
+            free(sd->courses[i].teachers);
         
         free(sd->courses);
     }
@@ -151,7 +154,7 @@ void free_all(SemesterData *sd)
     {
         /* Free course arrays inside specializations */
         for (i = 0; i < sd->numSpecializations; i++)
-            free(sd->specializations[i]->courses);
+            free(sd->specializations[i].courses);
         
         free(sd->specializations);
     }

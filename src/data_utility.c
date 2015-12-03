@@ -13,9 +13,7 @@ void add_lecture(SemesterData *sd, int lectIndex, int day, int period, int roomI
     /* Check if the index goes beyond the bounds of the lecture array */
     if (lectIndex >= sd->numLectures)
         exit(ERROR_ARRAY_BOUNDS_EXCEEDED);
-    
-    printf("set item %d course to %d\n", lectIndex, courseId);
-    
+	
     /* Set lecture values */
     sd->lectures[lectIndex].day = day;
     sd->lectures[lectIndex].period = period;
@@ -31,7 +29,7 @@ int get_students_on_course(SemesterData *sd, Course *course)
     /* Go through all specializations */
     for (i = 0; i < sd->numSpecializations; i++)
     {
-        Specialization *spec = sd->specializations[i];
+        Specialization *spec = &sd->specializations[i];
         
         /* Go through all the courses for this specialization */
         for (j = 0; j < spec->numCourses; j++)
@@ -52,7 +50,7 @@ int get_amount_of_lectures(SemesterData *sd)
     
     /* Add amount of lectures from each course */
     for (i = 0; i < sd->numCourses; i++)
-        totLectureAmount += sd->courses[i]->totLectures;
+        totLectureAmount += sd->courses[i].totLectures;
     
     return totLectureAmount;
 }

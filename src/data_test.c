@@ -6,7 +6,7 @@
 int test_lecture_capacity(SemesterData *sd, int lectureId)
 {
     int roomCap, numStudents, severity = 0, roomSeats;
-    Lecture *lect = sd->lectures[lectureId];
+    Lecture *lect = &sd->lectures[lectureId];
     
     /* Functions, calculations and pointers used multiple times are assigned to local variables. */
     roomSeats = lect->assignedRoom->seats;
