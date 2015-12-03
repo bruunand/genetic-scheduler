@@ -8,7 +8,7 @@ typedef struct
     char name[32];
     
     int seats;
-} room;
+} Room;
 
 /* OffTime struct */
 /* A day and time period (0 or 1) where the teacher isn't available */
@@ -16,7 +16,7 @@ typedef struct
 {
     int day;
     int periods[MAX_PERIODS];
-} offTime;
+} OffTime;
 
 /* Teacher struct */
 typedef struct
@@ -24,8 +24,8 @@ typedef struct
     char name[32];
     
     int numOffTimes;
-    offTime *offTimes;
-} teacher;
+    OffTime **offTimes;
+} Teacher;
 
 /* Course struct */
 typedef struct
@@ -33,9 +33,9 @@ typedef struct
     char name[64];
     int totLectures;
     
-    int numTeachers; /* Number of teachers associated */
-    int *teachers;   /* Array of associated teachers */
-} course;
+    int numTeachers;     /* Number of teachers associated */
+    Teacher ***teachers; /* Array of associated teachers */
+} Course;
 
 /* Specialization (major) struct */
 typedef struct
@@ -45,8 +45,8 @@ typedef struct
     int numStudents;
     
     int numCourses;
-    int *courses;
-} specialization;
+    Course **courses;
+} Specialization;
 
 /* Lecture struct */
 typedef struct
@@ -56,9 +56,9 @@ typedef struct
     
     /* int numLectures; */
     
-    int assignedRoom;
-    int assignedCourse;
-} lecture;
+    Room   *assignedRoom;
+    Course *ssignedCourse;
+} Lecture;
 
 /* SemesterData struct */
 typedef struct
@@ -66,23 +66,23 @@ typedef struct
     int numWeeks;
     
     int numRooms;
-    room *rooms;
+    Room **rooms;
     
     int numTeachers;
-    teacher *teachers;
+    Teacher **teachers;
     
     int numCourses;
-    course *courses;
+    Course **courses;
     
     int numSpecializations;
-    specialization *specializations;
+    Specialization **specializations;
     
     int numLectures;
-    lecture *lectures;
-} semesterData;
+    Lecture **lectures;
+} SemesterData;
 
 typedef struct
 {
-    semesterData *currentGeneration;
-    semesterData *newGeneration;
-} generations;
+    SemesterData *currentGeneration;
+    SemesterData *newGeneration;
+} Generations;
