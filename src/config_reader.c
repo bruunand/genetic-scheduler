@@ -9,7 +9,7 @@
 
 #define BUFFER_SIZE 512
 
-int read_config(char *fileName, semesterData *sd)
+int read_config(char *fileName, SemesterData *sd)
 {
     FILE* fp;
     char buffer[BUFFER_SIZE];
@@ -59,7 +59,7 @@ int read_config(char *fileName, semesterData *sd)
     return 1;
 }
 
-void handle_line(char* line, semesterData *sd)
+void handle_line(char* line, SemesterData *sd)
 {
     char command[16], typeName[16];
     int p = 0; /* Keeps track of our current position in the string */
@@ -95,7 +95,7 @@ void handle_line(char* line, semesterData *sd)
         {
             char courseName[32];
             int totLectures, curTeacherId, numTeachers = 0;
-            int *teachers = 0;
+            Teacher **teachers = 0;
             
             /* Read name of course */
             if (!read_multiple_words(line, &p, courseName))
@@ -108,11 +108,11 @@ void handle_line(char* line, semesterData *sd)
             /* Read teachers into an array */
             while (read_int(line, &p, &curTeacherId))
             {
-                teachers = (int*) realloc(teachers, (numTeachers + 1) * sizeof(int));
+                teachers = realloc(teachers, (numTeachers + 1) * sizeof(Teacher*));
                 if (!teachers)
                     exit(ERROR_OUT_OF_MEMORY);
                 
-                teachers[numTeachers] = curTeacherId;
+                teachers[numTeachers] = sd->teachers[curTeacherId];
                 numTeachers++;
             }
             
@@ -122,7 +122,7 @@ void handle_line(char* line, semesterData *sd)
         {
             char teacherName[32];
             int numOffTimes = 0, curOffDay, i;
-            offTime *offTimes = 0;
+            OffTime *offTimes = 0;
             
             /* Read name of teacher */
             if (!read_multiple_words(line, &p, teacherName))
@@ -132,7 +132,7 @@ void handle_line(char* line, semesterData *sd)
             /* Start by checking if we can read the next day */
             while (read_int(line, &p, &curOffDay))
             {
-                offTimes = (offTime*) realloc(offTimes, (numOffTimes + 1) * sizeof(offTime));
+                offTimes = realloc(offTimes, (numOffTimes + 1) * sizeof(OffTime));
                 if (!offTimes)
                     exit(ERROR_OUT_OF_MEMORY);
                 
@@ -167,7 +167,7 @@ void handle_line(char* line, semesterData *sd)
         {
             char specName[32];
             int numStudents, curCourseId, numCourses = 0;
-            int *courses = 0;
+            Course **courses = 0;
             
             /* Read name of specialization */
             if (!read_multiple_words(line, &p, specName))
@@ -180,11 +180,11 @@ void handle_line(char* line, semesterData *sd)
             /* Read all remaining integers */
             while (read_int(line, &p, &curCourseId))
             {
-                courses = (int*) realloc(courses, (numCourses + 1) * sizeof(int));
+                courses = realloc(courses, (numCourses + 1) * sizeof(Course*));
                 if (!courses)
                     exit(ERROR_OUT_OF_MEMORY);
                 
-                courses[numCourses] = curCourseId;
+                courses[numCourses] = sd->courses[curCourseId];
                 numCourses++;
             }
             
@@ -232,11 +232,11 @@ int read_multiple_words(char* line, int* position, char* out)
     return strlen(out) ? 1 : 0;
 }
 
-void add_teacher(semesterData *sd, char *name, int numOffTimes, offTime *offTimes)
+void add_teacher(SemesterData *sd, char *name, int numOffTimes, OffTime *offTimes)
 {
     /* Reallocate memory for the new count */
     int teacherIndex = sd->numTeachers++;
-    sd->teachers = (teacher*) realloc(sd->teachers, sd->numTeachers * sizeof(teacher));
+    sd->teachers = realloc(sd->teachers, sd->numTeachers * sizeof(Teacher));
     if (!sd->teachers)
         exit(ERROR_OUT_OF_MEMORY);
     
@@ -246,45 +246,45 @@ void add_teacher(semesterData *sd, char *name, int numOffTimes, offTime *offTime
     sd->teachers[teacherIndex].numOffTimes = numOffTimes;
 }
 
-void add_room(semesterData *sd, char *name, int seats)
+void add_room(SemesterData *sd, char *name, int seats)
 {
     /* Reallocate memory for the new count */
     int roomIndex = sd->numRooms++;
-    sd->rooms = (room*) realloc(sd->rooms, sd->numRooms * sizeof(room));
+    sd->rooms = realloc(sd->rooms, sd->numRooms * sizeof(Room));
     if (!sd->rooms)
         exit(ERROR_OUT_OF_MEMORY);
     
     /* Set values */
-    sd->rooms[roomIndex].seats = seats;
-    strcpy(sd->rooms[roomIndex].name, name);
+	strcpy(sd->rooms[roomIndex]->name, name);
+    sd->rooms[roomIndex]->seats = seats;
 }
 
-void add_course(semesterData *sd, char *name, int totLectures, int numTeachers, int *teachers)
+void add_course(SemesterData *sd, char *name, int totLectures, int numTeachers, Teacher **teachers)
 {
     /* Reallocate memory for the new count */
     int courseIndex = sd->numCourses++;
-    sd->courses = (course*) realloc(sd->courses, sd->numCourses * sizeof(course));
+    sd->courses = realloc(sd->courses, sd->numCourses * sizeof(Course));
     if (!sd->courses)
         exit(ERROR_OUT_OF_MEMORY);
     
     /* Set values */
+    strcpy(sd->courses[courseIndex].name, name);
     sd->courses[courseIndex].totLectures = totLectures;
     sd->courses[courseIndex].numTeachers = numTeachers;
     sd->courses[courseIndex].teachers = teachers;
-    strcpy(sd->courses[courseIndex].name, name);
 }
 
-void add_specialization(semesterData *sd, char *name, int numStudents, int numCourses, int *courses)
+void add_specialization(SemesterData *sd, char *name, int numStudents, int numCourses, Course **courses)
 {
     /* Reallocate memory for the new count */
     int specIndex = sd->numSpecializations++;
-    sd->specializations = (specialization*) realloc(sd->specializations, sd->numSpecializations * sizeof(specialization));
+    sd->specializations = realloc(sd->specializations, sd->numSpecializations * sizeof(Specialization*));
     if (!sd->specializations)
         exit(ERROR_OUT_OF_MEMORY);
     
     /* Set values */
-    sd->specializations[specIndex].numStudents = numStudents;
-    sd->specializations[specIndex].numCourses = numCourses;
-    sd->specializations[specIndex].courses = courses;
-    strcpy(sd->specializations[specIndex].name, name);
+    strcpy(sd->specializations[specIndex]->name, name);
+    sd->specializations[specIndex]->numStudents = numStudents;
+    sd->specializations[specIndex]->numCourses = numCourses;
+    sd->specializations[specIndex]->courses = courses;
 }
