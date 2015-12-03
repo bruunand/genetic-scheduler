@@ -12,7 +12,7 @@
 int main(void)
 {   
     int i, j, k, l;
-    semesterData sd = {0, 0, NULL, 0, NULL, 0, NULL, 0, NULL, 0, NULL};
+    SemesterData sd = {0, 0, NULL, 0, NULL, 0, NULL, 0, NULL, 0, NULL};
  
     srand(time(NULL));
     
@@ -37,22 +37,25 @@ int main(void)
     /* DEBUG: Go through all specializations, their courses, their teachers and their offtimes */
     for (i = 0; i < sd.numSpecializations; i++)
     {
-        specialization* spec = get_specialization(&sd, i);
+        Specialization *spec = &sd.specializations[i];
         printf("Specialization: %s\n", spec->name);
         
         for (j = 0; j < spec->numCourses; j++)
         {
-            course* cour = get_course(&sd, spec->courses[j]);
+            Course *cour = spec->courses[j];
+			
             printf("\t Course: %s\n", cour->name);
             
             for (k = 0; k < cour->numTeachers; k++)
             {
-                teacher* teach = get_teacher(&sd, cour->teachers[k]);
+                Teacher* teach = cour->teachers[k];
+				
                 printf("\t\tTeacher: %s\n", teach->name);
 
                 for (l = 0; l < teach->numOffTimes; l++)
                 {
-                    offTime* offt = get_offTime(teach, l);
+                    OffTime *offt = &teach->offTimes[l];
+					
                     printf("\t\t\tOfftime on day %d (%s): %d, %d\n",
 						offt->day,
 						get_name_of_day(offt->day),
@@ -68,15 +71,15 @@ int main(void)
     /* DEBUG: Go through all lectures, test their capacity */
     for (i = 0; i < sd.numLectures; i++)
     {
-        lecture *lect = get_lecture(&sd, i);
-        course *crs = get_course(&sd, lect->assignedCourse);
-        room *rm = get_room(&sd, lect->assignedRoom);
+        Lecture *lect = &sd.lectures[i];
+        Course *crs = lect->assignedCourse;
+        Room *rm = lect->assignedRoom;
         
         printf("Lecture %d: %s in %s (severity %d)\n",
 			i + 1,
 			crs->name,
 			rm->name,
-			est_lecture_capacity(&sd, i));
+			test_lecture_capacity(&sd, i));
     }
     
     free_all(&sd);
@@ -88,7 +91,7 @@ int main(void)
  * Generate a 'dumb' schedule (array of lectures)
  * The only fulfilled requirement is the amount of lectures per course
 */
-void generate_initial_schedule(semesterData *sd)
+void generate_initial_schedule(SemesterData *sd)
 {
     int i, j, k = 0;
 
@@ -96,14 +99,14 @@ void generate_initial_schedule(semesterData *sd)
     sd->numLectures = get_amount_of_lectures(sd);
     
     /* Allocate memory for the lectures */
-    sd->lectures = (lecture*) malloc(sd->numLectures * sizeof(lecture));
+    sd->lectures = malloc(sd->numLectures * sizeof(Lecture));
     if (!sd->lectures)
         exit(ERROR_OUT_OF_MEMORY);
     
     /* Go through all courses */
     for (i = 0; i < sd->numCourses; i++)
     {
-        course *crs = get_course(sd, i);
+        Course *crs = &sd->courses[i];
         
         /* Go through the amount of lectures in this course */
         for (j = 0; j < crs->totLectures; j++)
@@ -115,10 +118,10 @@ void generate_initial_schedule(semesterData *sd)
 }
 
 /*
- * Free all memory associated with the semesterData struct
+ * Free all memory associated with the SemesterData struct
  * Dynamically allocated arrays inside the structs are also freed
 */
-void free_all(semesterData *sd)
+void free_all(SemesterData *sd)
 {
     int i;
     
@@ -127,7 +130,7 @@ void free_all(semesterData *sd)
     {
         /* Free offtimes arrays inside teachers */
         for (i = 0; i < sd->numTeachers; i++)
-            free(get_teacher(sd, i)->offTimes);
+            free(sd->teachers[i].offTimes);
         
         free(sd->teachers);
     }
@@ -141,7 +144,7 @@ void free_all(semesterData *sd)
     {
         /* Free teacher arrays inside courses */
         for (i = 0; i < sd->numCourses; i++)
-            free(get_course(sd, i)->teachers);
+            free(sd->courses[i].teachers);
         
         free(sd->courses);
     }
@@ -151,7 +154,7 @@ void free_all(semesterData *sd)
     {
         /* Free course arrays inside specializations */
         for (i = 0; i < sd->numSpecializations; i++)
-            free(get_specialization(sd, i)->courses);
+            free(sd->specializations[i].courses);
         
         free(sd->specializations);
     }

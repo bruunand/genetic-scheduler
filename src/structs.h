@@ -24,7 +24,7 @@ typedef struct
     char name[32];
     
     int numOffTimes;
-    OffTime **offTimes;
+    OffTime *offTimes;
 } Teacher;
 
 /* Course struct */
@@ -34,7 +34,7 @@ typedef struct
     int totLectures;
     
     int numTeachers;     /* Number of teachers associated */
-    Teacher ***teachers; /* Array of associated teachers */
+    Teacher **teachers; /* Array of associated teachers */
 } Course;
 
 /* Specialization (major) struct */
@@ -57,7 +57,7 @@ typedef struct
     /* int numLectures; */
     
     Room   *assignedRoom;
-    Course *ssignedCourse;
+    Course *assignedCourse;
 } Lecture;
 
 /* SemesterData struct */
@@ -66,19 +66,19 @@ typedef struct
     int numWeeks;
     
     int numRooms;
-    Room **rooms;
+    Room *rooms;
     
     int numTeachers;
-    Teacher **teachers;
+    Teacher *teachers;
     
     int numCourses;
-    Course **courses;
+    Course *courses;
     
     int numSpecializations;
-    Specialization **specializations;
+    Specialization *specializations;
     
     int numLectures;
-    Lecture **lectures;
+    Lecture *lectures;
 } SemesterData;
 
 typedef struct
