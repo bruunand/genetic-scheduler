@@ -183,7 +183,7 @@ void handle_line(char* line, SemesterData *sd)
                 courses = realloc(courses, (numCourses + 1) * sizeof(Course*));
                 if (!courses)
                     exit(ERROR_OUT_OF_MEMORY);
-                printf("%d\n", curCourseId);
+
                 courses[numCourses] = &sd->courses[curCourseId];
                 numCourses++;
             }
@@ -269,7 +269,6 @@ void add_course(SemesterData *sd, char *name, int totLectures, int numTeachers, 
     
     /* Set values */
     strcpy(sd->courses[courseIndex].name, name);
-	printf("'%s'\n", sd->courses[courseIndex].name);
     sd->courses[courseIndex].totLectures = totLectures;
     sd->courses[courseIndex].numTeachers = numTeachers;
     sd->courses[courseIndex].teachers = teachers;

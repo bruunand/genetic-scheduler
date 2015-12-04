@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include <time.h>
 
 #include "structs.h"
@@ -12,8 +13,8 @@
 
 int main(void)
 {   
-    int i, j, k, l;
-    SemesterData sd = {0, 0, NULL, 0, NULL, 0, NULL, 0, NULL, 0, NULL};
+    SemesterData sd;
+    memset(&sd, 0, sizeof(SemesterData));
  
     srand(time(NULL));
     
@@ -26,63 +27,8 @@ int main(void)
     
     /* Generate schedule */
     generate_initial_schedule(&sd);
-
-    /* Debug */
-    printf("%d teachers\n", sd.numTeachers);
-    printf("%d rooms\n", sd.numRooms);
-    printf("%d courses\n", sd.numCourses);
-    printf("%d specializations\n", sd.numSpecializations);
-    printf("%d weeks\n", sd.numWeeks);
-    printf("\n");
     
-    /* DEBUG: Go through all specializations, their courses, their teachers and their offtimes */
-    for (i = 0; i < sd.numSpecializations; i++)
-    {
-        Specialization *spec = &sd.specializations[i];
-        printf("Specialization: %s\n", spec->name);
-        
-        for (j = 0; j < spec->numCourses; j++)
-        {
-            Course *cour = spec->courses[j];
-			
-            printf("\t Course: %s (%d)\n", cour->name, get_students_on_course(&sd, cour));
-            
-            for (k = 0; k < cour->numTeachers; k++)
-            {
-                Teacher* teach = cour->teachers[k];
-				
-                printf("\t\tTeacher: %s\n", teach->name);
-
-                for (l = 0; l < teach->numOffTimes; l++)
-                {
-                    OffTime *offt = &teach->offTimes[l];
-					
-                    printf("\t\t\tOfftime on day %d (%s): %d, %d\n",
-						offt->day,
-						get_name_of_day(offt->day),
-						offt->periods[0],
-						offt->periods[1]);
-                }
-            }
-        }
-        
-        printf("\n");
-    }
-    
-    /* DEBUG: Go through all lectures, test their capacity */
-    for (i = 0; i < sd.numLectures; i++)
-    {
-        Lecture *lect = &sd.lectures[i];
-        Course *crs = lect->assignedCourse;
-        Room *rm = lect->assignedRoom;
-        
-        printf("Lecture %d: %s in %s (severity %d)\n",
-			i + 1,
-			crs->name,
-			rm->name,
-			test_lecture_capacity(&sd, i));
-    }
-    
+    /* Print schedules to files */
     print_schedule_to_file(&sd, &sd.specializations[0], "swdat.html");
     print_schedule_to_file(&sd, &sd.specializations[1], "robotics.html");
     
@@ -112,18 +58,15 @@ void generate_initial_schedule(SemesterData *sd)
     {
         Course *crs = &sd->courses[i];
         
-        /* Go through the amount of lectures in this course */
+        /* Randomly generate all lectures for this course */
         for (j = 0; j < crs->totLectures; j++)
-        {
-            /* Pass sd pointer, lectureIndex, day, period, roomId, courseId */
             add_lecture(sd, k++, rand() % (DAYS_PER_WEEK * sd->numWeeks), rand() % MAX_PERIODS, rand() % sd->numRooms, i);
-        }
     }
 }
 
 /*
- * Free all memory associated with the SemesterData struct
- * Dynamically allocated arrays inside the structs are also freed
+ * Free all memory associated with the SemesterData struct.
+ * Dynamically allocated arrays inside the structs are also freed.
 */
 void free_all(SemesterData *sd)
 {
