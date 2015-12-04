@@ -21,6 +21,30 @@ void add_lecture(SemesterData *sd, int lectIndex, int day, int period, int roomI
     sd->lectures[lectIndex].assignedCourse = &sd->courses[courseId];
 }
 
+/*
+ * Returns 1 if a teacher has an offtime (not available) on a day and period.
+ * Returns 0 if available.
+*/
+int teacher_has_offtime(SemesterData *sd, Teacher *teacher, int dayId, int periodId)
+{
+    int i, j;
+    
+    /* Validate period on day */
+    if (periodId > 2 || dayId > (DAYS_PER_WEEK * sd->numWeeks) - 1)
+        return 1;
+    
+    /* Iterate through all offtimes */
+    for (i = 0; i < teacher->numOffTimes; i++)
+    {
+        OffTime *offTime = &teacher->offTimes[i];
+        
+        if (offTime->day == dayId && offTime->periods[periodId] == 1)
+            return 1;
+    }
+    
+    return 0;
+}
+
 /* Returns the amount of students on a specific course */
 int get_students_on_course(SemesterData *sd, Course *course)
 {

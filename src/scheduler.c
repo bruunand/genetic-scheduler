@@ -44,7 +44,7 @@ int main(void)
         {
             Course *cour = spec->courses[j];
 			
-            printf("\t Course: %s\n", cour->name);
+            printf("\t Course: %s (%d)\n", cour->name, get_students_on_course(&sd, cour));
             
             for (k = 0; k < cour->numTeachers; k++)
             {
