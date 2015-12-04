@@ -22,12 +22,28 @@ void add_lecture(SemesterData *sd, int lectIndex, int day, int period, int roomI
 }
 
 /*
- * Returns 1 if a teacher has an offtime (not available) on a day and period.
- * Returns 0 if available.
+ * Returns whether a specialization is on a specific lecture.
+ *
+ * sp: Pointer to a specialization.
 */
+int specialization_has_lecture(Specialization *sp, Lecture *lect)
+{
+    int i;
+    
+    /* Iterate through all courses for this */
+    for (i = 0; i < sp->numCourses; i++)
+    {
+        if (sp->courses[i] == lect->assignedCourse)
+            return 1;
+    }
+
+    return 0;
+}
+
+/* Returns 1 if a teacher has an offtime (not available) on a day and period. */
 int teacher_has_offtime(SemesterData *sd, Teacher *teacher, int dayId, int periodId)
 {
-    int i, j;
+    int i;
     
     /* Validate period on day */
     if (periodId > 2 || dayId > (DAYS_PER_WEEK * sd->numWeeks) - 1)
