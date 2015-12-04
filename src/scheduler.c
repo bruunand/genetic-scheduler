@@ -8,6 +8,7 @@
 #include "data_utility.h"
 #include "data_test.h"
 #include "defs.h"
+#include "html_output.h"
 
 int main(void)
 {   
@@ -81,6 +82,8 @@ int main(void)
 			rm->name,
 			test_lecture_capacity(&sd, i));
     }
+    
+    print_schedule_to_file(&sd, &sd.specializations[0], "output.html");
     
     free_all(&sd);
     
