@@ -83,7 +83,8 @@ int main(void)
 			test_lecture_capacity(&sd, i));
     }
     
-    print_schedule_to_file(&sd, &sd.specializations[0], "output.html");
+    print_schedule_to_file(&sd, &sd.specializations[0], "swdat.html");
+    print_schedule_to_file(&sd, &sd.specializations[1], "robotics.html");
     
     free_all(&sd);
     

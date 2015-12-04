@@ -103,14 +103,14 @@ void print_period(SemesterData *sd, Specialization *sp, FILE *f, int periodId, i
                     get_name_of_period(lect->period));
                     
                 /* Write regardless */
-                fprintf(f, " [+%s]", lect->assignedCourse->name);
+                fprintf(f, "<br />[+%s]", lect->assignedCourse->name);
             }
             else
             {
                 begin_print_data(f, lect->assignedCourse->name);
-                fprintf(f, " (%s)", lect->assignedRoom->name);
                 for (k = 0; k < lect->assignedCourse->numTeachers; k++)
-                    fprintf(f, " (%s)", lect->assignedCourse->teachers[k]->name);
+                    fprintf(f, "<br /><i>%s</i>", lect->assignedCourse->teachers[k]->name);
+                fprintf(f, "<br />%s", lect->assignedRoom->name);
                 
                 foundMatches++;                
             }
