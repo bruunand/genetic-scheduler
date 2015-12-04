@@ -71,7 +71,7 @@ void end_print_row(FILE *f)
 
 void print_period(SemesterData *sd, Specialization *sp, FILE *f, int periodId, int weekNumber)
 {
-    int i, j, foundMatches;
+    int i, j, k, foundMatches;
     
     begin_print_row(f, "#F0F0F0");
     
@@ -109,6 +109,9 @@ void print_period(SemesterData *sd, Specialization *sp, FILE *f, int periodId, i
             {
                 begin_print_data(f, lect->assignedCourse->name);
                 fprintf(f, " (%s)", lect->assignedRoom->name);
+                for (k = 0; k < lect->assignedCourse->numTeachers; k++)
+                    fprintf(f, " (%s)", lect->assignedCourse->teachers[k]->name);
+                
                 foundMatches++;                
             }
         }
