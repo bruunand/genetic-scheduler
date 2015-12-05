@@ -141,7 +141,7 @@ void print_schedule_to_file(SemesterData *sd, Specialization *sp, const char* fi
     for(i = 0; i < sd->numWeeks; i++)
     {
         begin_print_table(f, 20);
-        begin_print_row(f, "pink");
+        begin_print_row(f, "#FFFFFF");
         
         print_row_header(f, WEEK_WIDTH, "Week %d", i + 1);
         
