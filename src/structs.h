@@ -58,6 +58,8 @@ typedef struct
     
     Room   *assignedRoom;
     Course *assignedCourse;
+    
+    int fitness;
 } Lecture;
 
 /* SemesterData struct */
