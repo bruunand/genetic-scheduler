@@ -1,1 +1,1 @@
-int test_lecture_capacity(SemesterData *sd, int lectureId);
+int test_lecture_capacity(SemesterData *sd, Lecture *lect);

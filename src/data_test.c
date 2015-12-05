@@ -3,10 +3,9 @@
 #include "defs.h"
 
 
-int test_lecture_capacity(SemesterData *sd, int lectureId)
+int test_lecture_capacity(SemesterData *sd, Lecture *lect)
 {
     int roomCap, numStudents, severity = 0, roomSeats;
-    Lecture *lect = &sd->lectures[lectureId];
     
     /* Functions, calculations and pointers used multiple times are assigned to local variables. */
     roomSeats = lect->assignedRoom->seats;

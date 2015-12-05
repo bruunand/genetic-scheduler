@@ -11,8 +11,62 @@
 #include "defs.h"
 #include "html_output.h"
 
+int compare_fitness(const void *a, const void *b)
+{
+    Lecture *firstLecture  = *(Lecture**) a;
+    Lecture *secondLecture = *(Lecture**) b;
+   
+    return secondLecture->fitness - firstLecture->fitness;
+}
+
+/* Work in progress */
+int generate_next(SemesterData *sd)
+{
+    Lecture **lecturePtrs;
+    int i, combinedFitness = 0;
+    
+    /* Initialize array of pointers to lectures */
+    lecturePtrs = malloc(sd->numLectures * sizeof(Lecture*));
+    if (!lecturePtrs)
+        exit(ERROR_OUT_OF_MEMORY);
+    
+    /* Test all parameters for all lectures */
+    for (i = 0; i < sd->numLectures; i++)
+    {
+        Lecture *curLect = &sd->lectures[i];
+        curLect->fitness = 0;
+        
+        /* Test capacity for lecture room */
+        curLect->fitness += test_lecture_capacity(sd, curLect);
+        
+        /* Add to combined fitness */
+        combinedFitness += curLect->fitness;
+        
+        /* Insert pointer to this lecture in array */
+        lecturePtrs[i] = curLect;
+    }
+    
+    /* Sort array of pointers by highest fitness */
+    qsort(lecturePtrs, sd->numLectures, sizeof(Lecture*), compare_fitness);
+    
+    /* Show the 10 % worst */
+    for (i = 0; i < sd->numLectures / 10; i++)
+    {
+        /* Skip perfect lectures */
+        if (lecturePtrs[i]->fitness == 0)
+            continue;
+        
+        /* Mutate room */
+        lecturePtrs[i]->assignedRoom = &sd->rooms[rand() % sd->numRooms];
+    }
+    
+    return combinedFitness;
+}
+
 int main(void)
 {   
+    int i;
+    
     SemesterData sd;
     memset(&sd, 0, sizeof(SemesterData));
  
@@ -27,6 +81,16 @@ int main(void)
     
     /* Generate schedule */
     generate_initial_schedule(&sd);
+    
+    /* WIP: Run 100 generations */
+    for (i = 0; i < 100; i++)
+    {
+        int combinedFitness = generate_next(&sd);
+        printf("Generation %d has a combined fitness of %d\n", i + 1, combinedFitness);
+        
+        if (combinedFitness == 0)
+            break;
+    }
     
     /* Print schedules to files */
     print_schedule_to_file(&sd, &sd.specializations[0], "swdat.html");
