@@ -38,6 +38,7 @@ int generate_next(SemesterData *sd)
         
         /* Test capacity for lecture room */
         curLect->fitness += test_lecture_capacity(sd, curLect);
+        curLect->fitness += test_overlap(sd, curLect);
         
         /* Add to combined fitness */
         combinedFitness += curLect->fitness;

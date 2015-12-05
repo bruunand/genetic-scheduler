@@ -23,3 +23,9 @@ int test_lecture_capacity(SemesterData *sd, Lecture *lect)
     
     return severity;
 }
+
+/* TODO: Implement */
+int test_overlap(SemesterData *sd, Lecture *lect)
+{
+    return 0;
+}
