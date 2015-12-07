@@ -38,7 +38,8 @@ int generate_next(SemesterData *sd)
         
         /* Test capacity for lecture room */
         curLect->fitness += test_lecture_capacity(sd, curLect);
-        curLect->fitness += test_overlap(sd, curLect);
+        curLect->fitness += test_doublebooking(sd, curLect);
+        curLect->fitness += test_teacher_availability(sd, curLect);
         
         /* Add to combined fitness */
         combinedFitness += curLect->fitness;
@@ -50,14 +51,18 @@ int generate_next(SemesterData *sd)
     /* Sort array of pointers by highest fitness */
     qsort(lecturePtrs, sd->numLectures, sizeof(Lecture*), compare_fitness);
     
-    /* Show the 10 % worst */
+    /* Go through the 10 % worst */
     for (i = 0; i < sd->numLectures / 10; i++)
     {
         /* Skip perfect lectures */
         if (lecturePtrs[i]->fitness == 0)
             continue;
         
-        /* Mutate room */
+        /* printf("%d has a fitness of %d\n", i, lecturePtrs[i]->fitness); */
+        
+        /* Mutate */
+        lecturePtrs[i]->day = rand() % (sd->numWeeks * DAYS_PER_WEEK);
+        lecturePtrs[i]->period = rand() % 2;
         lecturePtrs[i]->assignedRoom = &sd->rooms[rand() % sd->numRooms];
     }
     
@@ -83,8 +88,8 @@ int main(void)
     /* Generate schedule */
     generate_initial_schedule(&sd);
     
-    /* WIP: Run 100 generations */
-    for (i = 0; i < 100; i++)
+    /* WIP: Run max 200 generations */
+    for (i = 0; i < 200; i++)
     {
         int combinedFitness = generate_next(&sd);
         printf("Generation %d has a combined fitness of %d\n", i + 1, combinedFitness);
