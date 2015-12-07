@@ -58,12 +58,12 @@ int generate_next(SemesterData *sd)
         return combinedFitness;
     
     /* Mutate random elements */
-    for (i = 0; i < 25; i++)
+    for (i = 0; i < 20; i++)
     {
         int rnd = rand() % sd->numLectures;
         
         /* Skip perfect lectures */
-        if (lecturePtrs[rnd]->fitness == 0)
+        if (lecturePtrs[rnd]->fitness <= 1)
             continue;
         
         /* Mutate */
@@ -99,10 +99,10 @@ int main(void)
     int lowestFitness = -1;
     for (i = 0; i < 1000000; i++)
     {
-        printf("%d\n", i + 1);
         int combinedFitness = generate_next(&sd);
         if (combinedFitness < lowestFitness || lowestFitness == -1)
             lowestFitness = combinedFitness;
+        printf("%d = %d\n", i + 1, combinedFitness);
         if (combinedFitness < 100)
         {
             break;

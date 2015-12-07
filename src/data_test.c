@@ -88,7 +88,6 @@ int test_doublebooking(SemesterData *sd, Lecture *lect)
         if (curLect->day != lect->day || curLect->period != lect->period)
             continue;
         
-        /* Check if the current lecture is already marked as doublebooked */
         if (curLect->flagDoublebookingRoom)
             continue;
 
@@ -114,7 +113,7 @@ int test_doublebooking(SemesterData *sd, Lecture *lect)
             
             if (curLect->day != lect->day || curLect->period != lect->period)
                 continue;
-            
+
             if (curLect->flagDoublebookingLecture)
                 continue;
             
@@ -166,9 +165,44 @@ int test_weekly_distribution(SemesterData *sd, Lecture *lect)
     
     /* Compute severity */
     if (totCoursePerDay > 1)
-        severity += 50 * (totCoursePerDay - 1);
+        severity += pow(25, totCoursePerDay - 1);
     if (totCoursePerWeek > 3)
         severity += pow(10, totCoursePerWeek - 3);
     
     return severity;
+}
+
+int test_semester_distribution(SemesterData *sd, Lecture *lect, Specialization *sp)
+{
+    int i, weekNum, lecturesCurWeek = 0, lecturesChecked = 0;
+    
+    weekNum = lect->day / DAYS_PER_WEEK;
+    
+    /* Iterate through all lectures */
+    for (i = 0; i < sd->numLectures; i++)
+    {
+        Lecture *curLect = &sd->lectures[i];
+        
+        if (curLect->day / DAYS_PER_WEEK != weekNum)
+            continue;
+        
+        if (!specialization_has_lecture(sp, curLect))
+            continue;
+        
+        lecturesChecked++;
+        
+        if (lect->flagSemesterOverflow)
+            continue;
+        
+        lecturesCurWeek++;
+        lect->flagSemesterOverflow = 1;
+    }
+    
+    /* Return severity */
+    if (lecturesCurWeek <= 2 && lecturesChecked != 0)
+        return pow(10, 5 - lecturesCurWeek) / (weekNum + 1);
+    else if (lecturesCurWeek > 7)
+        return pow(10, totLecturesPerWeek - 7) * (weekNum + 1);
+    else
+        return 0;
 }
