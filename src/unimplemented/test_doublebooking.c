@@ -1,3 +1,11 @@
+/**
+ *  \brief Tests doublebooking
+ *  
+ *  \param [in] sd Semester data
+ *  \return Returns the fitness of the test
+ *  
+ *  \details This function splits the shedule in two, and then goes through them one at a time in a new function
+ */
 int test_doublebooking(semesterData *sd)
 {
     int fitness = 0, a, b, c=0, d=0;
