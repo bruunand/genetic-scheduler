@@ -50,16 +50,7 @@ int generate_next(SemesterData *sd)
     /* Sort array of pointers by highest fitness */
     qsort(lecturePtrs, sd->numLectures, sizeof(Lecture*), compare_fitness);
     
-    /* Show the 10 % worst */
-    for (i = 0; i < sd->numLectures / 10; i++)
-    {
-        /* Skip perfect lectures */
-        if (lecturePtrs[i]->fitness == 0)
-            continue;
-        
-        /* Mutate room */
-        lecturePtrs[i]->assignedRoom = &sd->rooms[rand() % sd->numRooms];
-    }
+    mutate(lecturePtrs);
     
     return combinedFitness;
 }
