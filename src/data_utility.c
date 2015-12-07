@@ -109,18 +109,29 @@ const char* get_name_of_day(int dayId)
     return dayNames[dayId % DAYS_PER_WEEK];
 }
 
-/*void get_specializations_for_course(SemesterData *sd, int courseIndex, Specialization *spec)
+/* Returns amount of specializations */
+int get_specializations_for_course(SemesterData *sd, Course *course, Specialization ***specs)
 {
-    int i, j, h;
+    int i, j, amount = 0;
+    
+    *specs = 0;
     
     for(i = 0; i < sd->numSpecializations; i++)
     {
-        for(j = 0; j < sd->specializations[i]->numCourses; j++)
+        for(j = 0; j < sd->specializations[i].numCourses; j++)
         {
-            if(courceIndex == sd->specializations[i]->courses[j])
+            if (sd->specializations[i].courses[j] == course)
             {
-                spec[h++] = sd->specializations[i];
+                /* Allocate memory for pointers to specializations */
+                *specs = realloc(*specs, (amount + 1) * sizeof(Specialization*));
+                if (!*specs)
+                    exit(ERROR_OUT_OF_MEMORY);
+                
+                (*specs)[amount] = &sd->specializations[i];
+                amount++;
             }
         }
     }
-}*/
+    
+    return amount;
+}

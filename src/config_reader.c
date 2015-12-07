@@ -59,7 +59,7 @@ int read_config(char *fileName, SemesterData *sd)
     return 1;
 }
 
-void handle_line(char* line, SemesterData *sd)
+void handle_line(char *line, SemesterData *sd)
 {
     char command[16], typeName[16];
     int p = 0; /* Keeps track of our current position in the string */

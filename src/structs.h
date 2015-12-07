@@ -34,7 +34,7 @@ typedef struct
     int totLectures;
     
     int numTeachers;     /* Number of teachers associated */
-    Teacher **teachers; /* Array of associated teachers */
+    Teacher **teachers;  /* Array of associated teachers */
 } Course;
 
 /* Specialization (major) struct */
@@ -60,6 +60,9 @@ typedef struct
     Course *assignedCourse;
     
     int fitness;
+    
+    int flagDoublebookingRoom;
+    int flagDoublebookingLecture;
 } Lecture;
 
 /* SemesterData struct */

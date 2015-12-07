@@ -108,6 +108,7 @@ void print_period(SemesterData *sd, Specialization *sp, FILE *f, int periodId, i
             else
             {
                 begin_print_data(f, lect->assignedCourse->name);
+                fprintf(f, "<b>[lect %d, period %d]</b>", j, lect->day);
                 for (k = 0; k < lect->assignedCourse->numTeachers; k++)
                     fprintf(f, "<br />%s", lect->assignedCourse->teachers[k]->name);
                 fprintf(f, "<br />%s", lect->assignedRoom->name);

@@ -49,21 +49,21 @@ int generate_next(SemesterData *sd)
     }
     
     /* Sort array of pointers by highest fitness */
-    qsort(lecturePtrs, sd->numLectures, sizeof(Lecture*), compare_fitness);
+    /*qsort(lecturePtrs, sd->numLectures, sizeof(Lecture*), compare_fitness);*/
     
-    /* Go through the 10 % worst */
-    for (i = 0; i < sd->numLectures / 10; i++)
+    /* Mutate random elements */
+    for (i = 0; i < 25; i++)
     {
+        int rnd = rand() % sd->numLectures;
+        
         /* Skip perfect lectures */
-        if (lecturePtrs[i]->fitness == 0)
+        if (lecturePtrs[rnd]->fitness == 0)
             continue;
-        
-        /* printf("%d has a fitness of %d\n", i, lecturePtrs[i]->fitness); */
-        
+
         /* Mutate */
-        lecturePtrs[i]->day = rand() % (sd->numWeeks * DAYS_PER_WEEK);
-        lecturePtrs[i]->period = rand() % 2;
-        lecturePtrs[i]->assignedRoom = &sd->rooms[rand() % sd->numRooms];
+        lecturePtrs[rnd]->day = rand() % (sd->numWeeks * DAYS_PER_WEEK);
+        lecturePtrs[rnd]->period = rand() % 2;
+        lecturePtrs[rnd]->assignedRoom = &sd->rooms[rand() % sd->numRooms];
     }
     
     return combinedFitness;
@@ -88,13 +88,13 @@ int main(void)
     /* Generate schedule */
     generate_initial_schedule(&sd);
     
-    /* WIP: Run max 200 generations */
-    for (i = 0; i < 200; i++)
+    /* WIP: Run max 500 generations */
+    for (i = 0; i < 500; i++)
     {
         int combinedFitness = generate_next(&sd);
         printf("Generation %d has a combined fitness of %d\n", i + 1, combinedFitness);
-        
-        if (combinedFitness == 0)
+
+        if (combinedFitness < 50)
             break;
     }
     
