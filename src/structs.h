@@ -63,6 +63,8 @@ typedef struct
     
     int flagDoublebookingRoom;
     int flagDoublebookingLecture;
+    int flagLectureOverflow;
+    int flagSemesterOverflow;
 } Lecture;
 
 /* SemesterData struct */

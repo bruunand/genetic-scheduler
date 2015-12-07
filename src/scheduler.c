@@ -11,12 +11,15 @@
 #include "defs.h"
 #include "html_output.h"
 
-int compare_fitness(const void *a, const void *b)
+int compare_time(const void *a, const void *b)
 {
     Lecture *firstLecture  = *(Lecture**) a;
     Lecture *secondLecture = *(Lecture**) b;
    
-    return secondLecture->fitness - firstLecture->fitness;
+    if (firstLecture->day != secondLecture->day)
+        return firstLecture->day - secondLecture->day;
+    else
+        return firstLecture->period - secondLecture->period;
 }
 
 /* Work in progress */
@@ -30,6 +33,8 @@ int generate_next(SemesterData *sd)
     if (!lecturePtrs)
         exit(ERROR_OUT_OF_MEMORY);
     
+    reset_lecture_flags(sd);
+    
     /* Test all parameters for all lectures */
     for (i = 0; i < sd->numLectures; i++)
     {
@@ -40,6 +45,7 @@ int generate_next(SemesterData *sd)
         curLect->fitness += test_lecture_capacity(sd, curLect);
         curLect->fitness += test_doublebooking(sd, curLect);
         curLect->fitness += test_teacher_availability(sd, curLect);
+        curLect->fitness += test_weekly_distribution(sd, curLect);
         
         /* Add to combined fitness */
         combinedFitness += curLect->fitness;
@@ -48,8 +54,8 @@ int generate_next(SemesterData *sd)
         lecturePtrs[i] = curLect;
     }
     
-    /* Sort array of pointers by highest fitness */
-    /*qsort(lecturePtrs, sd->numLectures, sizeof(Lecture*), compare_fitness);*/
+    if (combinedFitness < 100)
+        return combinedFitness;
     
     /* Mutate random elements */
     for (i = 0; i < 25; i++)
@@ -59,7 +65,7 @@ int generate_next(SemesterData *sd)
         /* Skip perfect lectures */
         if (lecturePtrs[rnd]->fitness == 0)
             continue;
-
+        
         /* Mutate */
         lecturePtrs[rnd]->day = rand() % (sd->numWeeks * DAYS_PER_WEEK);
         lecturePtrs[rnd]->period = rand() % 2;
@@ -71,12 +77,13 @@ int generate_next(SemesterData *sd)
 
 int main(void)
 {   
-    int i;
+    int i, seed = time(NULL);
     
     SemesterData sd;
     memset(&sd, 0, sizeof(SemesterData));
  
-    srand(time(NULL));
+    /*scanf("%d", &seed);*/
+    srand(seed);
     
     /* Read configuration file */
     if (!read_config("scheduler.input", &sd))
@@ -89,14 +96,20 @@ int main(void)
     generate_initial_schedule(&sd);
     
     /* WIP: Run max 500 generations */
-    for (i = 0; i < 500; i++)
+    int lowestFitness = -1;
+    for (i = 0; i < 1000000; i++)
     {
+        printf("%d\n", i + 1);
         int combinedFitness = generate_next(&sd);
-        printf("Generation %d has a combined fitness of %d\n", i + 1, combinedFitness);
-
-        if (combinedFitness < 50)
+        if (combinedFitness < lowestFitness || lowestFitness == -1)
+            lowestFitness = combinedFitness;
+        if (combinedFitness < 100)
+        {
             break;
+        }
     }
+    
+    printf("lowest %d\n", lowestFitness);
     
     /* Print schedules to files */
     print_schedule_to_file(&sd, &sd.specializations[0], "swdat.html");

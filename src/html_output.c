@@ -98,7 +98,8 @@ void print_period(SemesterData *sd, Specialization *sp, FILE *f, int periodId, i
             /* Check if there's already a course on this hour and day*/
             if (foundMatches)
             {
-                printf("Warning: Overlap on %s at %s\n",
+                printf("Warning: Overlap on %d, %s at %s\n",
+                    lect->day,
                     get_name_of_day(lect->day),
                     get_name_of_period(lect->period));
                     
@@ -108,7 +109,7 @@ void print_period(SemesterData *sd, Specialization *sp, FILE *f, int periodId, i
             else
             {
                 begin_print_data(f, lect->assignedCourse->name);
-                fprintf(f, "<b>[lect %d, period %d]</b>", j, lect->day);
+                fprintf(f, "<b> [Lecture no. %d, Day %d]</b>", j, lect->day);
                 for (k = 0; k < lect->assignedCourse->numTeachers; k++)
                     fprintf(f, "<br />%s", lect->assignedCourse->teachers[k]->name);
                 fprintf(f, "<br />%s", lect->assignedRoom->name);

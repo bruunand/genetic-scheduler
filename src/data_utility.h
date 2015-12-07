@@ -1,5 +1,7 @@
 #include "structs.h"
 
+void reset_lecture_flags(SemesterData *sd);
+
 void add_lecture(SemesterData *sd, int lectIndex, int day, int period, int roomId, int courseId);
 
 int teacher_has_offtime(SemesterData *sd, Teacher *teacher, int dayId, int periodId);

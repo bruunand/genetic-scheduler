@@ -7,6 +7,22 @@
 const char* periodNames[] = {"08:15 - 12:00", "12:30 - 16:15"};
 const char* dayNames[] = {"Monday", "Tuesday", "Wednesday", "Thursday", "Friday"};
 
+/* Reset flags for all lectures */
+void reset_lecture_flags(SemesterData *sd)
+{
+    int i;
+
+    for (i = 0; i < sd->numLectures; i++)
+    {
+        Lecture *curLect = &sd->lectures[i];
+
+        curLect->flagDoublebookingRoom = 0;
+        curLect->flagDoublebookingLecture = 0;
+        curLect->flagLectureOverflow = 0;
+        curLect->flagSemesterOverflow = 0;
+    }
+}
+
 /* Adds lecture to the SemesterData struct */
 void add_lecture(SemesterData *sd, int lectIndex, int day, int period, int roomId, int courseId)
 {
