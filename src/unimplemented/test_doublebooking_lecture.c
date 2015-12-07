@@ -1,3 +1,13 @@
+/**
+ *  \brief Tests doublebooking on an array of lectures
+ *  
+ *  \param [in] sd Semester data
+ *  \param [in] lecture the lectures we use
+ *  \param [in] numLectures the amount of lectures in the array
+ *  \return returns the fitness of the test
+ *  
+ *  \details This function goes through an array of lectures and determins the fitness of the lectures within.
+ */
 int test_doublebooking_lectures(semesterData *sd, lecture *lecture, int numLectures)
 {
     int fitness = 0, a, b, c, d = 0, e, f, g;
@@ -8,6 +18,7 @@ int test_doublebooking_lectures(semesterData *sd, lecture *lecture, int numLectu
         exit(ERROR_OUT_OF_MEMORY);
     }
     
+    /* This part checks for overlap on rooms */
     for(a = 0; a < numLectures-1; a++)
     {
         for(b = a+1; b < numLectures-1; b++)
@@ -21,6 +32,7 @@ int test_doublebooking_lectures(semesterData *sd, lecture *lecture, int numLectu
         }
     }
     
+    /* Here we check for overlaps on specializations */
     for(a = 0; a < numLectures-1; a++)
     {
         get_specializations_for_course(sd, lecture[a].assignedCourse, specWithCurrentCourse);
@@ -38,6 +50,7 @@ int test_doublebooking_lectures(semesterData *sd, lecture *lecture, int numLectu
         }
     }
     
+    /* Here we check for overlaps on teachers */
     for(a = 0; a < numLectures-1; a++)
     {
         for(b = 0; b < numLectures-1; b++)
