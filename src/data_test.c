@@ -190,7 +190,8 @@ int test_semester_distribution(SemesterData *sd, Lecture *lect)
 	/* Get severity for all specializations */
 	for (i = 0; i < numSpecs; i++)
 	{
-		severity += test_semester_distribution_inner(sd, lect, specs[i]);
+        int tmp = test_semester_distribution_inner(sd, lect, specs[i]);
+		severity += tmp;
 	}
 	
 	free(specs);
@@ -201,10 +202,12 @@ int test_semester_distribution(SemesterData *sd, Lecture *lect)
 /* Test how the lecture fits into the semester distribution */
 int test_semester_distribution_inner(SemesterData *sd, Lecture *lect, Specialization *sp)
 {
-	printf("test %s\n", sp->name);
-    int i, weekNum, lecturesCurWeek = 0, lecturesChecked = 0;
+    int i, weekNum, lecturesCurWeek = 0, maxLecturesCurWeek;
     
     weekNum = lect->day / DAYS_PER_WEEK;
+    
+    if (lect->flagSemesterOverflow)
+        return 0;
     
     /* Iterate through all lectures */
     for (i = 0; i < sd->numLectures; i++)
@@ -219,25 +222,19 @@ int test_semester_distribution_inner(SemesterData *sd, Lecture *lect, Specializa
         if (!specialization_has_lecture(sp, curLect))
             continue;
         
-        lecturesChecked++;
-        
-        if (lect->flagSemesterOverflow)
-            continue;
-        
         lecturesCurWeek++;
-        lect->flagSemesterOverflow = 1;
+        curLect->flagSemesterOverflow = 1;
     }
-    
-	printf("%d lectures on week %d\n", lecturesCurWeek, weekNum + 1);
-	
-    /*
-	 * Return severity.
-	 * Prioritize an early distribution of lectures.
-	 */
-    if (lecturesCurWeek <= 2 && lecturesChecked != 0)
-        return 50;
-    else if (lecturesCurWeek > 7)
-        return 100;
+
+    /* Distribute most lectures in 3/4 of the semester */
+    if (weekNum > sd->numWeeks * 3 / 4)
+        maxLecturesCurWeek = 7 - weekNum * ((float) 6 / sd->numWeeks);
+    else
+        maxLecturesCurWeek = 7;
+
+    /* Check if this week exceeds the allowed lectures */
+    if (lecturesCurWeek > maxLecturesCurWeek)
+        return (lecturesCurWeek - maxLecturesCurWeek) * 50;
     else
         return 0;
 }

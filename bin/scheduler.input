@@ -1,14 +1,14 @@
 # AAU Scheduler Configuration
 #   [type] [value]
-set WEEKS 16
+set WEEKS 15
 
 # Add teachers
 #           '[name]'            [offDay period1 period2...]
-add TEACHER 'Lars Peter Jensen' 4 1 1
-add TEACHER 'Kurt Normark' 4 1 1
-add TEACHER 'Jacob Broe' 4 1 1
-add TEACHER 'Mr. Robot' 4 1 1
-add TEACHER 'Olav Geil' 4 1 1
+add TEACHER 'Lars Peter Jensen'
+add TEACHER 'Kurt Normark'
+add TEACHER 'Jacob Broe'
+add TEACHER 'Mr. Robot'
+add TEACHER 'Olav Geil'
 
 # Add rooms
 #        '[name]'       [#numSeats]

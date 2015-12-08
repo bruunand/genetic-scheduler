@@ -79,7 +79,8 @@ int generate_next(SemesterData *sd)
 int main(void)
 {   
     int i, seed;
-    
+    int lowestFitness = -1, start;
+        
     SemesterData sd;
     memset(&sd, 0, sizeof(SemesterData));
  
@@ -98,20 +99,22 @@ int main(void)
     generate_initial_schedule(&sd);
     
     /* WIP: Run max 500 generations */
-    int lowestFitness = -1;
+    start = time(NULL);
     for (i = 0; i < 1000000; i++)
     {
         int combinedFitness = generate_next(&sd);
         if (combinedFitness < lowestFitness || lowestFitness == -1)
             lowestFitness = combinedFitness;
-        printf("%d = %d\n", i + 1, combinedFitness);
+        if ((i + 1) % 1000 == 0)
+            printf("%d = %d\n", i + 1, combinedFitness);
         if (combinedFitness < 100)
         {
             break;
         }
     }
     
-    printf("lowest %d\n", lowestFitness);
+    printf("final %d, lowest %d\n", i, lowestFitness);
+    printf("took %d seconds\n", time(NULL) - start);
     
     /* Print schedules to files */
     print_schedule_to_file(&sd, &sd.specializations[0], "swdat.html");
