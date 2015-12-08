@@ -46,7 +46,8 @@ int generate_next(SemesterData *sd)
         curLect->fitness += test_doublebooking(sd, curLect);
         curLect->fitness += test_teacher_availability(sd, curLect);
         curLect->fitness += test_weekly_distribution(sd, curLect);
-        
+        curLect->fitness += test_semester_distribution(sd, curLect);
+		
         /* Add to combined fitness */
         combinedFitness += curLect->fitness;
         
@@ -77,12 +78,13 @@ int generate_next(SemesterData *sd)
 
 int main(void)
 {   
-    int i, seed = time(NULL);
+    int i, seed;
     
     SemesterData sd;
     memset(&sd, 0, sizeof(SemesterData));
  
-    /*scanf("%d", &seed);*/
+    if(!scanf("%d", &seed))
+		seed = time(NULL);
     srand(seed);
     
     /* Read configuration file */

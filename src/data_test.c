@@ -1,11 +1,13 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include <math.h>
 
 #include "structs.h"
 #include "data_utility.h"
 #include "defs.h"
+#include "data_test.h"
 
-
+/* Test how well the lecture fits into the assigned room. */
 int test_lecture_capacity(SemesterData *sd, Lecture *lect)
 {
     int roomCap, numStudents, severity = 0, roomSeats;
@@ -16,17 +18,20 @@ int test_lecture_capacity(SemesterData *sd, Lecture *lect)
     numStudents = get_students_on_course(sd, lect->assignedCourse);
 
     /*
-	 * Severity is increased by 1 per 5% room capacity is exceeded.
-	 * Increased by 1 if half or less of the seats are used.
+	 * Severity is increased by 1 per 5% room capacity exceeded.
+	 * Set to 1 if half or less of the seats are used.
 	*/
     if (roomCap < numStudents)
-        severity += 1 + (numStudents - roomCap) / ((roomCap > roomSeats) ? (roomCap - roomSeats) : 1);
+        severity = 1 + (numStudents - roomCap) / ((roomCap > roomSeats) ? (roomCap - roomSeats) : 1);
     else if ((roomSeats / numStudents) >= 2)
-        severity++;
+        severity = 1;
     
     return severity;
 }
 
+/* Test whether the teacher has an offtime on a given date.
+ * Also test whether the teacher is already assigned to a lecture on
+ * the same date. */
 int test_teacher_availability(SemesterData *sd, Lecture *lect)
 {
     int severity = 0, i, j, k;
@@ -69,7 +74,7 @@ int test_teacher_availability(SemesterData *sd, Lecture *lect)
     return severity;
 }
 
-/*
+/* Test for doublebooking. Both tests for room and lecture doublebooking.
  * lect: Pointer to lecture to test.
 */
 int test_doublebooking(SemesterData *sd, Lecture *lect)
@@ -131,6 +136,7 @@ int test_doublebooking(SemesterData *sd, Lecture *lect)
     return severity;
 }
 
+/* Test distribution a weekly basis to ensure an even workload. */
 int test_weekly_distribution(SemesterData *sd, Lecture *lect)
 {
     int severity = 0, i, weekNum;
@@ -172,8 +178,30 @@ int test_weekly_distribution(SemesterData *sd, Lecture *lect)
     return severity;
 }
 
-int test_semester_distribution(SemesterData *sd, Lecture *lect, Specialization *sp)
+/* Makes a call to the inner test function for every specialization
+ * on the specified lecture */
+int test_semester_distribution(SemesterData *sd, Lecture *lect)
 {
+	int severity = 0, numSpecs, i;
+	Specialization **specs = 0;
+	
+	numSpecs = get_specializations_for_course(sd, lect->assignedCourse, &specs);
+	
+	/* Get severity for all specializations */
+	for (i = 0; i < numSpecs; i++)
+	{
+		severity += test_semester_distribution_inner(sd, lect, specs[i]);
+	}
+	
+	free(specs);
+	
+	return severity;
+}
+
+/* Test how the lecture fits into the semester distribution */
+int test_semester_distribution_inner(SemesterData *sd, Lecture *lect, Specialization *sp)
+{
+	printf("test %s\n", sp->name);
     int i, weekNum, lecturesCurWeek = 0, lecturesChecked = 0;
     
     weekNum = lect->day / DAYS_PER_WEEK;
@@ -183,9 +211,11 @@ int test_semester_distribution(SemesterData *sd, Lecture *lect, Specialization *
     {
         Lecture *curLect = &sd->lectures[i];
         
+		/* Only check lectures that are in the same week */
         if (curLect->day / DAYS_PER_WEEK != weekNum)
             continue;
         
+		/* Only check lectures that this specialization has */
         if (!specialization_has_lecture(sp, curLect))
             continue;
         
@@ -198,11 +228,16 @@ int test_semester_distribution(SemesterData *sd, Lecture *lect, Specialization *
         lect->flagSemesterOverflow = 1;
     }
     
-    /* Return severity */
+	printf("%d lectures on week %d\n", lecturesCurWeek, weekNum + 1);
+	
+    /*
+	 * Return severity.
+	 * Prioritize an early distribution of lectures.
+	 */
     if (lecturesCurWeek <= 2 && lecturesChecked != 0)
-        return pow(10, 5 - lecturesCurWeek) / (weekNum + 1);
+        return 50;
     else if (lecturesCurWeek > 7)
-        return pow(10, totLecturesPerWeek - 7) * (weekNum + 1);
+        return 100;
     else
         return 0;
 }
