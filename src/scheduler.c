@@ -11,6 +11,15 @@
 #include "defs.h"
 #include "html_output.h"
 
+/**
+ *  \brief A function to compare times of two lectures.
+ *  
+ *  \param [in] a Lecture one
+ *  \param [in] b Lecture two
+ *  \return Returns a value to qsort in order to determin the way to order the lectures array
+ *  
+ *  \details This function is run by qsort. The function starts by comparing the two lectures by day. If they have the same day, they are compared by period
+ */
 int compare_time(const void *a, const void *b)
 {
     Lecture *firstLecture  = *(Lecture**) a;
@@ -22,6 +31,14 @@ int compare_time(const void *a, const void *b)
         return firstLecture->period - secondLecture->period;
 }
 
+/**
+ *  \brief Brief
+ *  
+ *  \param [in] sd SemesterData contains all the information about the structs needed for this function
+ *  \return Returns the combined fitness of ?
+ *  
+ *  \details Run by main
+ */
 /* Work in progress */
 int generate_next(SemesterData *sd)
 {
@@ -76,6 +93,13 @@ int generate_next(SemesterData *sd)
     return combinedFitness;
 }
 
+/**
+ *  \brief The main function
+ *  
+ *  \return Returns a value based on how the program exited
+ *  
+ *  \details Run by the OS
+ */
 int main(void)
 {   
     int i, seed;
@@ -122,10 +146,13 @@ int main(void)
     return 0;
 }
 
-/*
- * Generate a 'dumb' schedule (array of lectures)
- * The only fulfilled requirement is the amount of lectures per course
-*/
+/**
+ *  \brief Generate a 'dumb' schedule (array of lectures)
+ *  
+ *  \param [in] sd SemesterData contains all the information about the structs needed for this function
+ *  
+ *  \details Run by main. The only fulfilled requirement is the amount of lectures per course
+ */
 void generate_initial_schedule(SemesterData *sd)
 {
     int i, j, k = 0;
@@ -149,10 +176,13 @@ void generate_initial_schedule(SemesterData *sd)
     }
 }
 
-/*
- * Free all memory associated with the SemesterData struct.
- * Dynamically allocated arrays inside the structs are also freed.
-*/
+/**
+ *  \brief Free all memory associated with the SemesterData struct.
+ *  
+ *  \param [in] sd The SemesterData struct
+ *  
+ *  \details Run by main. Dynamically allocated arrays inside the structs are also freed.
+ */
 void free_all(SemesterData *sd)
 {
     int i;
