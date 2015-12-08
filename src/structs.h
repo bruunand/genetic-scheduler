@@ -1,3 +1,7 @@
+/**
+ *  \file structs.h
+ *  \brief The header file containing all the structs required by the program
+ */
 #pragma once
 
 #include "defs.h"

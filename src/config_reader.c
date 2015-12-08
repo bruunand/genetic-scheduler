@@ -1,3 +1,7 @@
+/**
+ *  \file config_reader.c
+ *  \brief This script is responsible for reading the data file
+ */
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
