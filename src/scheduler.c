@@ -22,9 +22,6 @@ int main(void)
     Generation gen;
     SemesterData sd;
     
-    /* Generation points to this SemesterData struct */
-    gen.sd = &sd;
-    
     /* Null all SemesterData values */
     memset(&sd, 0, sizeof(SemesterData));
  
@@ -40,7 +37,7 @@ int main(void)
     }
     
     /* Generate initial generation */
-    generate_initial_generation(&sd, &gen);
+    gen = generate_initial_generation(&sd);
     
     /* Print schedules to files */
     print_schedule_to_file(&gen, 0, &sd.specializations[0], "swdat.html");
@@ -52,7 +49,7 @@ int main(void)
 }
 
 /* Generate initial generation by generating n schedules */
-void generate_initial_generation(SemesterData *sd, Generation *gp)
+Generation generate_initial_generation(SemesterData *sd, Generation *gp)
 {
     int i, j, k, l;
 
@@ -84,6 +81,12 @@ void generate_initial_generation(SemesterData *sd, Generation *gp)
             }
         }
     }
+    
+    /* Debug: Test fitness for all generations */
+    for (i = 0; i < GENERATION_SIZE; i++)
+    {
+        printf("%d has a fitness of %d\n", i, test_schedule_fitness(gp, i));
+    }
 }
 
 /*
@@ -93,6 +96,8 @@ void generate_initial_generation(SemesterData *sd, Generation *gp)
 void free_all(SemesterData *sd)
 {
     int i;
+    
+    /* TODO: Free generation */
     
     /* Free teachers */
     if (sd->teachers)

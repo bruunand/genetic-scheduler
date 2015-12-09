@@ -69,9 +69,7 @@ typedef struct
 
     Room   *assignedRoom;
     Course *assignedCourse;
-    
-    int fitness;
-    
+
     Flags flags;
 } Lecture;
 
@@ -104,5 +102,5 @@ typedef struct
     SemesterData *sd;
     
     /* Array of schedules. */
-    Lecture *schedules[GENERATION_SIZE]; /*Lecture *schedules[GENERATION_SIZE];*/
+    Lecture *schedules[GENERATION_SIZE];
 } Generation;

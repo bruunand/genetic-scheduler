@@ -4,7 +4,7 @@
  */
 #include "structs.h"
 
-void reset_lecture_flags(Generation *gp, int scheduleId);
+void reset_schedule_flags(Generation *gp, int scheduleId);
 
 void add_lecture(Generation *gp, int scheduleId, int lectureId, int day, int period, int roomId, int courseId);
 

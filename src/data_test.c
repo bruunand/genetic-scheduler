@@ -16,13 +16,13 @@
  *  
  *  \param [in] sd SemesterData contains all the information about the structs needed for this function
  *  \param [in] lect Pointer to lecture to test
- *  \return Returns the severity of the test. Aka. Fitness
+ *  \return Returns the fitness of the test. Aka. Fitness
  *  
  *  \details This function checks the capacity of the room and the amount of students on the lecture and determins the penalty in fitness by comparing the two.
  */
 int test_lecture_capacity(SemesterData *sd, Lecture *lect)
 {
-    int roomCap, numStudents, severity = 0, roomSeats;
+    int roomCap, numStudents, fitness = 0, roomSeats;
     
     /* Functions, calculations and pointers used multiple times are assigned to local variables. */
     roomSeats = lect->assignedRoom->seats;
@@ -34,11 +34,11 @@ int test_lecture_capacity(SemesterData *sd, Lecture *lect)
      * Set to 1 if half or less of the seats are used.
     */
     if (roomCap < numStudents)
-        severity = 1 + (numStudents - roomCap) / ((roomCap > roomSeats) ? (roomCap - roomSeats) : 1);
+        fitness = 1 + (numStudents - roomCap) / ((roomCap > roomSeats) ? (roomCap - roomSeats) : 1);
     else if ((roomSeats / numStudents) >= 2)
-        severity = 1;
+        fitness = 1;
     
-    return severity;
+    return fitness;
 }
 
 /**
@@ -47,18 +47,18 @@ int test_lecture_capacity(SemesterData *sd, Lecture *lect)
  *  \param [in] gp Generation contains the required information about the data that should be printed
  *  \param [in] scheduleId ???????????????
  *  \param [in] lect Pointer to lecture to test
- *  \return Returns the severity of the test. Aka. Fitness
+ *  \return Returns the fitness of the test. Aka. Fitness
  *  
  *  \details Also test whether the teacher is already assigned to a lecture on the same date
  */
 int test_teacher_availability(Generation *gp, int scheduleId, Lecture *lect)
 {
-    int severity = 0, i, j, k;
+    int fitness = 0, i, j, k;
     
     /*
      * Iterate through all teachers assigned to this course.
-     * If they have an offtime on this day, increase the severity.
-     * If they have another lecture, increase the severity.
+     * If they have an offtime on this day, increase the fitness.
+     * If they have another lecture, increase the fitness.
     */
     for (i = 0; i < lect->assignedCourse->numTeachers; i++)
     {
@@ -66,7 +66,7 @@ int test_teacher_availability(Generation *gp, int scheduleId, Lecture *lect)
         
         /* Test if they are off on this day */
         if (teacher_has_offtime(gp->sd, curTeacher, lect->day, lect->period))
-            severity += 100;
+            fitness += 100;
         
         /* Test if they have another lecture at this time */
         for (j = 0; j < gp->sd->numLectures; j++)
@@ -81,16 +81,16 @@ int test_teacher_availability(Generation *gp, int scheduleId, Lecture *lect)
             if (curLect->day != lect->day || curLect->period != lect->period)
                 continue;
             
-            /* Increase severity if this teacher is on this course */
+            /* Increase fitness if this teacher is on this course */
             for (k = 0; k < curLect->assignedCourse->numTeachers; k++)
             {
                 if (curLect->assignedCourse->teachers[k] == curTeacher)
-                    severity += 100;
+                    fitness += 100;
             }
         }
     }
     
-    return severity;
+    return fitness;
 }
 
 /**
@@ -99,14 +99,14 @@ int test_teacher_availability(Generation *gp, int scheduleId, Lecture *lect)
  *  \param [in] gp Generation contains the required information about the data that should be printed
  *  \param [in] scheduleId ???????????????
  *  \param [in] lect Pointer to lecture to test
- *  \return Returns the severity of the test. Aka. Fitness
+ *  \return Returns the fitness of the test. Aka. Fitness
  *  
  *  \details Performs tests for both room and lecture doublebooking
  */
 int test_doublebooking(Generation *gp, int scheduleId, Lecture *lect)
 {
     Specialization **specs;
-    int severity = 0, numSpecs, i, j;
+    int fitness = 0, numSpecs, i, j;
     
     /* Test room doublebooking */
     for(i = 0; i < gp->sd->numLectures; i++)
@@ -126,7 +126,7 @@ int test_doublebooking(Generation *gp, int scheduleId, Lecture *lect)
         {
             curLect->flags.doubleBookingRoom = 1;
             
-            severity += 100;
+            fitness += 100;
         }
     }
     
@@ -152,14 +152,14 @@ int test_doublebooking(Generation *gp, int scheduleId, Lecture *lect)
             {
                 curLect->flags.doubleBookingLecture = 1;
 
-                severity += 100;
+                fitness += 100;
             }
         }
     }
     
     free(specs);
     
-    return severity;
+    return fitness;
 }
 
 /**
@@ -168,13 +168,13 @@ int test_doublebooking(Generation *gp, int scheduleId, Lecture *lect)
  *  \param [in] gp Generation contains the required information about the data that should be printed
  *  \param [in] scheduleId ???????????????
  *  \param [in] lect Pointer to lecture to test
- *  \return Returns the severity of the test. Aka. Fitness
+ *  \return Returns the fitness of the test. Aka. Fitness
  *  
  *  \details Details
  */
 int test_weekly_distribution(Generation *gp, int scheduleId, Lecture *lect)
 {
-    int severity = 0, i, weekNum;
+    int fitness = 0, i, weekNum;
     int totCoursePerWeek = 0, totCoursePerDay = 0;
 
     weekNum = lect->day / DAYS_PER_WEEK;
@@ -204,13 +204,13 @@ int test_weekly_distribution(Generation *gp, int scheduleId, Lecture *lect)
         }
     }
     
-    /* Compute severity */
+    /* Compute fitness */
     if (totCoursePerDay > 1)
-        severity += pow(25, totCoursePerDay - 1);
+        fitness += pow(25, totCoursePerDay - 1);
     if (totCoursePerWeek > 3)
-        severity += pow(10, totCoursePerWeek - 3);
+        fitness += pow(10, totCoursePerWeek - 3);
     
-    return severity;
+    return fitness;
 }
 
  /**
@@ -219,27 +219,27 @@ int test_weekly_distribution(Generation *gp, int scheduleId, Lecture *lect)
  *  \param [in] gp Generation contains the required information about the data that should be printed
  *  \param [in] scheduleId ???????????????
  *  \param [in] lect Pointer to lecture to test
- *  \return Returns the severity of the test. Aka. Fitness
+ *  \return Returns the fitness of the test. Aka. Fitness
  *  
  *  \details Makes a call to the inner test function for every specialization on the specified lecture
  */
 int test_semester_distribution(Generation *gp, int scheduleId, Lecture *lect)
 {
-    int severity = 0, numSpecs, i;
+    int fitness = 0, numSpecs, i;
     Specialization **specs = 0;
     
     numSpecs = get_specializations_for_course(gp->sd, lect->assignedCourse, &specs);
     
-    /* Get severity for all specializations */
+    /* Get fitness for all specializations */
     for (i = 0; i < numSpecs; i++)
     {
     int tmp = test_semester_distribution_inner(gp, scheduleId, lect, specs[i]);
-        severity += tmp;
+        fitness += tmp;
     }
     
     free(specs);
     
-    return severity;
+    return fitness;
 }
 
 /**
@@ -249,7 +249,7 @@ int test_semester_distribution(Generation *gp, int scheduleId, Lecture *lect)
  *  \param [in] scheduleId ???????????????
  *  \param [in] lect Pointer to lecture to test
  *  \param [in] sp ???????????????????????????????????
- *  \return Returns the severity of the test. Aka. Fitness
+ *  \return Returns the fitness of the test. Aka. Fitness
  *  
  *  \details Details
  */
@@ -290,4 +290,36 @@ int test_semester_distribution_inner(Generation *gp, int scheduleId, Lecture *le
         return (lecturesCurWeek - maxLecturesCurWeek) * 50;
     else
         return 0;
+}
+
+/* Test fitness for a single lecture (gene) */
+int test_lecture_fitness(Generation *gp, int scheduleId, Lecture *lect)
+{
+    int combinedFitness = 0;
+    
+    combinedFitness += test_lecture_capacity(gp->sd, lect);
+    combinedFitness += test_teacher_availability(gp, scheduleId, lect);
+    combinedFitness += test_doublebooking(gp, scheduleId, lect);
+    combinedFitness += test_weekly_distribution(gp, scheduleId, lect);
+    combinedFitness += test_semester_distribution(gp, scheduleId, lect);
+    
+    return combinedFitness;
+}
+
+/* Test fitness for a schedule/genome */
+int test_schedule_fitness(Generation *gp, int scheduleId)
+{
+    int combinedFitness = 0, i;
+
+    reset_schedule_flags(gp, scheduleId);
+    
+    /* Iterate through all lectures */
+    for (i = 0; i < gp->sd->numLectures; i++)
+    {
+        Lecture *curLect = &gp->schedules[scheduleId][i];
+        
+        combinedFitness += test_lecture_fitness(gp, scheduleId, curLect);
+    }
+    
+    return combinedFitness;
 }

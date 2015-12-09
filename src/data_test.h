@@ -14,3 +14,7 @@ int test_weekly_distribution(Generation *gp, int scheduleId, Lecture *lect);
 
 int test_semester_distribution(Generation *gp, int scheduleId, Lecture *lect);
 int test_semester_distribution_inner(Generation *gp, int scheduleId, Lecture *lect, Specialization *sp);
+
+int test_schedule_fitness(Generation *gp, int scheduleId);
+
+int test_lecture_fitness(Generation *gp, int scheduleId, Lecture *lect);

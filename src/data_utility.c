@@ -10,7 +10,7 @@ const char* periodNames[] = {"08:15 - 12:00", "12:30 - 16:15"};
 const char* dayNames[] = {"Monday", "Tuesday", "Wednesday", "Thursday", "Friday"};
 
 /* Reset flags for all lectures in a specific schedule */
-void reset_lecture_flags(Generation *gp, int scheduleId)
+void reset_schedule_flags(Generation *gp, int scheduleId)
 {
     int i;
 
