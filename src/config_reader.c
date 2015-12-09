@@ -1,3 +1,7 @@
+/**
+ *  \file config_reader.c
+ *  \brief This script is responsible for reading the data file
+ */
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -9,6 +13,15 @@
 
 #define BUFFER_SIZE 512
 
+/**
+ *  \brief Initial function for the config reader
+ *  
+ *  \param [in] fileName The name of the file to read from
+ *  \param [in] sd SemesterData is a link to our structs that we will need for this function
+ *  \return Returns 1 or 0 depending weather the function succeded or failed
+ *  
+ *  \details The function reads the file line by line and formats them to the format we need for further processing, then sends it to handle_line
+ */
 int read_config(char *fileName, SemesterData *sd)
 {
     FILE* fp;
@@ -59,6 +72,14 @@ int read_config(char *fileName, SemesterData *sd)
     return 1;
 }
 
+/**
+ *  \brief This function handles the lines from the main config reader function
+ *  
+ *  \param [in] line This line is given by the config_reader function
+ *  \param [in] sd SemesterData is a link to the structs the function needs
+ *  
+ *  \details This function goes through the line and checks it for commands and parameters. Essentially it works like a parser
+ */
 void handle_line(char *line, SemesterData *sd)
 {
     char command[16], typeName[16];
@@ -193,7 +214,16 @@ void handle_line(char *line, SemesterData *sd)
     }
 }
 
-/* Reads an int and adds the amount of digits to position */
+/**
+ *  \brief Reads an int from a string and adds the amount of digits to position
+ *  
+ *  \param [in] line The string to read
+ *  \param [in] position Current position in the string
+ *  \param [out] out A pointer to an int where the final number will be stored
+ *  \return Returns weather the function has failed or succeded
+ *  
+ *  \details The function goes through the string (line) until there are no more characters. It then converts the content of the string to int and outputs it to the out variable
+ */
 int read_int(char* line, int* position, int* out)
 {
     char outStr[16];
@@ -217,7 +247,16 @@ int read_int(char* line, int* position, int* out)
         return 1;
 }
 
-/* Reads an entire string between two apostrophes */
+/**
+ *  \brief Reads an entire string between two apostrophes
+ *  
+ *  \param [in] line The string to read from
+ *  \param [in] position The current position in the string
+ *  \param [out] out The output string
+ *  \return Returns weather the function succeded or not
+ *  
+ *  \details This function reads from the line string and outputs everything between two apostrophes to the output string
+ */
 int read_multiple_words(char* line, int* position, char* out)
 {
     /* Do not go beyond the bounds of the string */
@@ -232,6 +271,16 @@ int read_multiple_words(char* line, int* position, char* out)
     return strlen(out) ? 1 : 0;
 }
 
+/**
+ *  \brief Adds a teacher to the teachers array
+ *  
+ *  \param [in] sd The teachers array is part of the SemesterData struct
+ *  \param [in] name The name of the teacher
+ *  \param [in] numOffTimes The amount of off times
+ *  \param [in] offTimes An array of offTimes
+ *  
+ *  \details Allocates the memory needed and updates relevant variables and values
+ */
 void add_teacher(SemesterData *sd, char *name, int numOffTimes, OffTime *offTimes)
 {
     /* Reallocate memory for the new count */
@@ -246,6 +295,15 @@ void add_teacher(SemesterData *sd, char *name, int numOffTimes, OffTime *offTime
     sd->teachers[teacherIndex].numOffTimes = numOffTimes;
 }
 
+/**
+ *  \brief Adds a room to the rooms array
+ *  
+ *  \param [in] sd The rooms array is part of the SemesterData struct
+ *  \param [in] name The name of the room
+ *  \param [in] seats The amount of seats available in the room
+ *  
+ *  \details Allocates the memory needed and updates relevant variables and values
+ */
 void add_room(SemesterData *sd, char *name, int seats)
 {
     /* Reallocate memory for the new count */
@@ -259,6 +317,17 @@ void add_room(SemesterData *sd, char *name, int seats)
     sd->rooms[roomIndex].seats = seats;
 }
 
+/**
+ *  \brief Adds a course to the courses array
+ *  
+ *  \param [in] sd The courses array is part of the SemesterData struct
+ *  \param [in] name The name of the course
+ *  \param [in] totLectures The total amount of lectures in the course
+ *  \param [in] numTeachers The amount of teachers assigned to the course
+ *  \param [in] teachers The array of teachers assigned
+ *  
+ *  \details Allocates the memory needed and updates relevant variables and values
+ */
 void add_course(SemesterData *sd, char *name, int totLectures, int numTeachers, Teacher **teachers)
 {
     /* Reallocate memory for the new count */
@@ -274,6 +343,17 @@ void add_course(SemesterData *sd, char *name, int totLectures, int numTeachers, 
     sd->courses[courseIndex].teachers = teachers;
 }
 
+/**
+ *  \brief Adds a specialization to the specializations array
+ *  
+ *  \param [in] sd The specialization array is part of the SemesterData struct
+ *  \param [in] name The name of the specialization
+ *  \param [in] numStudents The total amount of students in the specialization
+ *  \param [in] numCourses The amount of courses assigned to the specialization
+ *  \param [in] courses The array of courses assigned
+ *  
+ *  \details Allocates the memory needed and updates relevant variables and values
+ */
 void add_specialization(SemesterData *sd, char *name, int numStudents, int numCourses, Course **courses)
 {
     /* Reallocate memory for the new count */
