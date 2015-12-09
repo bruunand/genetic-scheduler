@@ -59,7 +59,13 @@ int main(void)
 /* Generate next generation based on existing generation */
 Generation generate_next_generation(Generation *curGen)
 {
+    int i, schedules[GENERATION_SIZE];
     Generation nextGen;
+    
+    /* Sort genomes by fitness */
+    /* Keep best 5 of the bunch */
+    /* Crossbreed 5 to get a total of 100 genomes */
+    /* Mutate randomly, even on the best ones */
     
     return nextGen;
 }
