@@ -48,23 +48,27 @@ typedef struct
     Course **courses;
 } Specialization;
 
+/* Flags struct: Used to prevent double fitness. */
+typedef struct
+{
+    int doubleBookingRoom;
+    int doubleBookingLecture;
+    int lectureOverflow;
+    int semesterOverflow;
+} Flags;
+
 /* Lecture struct */
 typedef struct
 {
     int day;
     int period;
-    
-    /* int numLectures; */
-    
+
     Room   *assignedRoom;
     Course *assignedCourse;
     
     int fitness;
     
-    int flagDoublebookingRoom;
-    int flagDoublebookingLecture;
-    int flagLectureOverflow;
-    int flagSemesterOverflow;
+    Flags flags;
 } Lecture;
 
 /* SemesterData struct */
@@ -84,12 +88,14 @@ typedef struct
     int numSpecializations;
     Specialization *specializations;
     
-    int numLectures;
-    Lecture *lectures;
+    Generation *generation;
+    /*int numLectures;
+    Lecture *lectures;*/
 } SemesterData;
 
+/* Generation struct */
 typedef struct
 {
-    SemesterData *currentGeneration;
-    SemesterData *newGeneration;
+    int numLectures;
+    Lecture *schedules[GENERATION_SIZE];
 } Generations;

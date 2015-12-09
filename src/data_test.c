@@ -94,11 +94,12 @@ int test_doublebooking(SemesterData *sd, Lecture *lect)
             continue;
         
         if (curLect->flagDoublebookingRoom)
+        if (curLect->flags.doubleBookingRoom)
             continue;
 
         if (curLect->assignedRoom == lect->assignedRoom)
         {
-            curLect->flagDoublebookingRoom = 1;
+            curLect->flags.doubleBookingRoom = 1;
             
             severity += 100;
         }
@@ -119,12 +120,12 @@ int test_doublebooking(SemesterData *sd, Lecture *lect)
             if (curLect->day != lect->day || curLect->period != lect->period)
                 continue;
 
-            if (curLect->flagDoublebookingLecture)
+            if (curLect->flags.doubleBookingLecture)
                 continue;
             
             if (specialization_has_lecture(specs[i], curLect))
             {
-                curLect->flagDoublebookingLecture = 1;
+                curLect->flags.doubleBookingLecture = 1;
 
                 severity += 100;
             }
@@ -154,17 +155,17 @@ int test_weekly_distribution(SemesterData *sd, Lecture *lect)
             continue;
         
         /* Skip flagged lectures */
-        if (curLect->flagLectureOverflow)
+        if (curLect->flags.lectureOverflow)
             continue;
 
         if (curLect->day == lect->day)
         {
-            curLect->flagLectureOverflow = 1;
+            curLect->flags.lectureOverflow = 1;
             totCoursePerDay++;
         }
         if (curLect->day / DAYS_PER_WEEK == weekNum)
         {
-            curLect->flagLectureOverflow = 1;
+            curLect->flags.lectureOverflow = 1;
             totCoursePerWeek++;
         }
     }
@@ -206,7 +207,7 @@ int test_semester_distribution_inner(SemesterData *sd, Lecture *lect, Specializa
     
     weekNum = lect->day / DAYS_PER_WEEK;
     
-    if (lect->flagSemesterOverflow)
+    if (lect->flags.semesterOverflow)
         return 0;
     
     /* Iterate through all lectures */
@@ -223,7 +224,7 @@ int test_semester_distribution_inner(SemesterData *sd, Lecture *lect, Specializa
             continue;
         
         lecturesCurWeek++;
-        curLect->flagSemesterOverflow = 1;
+        curLect->flags.semesterOverflow = 1;
     }
 
     /* Distribute most lectures in 3/4 of the semester */

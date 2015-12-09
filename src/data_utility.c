@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
 
 #include "structs.h"
 #include "defs.h"
@@ -14,12 +15,7 @@ void reset_lecture_flags(SemesterData *sd)
 
     for (i = 0; i < sd->numLectures; i++)
     {
-        Lecture *curLect = &sd->lectures[i];
-
-        curLect->flagDoublebookingRoom = 0;
-        curLect->flagDoublebookingLecture = 0;
-        curLect->flagLectureOverflow = 0;
-        curLect->flagSemesterOverflow = 0;
+        memset(&sd->lectures[i].flags, 0, sizeof(Flags));
     }
 }
 
