@@ -1,3 +1,7 @@
+/**
+ *  \file data_utility.h
+ *  \brief This file contains prototypes required by the data_utility.c script
+ */
 #include "structs.h"
 
 void reset_lecture_flags(SemesterData *sd);
