@@ -80,11 +80,7 @@ int main(void)
     return 0;
 }
 
-/*
- * Generate a 'dumb' schedule (array of lectures)
- * The only fulfilled requirement is the amount of lectures per course
-*/
-void generate_initial_schedule(SemesterData *sd)
+void generate_initial_schedules(SemesterData *sd)
 {
     int i, j, k = 0, l;
 
