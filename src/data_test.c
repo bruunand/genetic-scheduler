@@ -93,7 +93,6 @@ int test_doublebooking(SemesterData *sd, Lecture *lect)
         if (curLect->day != lect->day || curLect->period != lect->period)
             continue;
         
-        if (curLect->flagDoublebookingRoom)
         if (curLect->flags.doubleBookingRoom)
             continue;
 
