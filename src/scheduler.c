@@ -16,7 +16,7 @@
 #include "html_output.h"
 
 int main(void)
-{   
+{
     int i, seed;
     int lowestFitness = -1, start;
     Generation gen;

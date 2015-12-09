@@ -44,7 +44,8 @@ int test_lecture_capacity(SemesterData *sd, Lecture *lect)
 /**
  *  \brief Test whether the teacher has an offtime on a given date
  *  
- *  \param [in] sd SemesterData contains all the information about the structs needed for this function
+ *  \param [in] gp Generation contains the required information about the data that should be printed
+ *  \param [in] scheduleId ???????????????
  *  \param [in] lect Pointer to lecture to test
  *  \return Returns the severity of the test. Aka. Fitness
  *  
@@ -95,7 +96,8 @@ int test_teacher_availability(Generation *gp, int scheduleId, Lecture *lect)
 /**
  *  \brief Test for doublebooking
  *  
- *  \param [in] sd SemesterData contains all the information about the structs needed for this function
+ *  \param [in] gp Generation contains the required information about the data that should be printed
+ *  \param [in] scheduleId ???????????????
  *  \param [in] lect Pointer to lecture to test
  *  \return Returns the severity of the test. Aka. Fitness
  *  
@@ -163,7 +165,8 @@ int test_doublebooking(Generation *gp, int scheduleId, Lecture *lect)
 /**
  *  \brief Test distribution on a weekly basis to ensure an even workload
  *  
- *  \param [in] sd SemesterData contains all the information about the structs needed for this function
+ *  \param [in] gp Generation contains the required information about the data that should be printed
+ *  \param [in] scheduleId ???????????????
  *  \param [in] lect Pointer to lecture to test
  *  \return Returns the severity of the test. Aka. Fitness
  *  
@@ -213,7 +216,8 @@ int test_weekly_distribution(Generation *gp, int scheduleId, Lecture *lect)
  /**
  *  \brief Tests the semester distribution
  *  
- *  \param [in] sd SemesterData contains all the information about the structs needed for this function
+ *  \param [in] gp Generation contains the required information about the data that should be printed
+ *  \param [in] scheduleId ???????????????
  *  \param [in] lect Pointer to lecture to test
  *  \return Returns the severity of the test. Aka. Fitness
  *  
@@ -241,7 +245,8 @@ int test_semester_distribution(Generation *gp, int scheduleId, Lecture *lect)
 /**
  *  \brief Test how the lecture fits into the semester distribution
  *  
- *  \param [in] sd SemesterData contains all the information about the structs needed for this function
+ *  \param [in] gp Generation contains the required information about the data that should be printed
+ *  \param [in] scheduleId ???????????????
  *  \param [in] lect Pointer to lecture to test
  *  \param [in] sp ???????????????????????????????????
  *  \return Returns the severity of the test. Aka. Fitness
