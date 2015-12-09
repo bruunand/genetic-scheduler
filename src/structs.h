@@ -87,6 +87,9 @@ typedef struct
     
     int numSpecializations;
     Specialization *specializations;
+    
+    /* The amount of lectures in each schedule. */
+    int numLectures;
 } SemesterData;
 
 /* Generation struct */
@@ -98,7 +101,4 @@ typedef struct
     
     /* Array of schedules. */
     Lecture *schedules[GENERATION_SIZE]; /*Lecture *schedules[GENERATION_SIZE];*/
-    
-    /* The amount of lectures in each schedule. */
-    int numLectures;
 } Generation;

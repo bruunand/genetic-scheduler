@@ -50,7 +50,7 @@ int test_teacher_availability(Generation *gp, int scheduleId, Lecture *lect)
             severity += 100;
         
         /* Test if they have another lecture at this time */
-        for (j = 0; j < gp->numLectures; j++)
+        for (j = 0; j < gp->sd->numLectures; j++)
         {
             Lecture *curLect = &gp->schedules[scheduleId][j];
             
@@ -83,7 +83,7 @@ int test_doublebooking(Generation *gp, int scheduleId, Lecture *lect)
     int severity = 0, numSpecs, i, j;
     
     /* Test room doublebooking */
-    for(i = 0; i < gp->numLectures; i++)
+    for(i = 0; i < gp->sd->numLectures; i++)
     {
         Lecture *curLect = &gp->schedules[scheduleId][i];
 
@@ -109,7 +109,7 @@ int test_doublebooking(Generation *gp, int scheduleId, Lecture *lect)
     for (i = 0; i < numSpecs; i++)
     {
         /* Find lectures on the same day as the test lecture */
-        for (j = 0; j < gp->numLectures; j++)
+        for (j = 0; j < gp->sd->numLectures; j++)
         {
             Lecture *curLect = &gp->schedules[scheduleId][j];
             
@@ -145,7 +145,7 @@ int test_weekly_distribution(Generation *gp, int scheduleId, Lecture *lect)
     weekNum = lect->day / DAYS_PER_WEEK;
 
     /* Test distribution for this course */
-    for (i = 0; i < gp->numLectures; i++)
+    for (i = 0; i < gp->sd->numLectures; i++)
     {
         Lecture *curLect = &gp->schedules[scheduleId][i];
         
@@ -210,7 +210,7 @@ int test_semester_distribution_inner(Generation *gp, int scheduleId, Lecture *le
         return 0;
     
     /* Iterate through all lectures */
-    for (i = 0; i < gp->numLectures; i++)
+    for (i = 0; i < gp->sd->numLectures; i++)
     {
         Lecture *curLect = &gp->schedules[scheduleId][i];
         

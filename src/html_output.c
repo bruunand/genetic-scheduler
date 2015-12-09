@@ -83,18 +83,21 @@ void print_period(Generation *gp, int scheduleId, Specialization *sp, FILE *f, i
     {
         foundMatches = 0;
 
-        for (j = 0; j < gp->numLectures; j++)
+        for (j = 0; j < gp->sd->numLectures; j++)
         {
             Lecture *lect = &gp->schedules[scheduleId][j];
-            
-            /* Validate lecture specialization */
-            if (!specialization_has_lecture(sp, lect))
-                continue;
             
             /* Validate day and period */
             if (lect->period != periodId || lect->day != i)
                 continue;
+            else
+                printf("%d, %d\n", lect->period, lect->day);
             
+            /* Validate lecture specialization */
+            if (!specialization_has_lecture(sp, lect))
+                continue;
+      
+            printf("hi");
             /* Check if there's already a course on this hour and day*/
             if (foundMatches)
             {

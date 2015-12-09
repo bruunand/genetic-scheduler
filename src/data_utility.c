@@ -14,7 +14,7 @@ void reset_lecture_flags(Generation *gp, int scheduleId)
 {
     int i;
 
-    for (i = 0; i < gp->numLectures; i++)
+    for (i = 0; i < gp->sd->numLectures; i++)
     {
         memset(&gp->schedules[scheduleId][i].flags, 0, sizeof(Flags));
     }

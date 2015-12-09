@@ -35,29 +35,30 @@ int main(void)
         exit(1);
     }
     
-    /* Generate schedule */
-    generate_initial_schedules(&sd, &gen);
+    /* Generate initial generation */
+    generate_initial_generation(&sd, &gen);
     
     /* Print schedules to files */
-    /*print_schedule_to_file(&sd, &sd.specializations[0], "swdat.html");
-    print_schedule_to_file(&sd, &sd.specializations[1], "robotics.html");*/
+    print_schedule_to_file(&gen, 0, &sd.specializations[0], "swdat.html");
+    print_schedule_to_file(&gen, 0, &sd.specializations[1], "robotics.html");
     
     free_all(&sd);
     
     return 0;
 }
 
-void generate_initial_schedules(SemesterData *sd, Generation *gp)
+/* Generate initial generation by generating n schedules */
+void generate_initial_generation(SemesterData *sd, Generation *gp)
 {
-    int i, j, k = 0, l;
+    int i, j, k, l;
 
     /* Set total amount of lectures */
-    gp->numLectures = get_amount_of_lectures(sd);
+    sd->numLectures = get_amount_of_lectures(sd);
     
     /* Allocate memory for the lectures in each schedule */
     for (i = 0; i < GENERATION_SIZE; i++)
     {
-        gp->schedules[i] = malloc(gp->numLectures * sizeof(Lecture));
+        gp->schedules[i] = malloc(sd->numLectures * sizeof(Lecture));
         if (!gp->schedules[i])
             exit(ERROR_OUT_OF_MEMORY);
     }
