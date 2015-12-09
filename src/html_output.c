@@ -154,7 +154,8 @@ void end_print_row(FILE *f)
 /**
  *  \brief Prints a period to the schedule
  *  
- *  \param [in] sd SemesterData contains the required information about the data that should be printed
+ *  \param [in] gp Generation contains the required information about the data that should be printed
+ *  \param [in] scheduleId ???????????????
  *  \param [in] sp Specialization contains information about the specialization the schedule is generated for
  *  \param [in] f The file in which the schedule is being generated
  *  \param [in] periodId ?????????????
@@ -224,7 +225,8 @@ void print_period(Generation *gp, int scheduleId, Specialization *sp, FILE *f, i
 /**
  *  \brief Prints a schedule for a specific specialization to a file
  *  
- *  \param [in] sd SemesterData contains the required information about the data that should be printed
+ *  \param [in] gp Generation contains the required information about the data that should be printed
+ *  \param [in] scheduleId ???????????????
  *  \param [in] sp Specialization contains information about the specialization the schedule is generated for
  *  \param [in] fileName The name of the file in which the schedule should be generated
  *  
