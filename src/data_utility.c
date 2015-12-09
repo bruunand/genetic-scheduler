@@ -7,18 +7,13 @@
 const char* periodNames[] = {"08:15 - 12:00", "12:30 - 16:15"};
 const char* dayNames[] = {"Monday", "Tuesday", "Wednesday", "Thursday", "Friday"};
 
-/* Adds lecture to the SemesterData struct */
-void add_lecture(SemesterData *sd, int lectIndex, int day, int period, int roomId, int courseId)
+/* Adds lecture to a schedule */
+void add_lecture(SemesterData *sd, int scheduleId, int index, int day, int period, int assignedRoom, int assignedCourse)
 {
-    /* Check if the index goes beyond the bounds of the lecture array */
-    if (lectIndex >= sd->numLectures)
-        exit(ERROR_ARRAY_BOUNDS_EXCEEDED);
-	
-    /* Set lecture values */
-    sd->lectures[lectIndex].day = day;
-    sd->lectures[lectIndex].period = period;
-    sd->lectures[lectIndex].assignedRoom = &sd->rooms[roomId];
-    sd->lectures[lectIndex].assignedCourse = &sd->courses[courseId];
+    sd->generation[scheduleId][index].day = day;
+    sd->generation[scheduleId][index].period = period;
+    sd->generation[scheduleId][index].assignedRoom = &sd->rooms[assignedRoom];
+    sd->generation[scheduleId][index].assignedCourse = &sd->courses[assignedCourse];
 }
 
 /*

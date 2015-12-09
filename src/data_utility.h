@@ -1,6 +1,6 @@
 #include "structs.h"
 
-void add_lecture(SemesterData *sd, int lectIndex, int day, int period, int roomId, int courseId);
+void add_lecture(semesterData *sd, int scheduleId, int lectIndex, int day, int period, int assignedRoom, int assignedCourse)
 
 int teacher_has_offtime(SemesterData *sd, Teacher *teacher, int dayId, int periodId);
 int specialization_has_lecture(Specialization *sp, Lecture *lect);

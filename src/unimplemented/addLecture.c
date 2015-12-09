@@ -1,17 +1,11 @@
 #include <stdio.h>
 #include <structs.h>
 
-void add_lecture(semesterData *sd, Generations *generation, uint schedule, uint day, uint period, uint assignedRoom, uint assignedCourse, uint assignedSpecialization)
+void add_lecture(semesterData *sd, int scheduleId, int index, int day, int period, int assignedRoom, int assignedCourse)
 {
-    /* Reallocate memory for the new count */
-    uint lectIndex = generation->numCurGenLectures[schedule]++;
-    generation->curGeneration[schedule] = (*lecture) realloc(generation->curGeneration[schedule], generation->numCurGenLectures[schedule] * sizeof(lecture));
-    
     /* Set values */
-    /* generation->numCurGenLectures[schedule].lectures[lectIndex].numLectures = numLectures; */
-    generation->numCurGenLectures[schedule].lectures[lectIndex].day = day;
-    generation->numCurGenLectures[schedule].lectures[lectIndex].period = period;
-    generation->numCurGenLectures[schedule].lectures[lectIndex].assignedRoom = assignedRoom;
-    generation->numCurGenLectures[schedule].lectures[lectIndex].assignedCourse = assignedCourse;
-    generation->numCurGenLectures[schedule].lectures[lectIndex].assignedSpecialization = assignedSpecialization; 
+    sd->generation[scheduleId][index].day = day;
+    sd->generation[scheduleId][index].period = period;
+    sd->generation[scheduleId][index].assignedRoom = &sd->rooms[assignedRoom];
+    sd->generation[scheduleId][index].assignedCourse = &sd->courses[assignedCourse];
 }

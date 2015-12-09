@@ -92,9 +92,6 @@ void generate_initial_schedule(SemesterData *sd)
     sd->generation->numLectures = get_amount_of_lectures(sd);
     
     /* Allocate memory for the lectures */
-    /*sd->generation = malloc(GENERATION_SIZE * sizeof(Lecture*));
-    if (!sd->generation)
-       exit(ERROR_OUT_OF_MEMORY); */
     for(i = 0; i < GENERATION_SIZE ; i++)
     {
         sd->generation[i] = malloc(sd->generation->numLectures * sizeof(Lecture));
