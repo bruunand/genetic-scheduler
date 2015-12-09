@@ -1,6 +1,6 @@
 /**
- *  \file data_test.c
- *  \brief This script contains the functions responsible for performing tests on the generations
+ *  \file fitness_calculation.c
+ *  \brief This script contains the functions responsible for calculating fitness values for the population.
  */
 #include <stdio.h>
 #include <stdlib.h>
@@ -9,7 +9,7 @@
 #include "structs.h"
 #include "data_utility.h"
 #include "defs.h"
-#include "data_test.h"
+#include "fitness_calculation.h"
 
 /**
  *  \brief Test how well the lecture fits into the assigned room
@@ -20,7 +20,7 @@
  *  
  *  \details This function checks the capacity of the room and the amount of students on the lecture and determins the penalty in fitness by comparing the two.
  */
-int test_lecture_capacity(SemesterData *sd, Lecture *lect)
+int calcfit_capacity(SemesterData *sd, Lecture *lect)
 {
     int roomCap, numStudents, fitness = 0, roomSeats;
     
@@ -42,7 +42,7 @@ int test_lecture_capacity(SemesterData *sd, Lecture *lect)
 }
 
 /**
- *  \brief Test whether the teacher has an offtime on a given date
+ *  \brief Calculates fitness based on the teacher's availability at the time of the lecture.
  *  
  *  \param [in] gp Generation contains the required information about the data that should be printed
  *  \param [in] scheduleId ???????????????
@@ -51,7 +51,7 @@ int test_lecture_capacity(SemesterData *sd, Lecture *lect)
  *  
  *  \details Also test whether the teacher is already assigned to a lecture on the same date
  */
-int test_teacher_availability(Generation *gp, int scheduleId, Lecture *lect)
+int calcfit_teacher_availability(Generation *gp, int scheduleId, Lecture *lect)
 {
     int fitness = 0, i, j, k;
     
@@ -77,7 +77,7 @@ int test_teacher_availability(Generation *gp, int scheduleId, Lecture *lect)
             if (curLect == lect)
                 continue;
             
-            /* Skip lecture that are at different times */
+            /* Skip lectures that are at different times */
             if (curLect->day != lect->day || curLect->period != lect->period)
                 continue;
             
@@ -94,7 +94,7 @@ int test_teacher_availability(Generation *gp, int scheduleId, Lecture *lect)
 }
 
 /**
- *  \brief Test for doublebooking
+ *  \brief Calculates fitness based on whether the room or period is doublebooked.
  *  
  *  \param [in] gp Generation contains the required information about the data that should be printed
  *  \param [in] scheduleId ???????????????
@@ -103,7 +103,7 @@ int test_teacher_availability(Generation *gp, int scheduleId, Lecture *lect)
  *  
  *  \details Performs tests for both room and lecture doublebooking
  */
-int test_doublebooking(Generation *gp, int scheduleId, Lecture *lect)
+int calcfit_doublebooking(Generation *gp, int scheduleId, Lecture *lect)
 {
     Specialization **specs;
     int fitness = 0, numSpecs, i, j;
@@ -163,16 +163,16 @@ int test_doublebooking(Generation *gp, int scheduleId, Lecture *lect)
 }
 
 /**
- *  \brief Test distribution on a weekly basis to ensure an even workload
+ *  \brief Calculates how well the lecture fits into its week.
  *  
  *  \param [in] gp Generation contains the required information about the data that should be printed
  *  \param [in] scheduleId ???????????????
  *  \param [in] lect Pointer to lecture to test
- *  \return Returns the fitness of the test. Aka. Fitness
+ *  \return Returns the fitness of the lecture distribution.
  *  
  *  \details Details
  */
-int test_weekly_distribution(Generation *gp, int scheduleId, Lecture *lect)
+int calcfit_distribution_weekly(Generation *gp, int scheduleId, Lecture *lect)
 {
     int fitness = 0, i, weekNum;
     int totCoursePerWeek = 0, totCoursePerDay = 0;
@@ -223,7 +223,7 @@ int test_weekly_distribution(Generation *gp, int scheduleId, Lecture *lect)
  *  
  *  \details Makes a call to the inner test function for every specialization on the specified lecture
  */
-int test_semester_distribution(Generation *gp, int scheduleId, Lecture *lect)
+int calcfit_distribution_semester(Generation *gp, int scheduleId, Lecture *lect)
 {
     int fitness = 0, numSpecs, i;
     Specialization **specs = 0;
@@ -233,7 +233,7 @@ int test_semester_distribution(Generation *gp, int scheduleId, Lecture *lect)
     /* Get fitness for all specializations */
     for (i = 0; i < numSpecs; i++)
     {
-    int tmp = test_semester_distribution_inner(gp, scheduleId, lect, specs[i]);
+    int tmp = calcfit_distribution_semester_inner(gp, scheduleId, lect, specs[i]);
         fitness += tmp;
     }
     
@@ -253,7 +253,7 @@ int test_semester_distribution(Generation *gp, int scheduleId, Lecture *lect)
  *  
  *  \details Details
  */
-int test_semester_distribution_inner(Generation *gp, int scheduleId, Lecture *lect, Specialization *sp)
+int calcfit_distribution_semester_inner(Generation *gp, int scheduleId, Lecture *lect, Specialization *sp)
 {
     int i, weekNum, lecturesCurWeek = 0, maxLecturesCurWeek;
     
@@ -293,21 +293,21 @@ int test_semester_distribution_inner(Generation *gp, int scheduleId, Lecture *le
 }
 
 /* Test fitness for a single lecture (gene) */
-int test_lecture_fitness(Generation *gp, int scheduleId, Lecture *lect)
+int calcfit_lecture(Generation *gp, int scheduleId, Lecture *lect)
 {
     int combinedFitness = 0;
     
-    combinedFitness += test_lecture_capacity(gp->sd, lect);
-    combinedFitness += test_teacher_availability(gp, scheduleId, lect);
-    combinedFitness += test_doublebooking(gp, scheduleId, lect);
-    combinedFitness += test_weekly_distribution(gp, scheduleId, lect);
-    combinedFitness += test_semester_distribution(gp, scheduleId, lect);
+    combinedFitness += calcfit_capacity(gp->sd, lect);
+    combinedFitness += calcfit_teacher_availability(gp, scheduleId, lect);
+    combinedFitness += calcfit_doublebooking(gp, scheduleId, lect);
+    combinedFitness += calcfit_distribution_weekly(gp, scheduleId, lect);
+    combinedFitness += calcfit_distribution_semester(gp, scheduleId, lect);
     
     return combinedFitness;
 }
 
 /* Test fitness for a schedule/genome */
-int test_schedule_fitness(Generation *gp, int scheduleId)
+int calcfit_schedule(Generation *gp, int scheduleId)
 {
     int combinedFitness = 0, i;
 
@@ -318,7 +318,7 @@ int test_schedule_fitness(Generation *gp, int scheduleId)
     {
         Lecture *curLect = &gp->schedules[scheduleId][i];
         
-        combinedFitness += test_lecture_fitness(gp, scheduleId, curLect);
+        combinedFitness += calcfit_lecture(gp, scheduleId, curLect);
     }
     
     return combinedFitness;

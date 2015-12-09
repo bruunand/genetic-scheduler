@@ -11,7 +11,7 @@
 #include "scheduler.h"
 #include "config_reader.h"
 #include "data_utility.h"
-#include "data_test.h"
+#include "fitness_calculation.h"
 #include "defs.h"
 #include "html_output.h"
 
@@ -110,7 +110,7 @@ Generation generate_initial_generation(SemesterData *sd)
     /* Debug: Test fitness for all generations */
     for (i = 0; i < GENERATION_SIZE; i++)
     {
-        printf("%d has a fitness of %d\n", i, test_schedule_fitness(&initialGen, i));
+        printf("%d has a fitness of %d\n", i, calcfit_schedule(&initialGen, i));
     }
     
     return initialGen;
