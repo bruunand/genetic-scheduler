@@ -18,10 +18,9 @@
 int main(void)
 {
     int i, seed;
-    int lowestFitness = -1, start;
     Generation gen;
     SemesterData sd;
-    
+
     /* Null all SemesterData values */
     memset(&sd, 0, sizeof(SemesterData));
  
@@ -39,28 +38,48 @@ int main(void)
     /* Generate initial generation */
     gen = generate_initial_generation(&sd);
     
+    /* Run up to 200 generations */
+    for (i = 0; i < MAX_GENERATIONS; i++)
+    {
+        gen = generate_next_generation(&gen);
+        
+        /* TODO: Exit if low fitness is found? */
+    }
+
     /* Print schedules to files */
     print_schedule_to_file(&gen, 0, &sd.specializations[0], "swdat.html");
     print_schedule_to_file(&gen, 0, &sd.specializations[1], "robotics.html");
     
-    free_all(&sd);
+    free_generation(&gen);
+    free_semesterdata(&sd);
     
     return 0;
 }
 
+/* Generate next generation based on existing generation */
+Generation generate_next_generation(Generation *curGen)
+{
+    Generation nextGen;
+    
+    return nextGen;
+}
+
 /* Generate initial generation by generating n schedules */
-Generation generate_initial_generation(SemesterData *sd, Generation *gp)
+Generation generate_initial_generation(SemesterData *sd)
 {
     int i, j, k, l;
+    Generation initialGen;
 
+    initialGen.sd = sd;
+    
     /* Set total amount of lectures */
     sd->numLectures = get_amount_of_lectures(sd);
     
     /* Allocate memory for the lectures in each schedule */
     for (i = 0; i < GENERATION_SIZE; i++)
     {
-        gp->schedules[i] = malloc(sd->numLectures * sizeof(Lecture));
-        if (!gp->schedules[i])
+        initialGen.schedules[i] = malloc(sd->numLectures * sizeof(Lecture));
+        if (!initialGen.schedules[i])
             exit(ERROR_OUT_OF_MEMORY);
     }
 
@@ -77,7 +96,7 @@ Generation generate_initial_generation(SemesterData *sd, Generation *gp)
             /* Iterate through all lectures for this course */
             for (l = 0; l < course->totLectures; l++)
             {
-                add_lecture(gp, i, k++, rand() % (DAYS_PER_WEEK * sd->numWeeks), rand() % MAX_PERIODS, rand() % sd->numRooms, j);
+                add_lecture(&initialGen, i, k++, rand() % (DAYS_PER_WEEK * sd->numWeeks), rand() % MAX_PERIODS, rand() % sd->numRooms, j);
             }
         }
     }
@@ -85,20 +104,25 @@ Generation generate_initial_generation(SemesterData *sd, Generation *gp)
     /* Debug: Test fitness for all generations */
     for (i = 0; i < GENERATION_SIZE; i++)
     {
-        printf("%d has a fitness of %d\n", i, test_schedule_fitness(gp, i));
+        printf("%d has a fitness of %d\n", i, test_schedule_fitness(&initialGen, i));
     }
+    
+    return initialGen;
+}
+
+void free_generation(Generation *gp)
+{
+    printf("Warning: Free_generation is not implemented yet!\n");
 }
 
 /*
  * Free all memory associated with the SemesterData struct.
  * Dynamically allocated arrays inside the structs are also freed.
 */
-void free_all(SemesterData *sd)
+void free_semesterdata(SemesterData *sd)
 {
     int i;
-    
-    /* TODO: Free generation */
-    
+
     /* Free teachers */
     if (sd->teachers)
     {
