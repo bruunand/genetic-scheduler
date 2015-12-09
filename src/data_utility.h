@@ -1,8 +1,8 @@
 #include "structs.h"
 
-void reset_lecture_flags(SemesterData *sd);
+void reset_lecture_flags(Generation *gp, int scheduleId);
 
-void add_lecture(SemesterData *sd, int lectIndex, int day, int period, int roomId, int courseId);
+void add_lecture(Generation *gp, int scheduleId, int lectureId, int day, int period, int roomId, int courseId);
 
 int teacher_has_offtime(SemesterData *sd, Teacher *teacher, int dayId, int periodId);
 int specialization_has_lecture(Specialization *sp, Lecture *lect);

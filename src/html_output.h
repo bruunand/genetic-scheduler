@@ -1,1 +1,1 @@
-void print_schedule_to_file(SemesterData *sd, Specialization *sp, const char* fileName);
+void print_schedule_to_file(Generation *gp, int scheduleId, Specialization *sp, const char* fileName);

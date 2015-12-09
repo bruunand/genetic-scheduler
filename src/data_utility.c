@@ -2,35 +2,31 @@
 #include <stdio.h>
 #include <string.h>
 
+#include "data_utility.h"
 #include "structs.h"
 #include "defs.h"
 
 const char* periodNames[] = {"08:15 - 12:00", "12:30 - 16:15"};
 const char* dayNames[] = {"Monday", "Tuesday", "Wednesday", "Thursday", "Friday"};
 
-/* Reset flags for all lectures */
-void reset_lecture_flags(SemesterData *sd)
+/* Reset flags for all lectures in a specific schedule */
+void reset_lecture_flags(Generation *gp, int scheduleId)
 {
     int i;
 
-    for (i = 0; i < sd->numLectures; i++)
+    for (i = 0; i < gp->numLectures; i++)
     {
-        memset(&sd->lectures[i].flags, 0, sizeof(Flags));
+        memset(&gp->schedules[scheduleId][i].flags, 0, sizeof(Flags));
     }
 }
 
-/* Adds lecture to the SemesterData struct */
-void add_lecture(SemesterData *sd, int lectIndex, int day, int period, int roomId, int courseId)
+/* Adds lecture to a schedule */
+void add_lecture(Generation *gp, int scheduleId, int lectureId, int day, int period, int roomId, int courseId)
 {
-    /* Check if the index goes beyond the bounds of the lecture array */
-    if (lectIndex >= sd->numLectures)
-        exit(ERROR_ARRAY_BOUNDS_EXCEEDED);
-	
-    /* Set lecture values */
-    sd->lectures[lectIndex].day = day;
-    sd->lectures[lectIndex].period = period;
-    sd->lectures[lectIndex].assignedRoom = &sd->rooms[roomId];
-    sd->lectures[lectIndex].assignedCourse = &sd->courses[courseId];
+    gp->schedules[scheduleId][lectureId].day = day;
+    gp->schedules[scheduleId][lectureId].period = period;
+    gp->schedules[scheduleId][lectureId].assignedRoom = &gp->sd->rooms[roomId];
+    gp->schedules[scheduleId][lectureId].assignedCourse = &gp->sd->courses[courseId];
 }
 
 /*

@@ -87,15 +87,18 @@ typedef struct
     
     int numSpecializations;
     Specialization *specializations;
-    
-    Generation *generation;
-    /*int numLectures;
-    Lecture *lectures;*/
 } SemesterData;
 
 /* Generation struct */
 typedef struct
 {
+    /* Contains a pointer to SemesterData, which contains
+     * information about teachers, rooms etc. */
+    SemesterData *sd;
+    
+    /* Array of schedules. */
+    Lecture **schedules; /*Lecture *schedules[GENERATION_SIZE];*/
+    
+    /* The amount of lectures in each schedule. */
     int numLectures;
-    Lecture *schedules[GENERATION_SIZE];
-} Generations;
+} Generation;

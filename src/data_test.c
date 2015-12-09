@@ -32,7 +32,7 @@ int test_lecture_capacity(SemesterData *sd, Lecture *lect)
 /* Test whether the teacher has an offtime on a given date.
  * Also test whether the teacher is already assigned to a lecture on
  * the same date. */
-int test_teacher_availability(SemesterData *sd, Lecture *lect)
+int test_teacher_availability(Generation *gp, int scheduleId, Lecture *lect)
 {
     int severity = 0, i, j, k;
     
@@ -46,13 +46,13 @@ int test_teacher_availability(SemesterData *sd, Lecture *lect)
         Teacher *curTeacher = lect->assignedCourse->teachers[i];
         
         /* Test if they are off on this day */
-        if (teacher_has_offtime(sd, curTeacher, lect->day, lect->period))
+        if (teacher_has_offtime(gp->sd, curTeacher, lect->day, lect->period))
             severity += 100;
         
         /* Test if they have another lecture at this time */
-        for (j = 0; j < sd->numLectures; j++)
+        for (j = 0; j < gp->numLectures; j++)
         {
-            Lecture *curLect = &sd->lectures[j];
+            Lecture *curLect = &gp->schedules[scheduleId][j];
             
             /* Skip lecture being tested */
             if (curLect == lect)
@@ -77,15 +77,15 @@ int test_teacher_availability(SemesterData *sd, Lecture *lect)
 /* Test for doublebooking. Both tests for room and lecture doublebooking.
  * lect: Pointer to lecture to test.
 */
-int test_doublebooking(SemesterData *sd, Lecture *lect)
+int test_doublebooking(Generation *gp, int scheduleId, Lecture *lect)
 {
     Specialization **specs;
     int severity = 0, numSpecs, i, j;
     
     /* Test room doublebooking */
-    for(i = 0; i < sd->numLectures; i++)
+    for(i = 0; i < gp->numLectures; i++)
     {
-        Lecture *curLect = &sd->lectures[i];
+        Lecture *curLect = &gp->schedules[scheduleId][i];
 
         if (curLect == lect)
             continue;
@@ -105,13 +105,13 @@ int test_doublebooking(SemesterData *sd, Lecture *lect)
     }
     
     /* Find out who has this lecture */
-    numSpecs = get_specializations_for_course(sd, lect->assignedCourse, &specs);
+    numSpecs = get_specializations_for_course(gp->sd, lect->assignedCourse, &specs);
     for (i = 0; i < numSpecs; i++)
     {
         /* Find lectures on the same day as the test lecture */
-        for (j = 0; j < sd->numLectures; j++)
+        for (j = 0; j < gp->numLectures; j++)
         {
-            Lecture *curLect = &sd->lectures[j];
+            Lecture *curLect = &gp->schedules[scheduleId][j];
             
             if (curLect == lect)
                 continue;
@@ -137,7 +137,7 @@ int test_doublebooking(SemesterData *sd, Lecture *lect)
 }
 
 /* Test distribution a weekly basis to ensure an even workload. */
-int test_weekly_distribution(SemesterData *sd, Lecture *lect)
+int test_weekly_distribution(Generation *gp, int scheduleId, Lecture *lect)
 {
     int severity = 0, i, weekNum;
     int totCoursePerWeek = 0, totCoursePerDay = 0;
@@ -145,9 +145,9 @@ int test_weekly_distribution(SemesterData *sd, Lecture *lect)
     weekNum = lect->day / DAYS_PER_WEEK;
 
     /* Test distribution for this course */
-    for (i = 0; i < sd->numLectures; i++)
+    for (i = 0; i < gp->numLectures; i++)
     {
-        Lecture *curLect = &sd->lectures[i];
+        Lecture *curLect = &gp->schedules[scheduleId][i];
         
         /* Skip other courses */
         if (curLect->assignedCourse != lect->assignedCourse)
@@ -180,17 +180,17 @@ int test_weekly_distribution(SemesterData *sd, Lecture *lect)
 
 /* Makes a call to the inner test function for every specialization
  * on the specified lecture */
-int test_semester_distribution(SemesterData *sd, Lecture *lect)
+int test_semester_distribution(Generation *gp, int scheduleId, Lecture *lect)
 {
 	int severity = 0, numSpecs, i;
 	Specialization **specs = 0;
 	
-	numSpecs = get_specializations_for_course(sd, lect->assignedCourse, &specs);
+	numSpecs = get_specializations_for_course(gp->sd, lect->assignedCourse, &specs);
 	
 	/* Get severity for all specializations */
 	for (i = 0; i < numSpecs; i++)
 	{
-        int tmp = test_semester_distribution_inner(sd, lect, specs[i]);
+        int tmp = test_semester_distribution_inner(gp, scheduleId, lect, specs[i]);
 		severity += tmp;
 	}
 	
@@ -200,7 +200,7 @@ int test_semester_distribution(SemesterData *sd, Lecture *lect)
 }
 
 /* Test how the lecture fits into the semester distribution */
-int test_semester_distribution_inner(SemesterData *sd, Lecture *lect, Specialization *sp)
+int test_semester_distribution_inner(Generation *gp, int scheduleId, Lecture *lect, Specialization *sp)
 {
     int i, weekNum, lecturesCurWeek = 0, maxLecturesCurWeek;
     
@@ -210,9 +210,9 @@ int test_semester_distribution_inner(SemesterData *sd, Lecture *lect, Specializa
         return 0;
     
     /* Iterate through all lectures */
-    for (i = 0; i < sd->numLectures; i++)
+    for (i = 0; i < gp->numLectures; i++)
     {
-        Lecture *curLect = &sd->lectures[i];
+        Lecture *curLect = &gp->schedules[scheduleId][i];
         
 		/* Only check lectures that are in the same week */
         if (curLect->day / DAYS_PER_WEEK != weekNum)
@@ -226,9 +226,9 @@ int test_semester_distribution_inner(SemesterData *sd, Lecture *lect, Specializa
         curLect->flags.semesterOverflow = 1;
     }
 
-    /* Distribute most lectures in 3/4 of the semester */
-    if (weekNum > sd->numWeeks * 3 / 4)
-        maxLecturesCurWeek = 7 - weekNum * ((float) 6 / sd->numWeeks);
+    /* Distribute most lectures in first 3/4 of the semester */
+    if (weekNum > gp->sd->numWeeks * 3 / 4)
+        maxLecturesCurWeek = 7 - weekNum * ((float) 6 / gp->sd->numWeeks);
     else
         maxLecturesCurWeek = 7;
 

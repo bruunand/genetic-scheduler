@@ -1,5 +1,5 @@
-#define MAX_PERIODS   2
-#define DAYS_PER_WEEK 5
+#define MAX_PERIODS     2
+#define DAYS_PER_WEEK   5
 #define GENERATION_SIZE 100
 
 /* Error codes */

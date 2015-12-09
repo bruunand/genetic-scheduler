@@ -69,7 +69,7 @@ void end_print_row(FILE *f)
     fprintf(f, "\t</tr>\n");
 }
 
-void print_period(SemesterData *sd, Specialization *sp, FILE *f, int periodId, int weekNumber)
+void print_period(Generation *gp, int scheduleId, Specialization *sp, FILE *f, int periodId, int weekNumber)
 {
     int i, j, k, foundMatches;
     
@@ -83,9 +83,9 @@ void print_period(SemesterData *sd, Specialization *sp, FILE *f, int periodId, i
     {
         foundMatches = 0;
 
-        for (j = 0; j < sd->numLectures; j++)
+        for (j = 0; j < gp->numLectures; j++)
         {
-            Lecture *lect = &sd->lectures[j];
+            Lecture *lect = &gp->schedules[scheduleId][j];
             
             /* Validate lecture specialization */
             if (!specialization_has_lecture(sp, lect))
@@ -129,7 +129,7 @@ void print_period(SemesterData *sd, Specialization *sp, FILE *f, int periodId, i
 }
 
 /* Prints a schedule for a specific specialization to a file */
-void print_schedule_to_file(SemesterData *sd, Specialization *sp, const char* fileName)
+void print_schedule_to_file(Generation *gp, int scheduleId, Specialization *sp, const char* fileName)
 {
     int i, j;
     FILE *f;
@@ -140,7 +140,7 @@ void print_schedule_to_file(SemesterData *sd, Specialization *sp, const char* fi
     print_title(f, sp->name);
 
     /* Print a table for every week */
-    for(i = 0; i < sd->numWeeks; i++)
+    for(i = 0; i < gp->sd->numWeeks; i++)
     {
         begin_print_table(f, 20);
         begin_print_row(f, "#FFFFFF");
@@ -155,7 +155,7 @@ void print_schedule_to_file(SemesterData *sd, Specialization *sp, const char* fi
         
         /* Print a for with lectures for each period */
         for (j = 0; j < MAX_PERIODS; j++)
-            print_period(sd, sp, f, j, i);
+            print_period(gp, scheduleId, sp, f, j, i);
 
         end_print_table(f);    
     }
