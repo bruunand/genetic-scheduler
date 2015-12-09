@@ -97,7 +97,7 @@ typedef struct
     SemesterData *sd;
     
     /* Array of schedules. */
-    Lecture **schedules; /*Lecture *schedules[GENERATION_SIZE];*/
+    Lecture *schedules[GENERATION_SIZE]; /*Lecture *schedules[GENERATION_SIZE];*/
     
     /* The amount of lectures in each schedule. */
     int numLectures;

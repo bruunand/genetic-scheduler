@@ -1,3 +1,7 @@
+/**
+ *  \file data_test.h
+ *  \brief This file contains prototypes required by the data_test.c script
+ */
 int test_lecture_capacity(SemesterData *sd, Lecture *lect);
 
 int test_overlap(SemesterData *sd, Lecture *lect);

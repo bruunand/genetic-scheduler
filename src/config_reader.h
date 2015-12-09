@@ -1,3 +1,7 @@
+/**
+ *  \file config_reader.h
+ *  \brief This file contains prototypes required by the config_reader.c script
+ */
 int read_config(char *fileName, SemesterData *data);
 void handle_line(char *line, SemesterData *data);
 

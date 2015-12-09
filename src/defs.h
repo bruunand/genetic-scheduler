@@ -1,5 +1,14 @@
+<<<<<<< HEAD
 #define MAX_PERIODS     2
 #define DAYS_PER_WEEK   5
+=======
+/**
+ *  \file defs.h
+ *  \brief This file contains the defines required by the program
+ */
+#define MAX_PERIODS   2
+#define DAYS_PER_WEEK 5
+>>>>>>> origin/master
 #define GENERATION_SIZE 100
 
 /* Error codes */

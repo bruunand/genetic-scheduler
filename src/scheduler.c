@@ -54,11 +54,6 @@ void generate_initial_schedules(SemesterData *sd, Generation *gp)
     /* Set total amount of lectures */
     gp->numLectures = get_amount_of_lectures(sd);
     
-    /* Allocate memory for the amount of generations */
-    gp->schedules = malloc(GENERATION_SIZE * sizeof(Lecture*));
-    if (!gp->schedules)
-        exit(ERROR_OUT_OF_MEMORY);
-    
     /* Allocate memory for the lectures in each schedule */
     for (i = 0; i < GENERATION_SIZE; i++)
     {
