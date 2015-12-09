@@ -1,3 +1,7 @@
+/**
+ *  \file data_test.c
+ *  \brief This script contains the functions responsible for performing tests on the generations
+ */
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
@@ -7,7 +11,15 @@
 #include "defs.h"
 #include "data_test.h"
 
-/* Test how well the lecture fits into the assigned room. */
+/**
+ *  \brief Test how well the lecture fits into the assigned room
+ *  
+ *  \param [in] sd SemesterData contains all the information about the structs needed for this function
+ *  \param [in] lect Pointer to lecture to test
+ *  \return Returns the severity of the test. Aka. Fitness
+ *  
+ *  \details This function checks the capacity of the room and the amount of students on the lecture and determins the penalty in fitness by comparing the two.
+ */
 int test_lecture_capacity(SemesterData *sd, Lecture *lect)
 {
     int roomCap, numStudents, severity = 0, roomSeats;
@@ -29,9 +41,15 @@ int test_lecture_capacity(SemesterData *sd, Lecture *lect)
     return severity;
 }
 
-/* Test whether the teacher has an offtime on a given date.
- * Also test whether the teacher is already assigned to a lecture on
- * the same date. */
+/**
+ *  \brief Test whether the teacher has an offtime on a given date
+ *  
+ *  \param [in] sd SemesterData contains all the information about the structs needed for this function
+ *  \param [in] lect Pointer to lecture to test
+ *  \return Returns the severity of the test. Aka. Fitness
+ *  
+ *  \details Also test whether the teacher is already assigned to a lecture on the same date
+ */
 int test_teacher_availability(Generation *gp, int scheduleId, Lecture *lect)
 {
     int severity = 0, i, j, k;
@@ -74,9 +92,15 @@ int test_teacher_availability(Generation *gp, int scheduleId, Lecture *lect)
     return severity;
 }
 
-/* Test for doublebooking. Both tests for room and lecture doublebooking.
- * lect: Pointer to lecture to test.
-*/
+/**
+ *  \brief Test for doublebooking
+ *  
+ *  \param [in] sd SemesterData contains all the information about the structs needed for this function
+ *  \param [in] lect Pointer to lecture to test
+ *  \return Returns the severity of the test. Aka. Fitness
+ *  
+ *  \details Performs tests for both room and lecture doublebooking
+ */
 int test_doublebooking(Generation *gp, int scheduleId, Lecture *lect)
 {
     Specialization **specs;
@@ -136,7 +160,15 @@ int test_doublebooking(Generation *gp, int scheduleId, Lecture *lect)
     return severity;
 }
 
-/* Test distribution a weekly basis to ensure an even workload. */
+/**
+ *  \brief Test distribution on a weekly basis to ensure an even workload
+ *  
+ *  \param [in] sd SemesterData contains all the information about the structs needed for this function
+ *  \param [in] lect Pointer to lecture to test
+ *  \return Returns the severity of the test. Aka. Fitness
+ *  
+ *  \details Details
+ */
 int test_weekly_distribution(Generation *gp, int scheduleId, Lecture *lect)
 {
     int severity = 0, i, weekNum;
@@ -178,8 +210,15 @@ int test_weekly_distribution(Generation *gp, int scheduleId, Lecture *lect)
     return severity;
 }
 
-/* Makes a call to the inner test function for every specialization
- * on the specified lecture */
+ /**
+ *  \brief Tests the semester distribution
+ *  
+ *  \param [in] sd SemesterData contains all the information about the structs needed for this function
+ *  \param [in] lect Pointer to lecture to test
+ *  \return Returns the severity of the test. Aka. Fitness
+ *  
+ *  \details Makes a call to the inner test function for every specialization on the specified lecture
+ */
 int test_semester_distribution(Generation *gp, int scheduleId, Lecture *lect)
 {
 	int severity = 0, numSpecs, i;
@@ -190,7 +229,7 @@ int test_semester_distribution(Generation *gp, int scheduleId, Lecture *lect)
 	/* Get severity for all specializations */
 	for (i = 0; i < numSpecs; i++)
 	{
-        int tmp = test_semester_distribution_inner(gp, scheduleId, lect, specs[i]);
+    int tmp = test_semester_distribution_inner(gp, scheduleId, lect, specs[i]);
 		severity += tmp;
 	}
 	
@@ -199,7 +238,16 @@ int test_semester_distribution(Generation *gp, int scheduleId, Lecture *lect)
 	return severity;
 }
 
-/* Test how the lecture fits into the semester distribution */
+/**
+ *  \brief Test how the lecture fits into the semester distribution
+ *  
+ *  \param [in] sd SemesterData contains all the information about the structs needed for this function
+ *  \param [in] lect Pointer to lecture to test
+ *  \param [in] sp ???????????????????????????????????
+ *  \return Returns the severity of the test. Aka. Fitness
+ *  
+ *  \details Details
+ */
 int test_semester_distribution_inner(Generation *gp, int scheduleId, Lecture *lect, Specialization *sp)
 {
     int i, weekNum, lecturesCurWeek = 0, maxLecturesCurWeek;

@@ -1,3 +1,7 @@
+/**
+ *  \file scheduler.c
+ *  \brief The main script of the program, the magic starts here
+ */
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
