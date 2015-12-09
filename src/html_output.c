@@ -102,7 +102,7 @@ void print_title(FILE *f, const char* title)
 }
 
 /**
- *  \brief Brief
+ *  \brief Begins data print
  *  
  *  \param [in] f The file in which the schedule is being generated
  *  \param [in] str The data to be printed
