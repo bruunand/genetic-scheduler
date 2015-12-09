@@ -30,9 +30,9 @@ int test_lecture_capacity(SemesterData *sd, Lecture *lect)
     numStudents = get_students_on_course(sd, lect->assignedCourse);
 
     /*
-	 * Severity is increased by 1 per 5% room capacity exceeded.
-	 * Set to 1 if half or less of the seats are used.
-	*/
+     * Severity is increased by 1 per 5% room capacity exceeded.
+     * Set to 1 if half or less of the seats are used.
+    */
     if (roomCap < numStudents)
         severity = 1 + (numStudents - roomCap) / ((roomCap > roomSeats) ? (roomCap - roomSeats) : 1);
     else if ((roomSeats / numStudents) >= 2)
@@ -221,21 +221,21 @@ int test_weekly_distribution(Generation *gp, int scheduleId, Lecture *lect)
  */
 int test_semester_distribution(Generation *gp, int scheduleId, Lecture *lect)
 {
-	int severity = 0, numSpecs, i;
-	Specialization **specs = 0;
-	
-	numSpecs = get_specializations_for_course(gp->sd, lect->assignedCourse, &specs);
-	
-	/* Get severity for all specializations */
-	for (i = 0; i < numSpecs; i++)
-	{
+    int severity = 0, numSpecs, i;
+    Specialization **specs = 0;
+    
+    numSpecs = get_specializations_for_course(gp->sd, lect->assignedCourse, &specs);
+    
+    /* Get severity for all specializations */
+    for (i = 0; i < numSpecs; i++)
+    {
     int tmp = test_semester_distribution_inner(gp, scheduleId, lect, specs[i]);
-		severity += tmp;
-	}
-	
-	free(specs);
-	
-	return severity;
+        severity += tmp;
+    }
+    
+    free(specs);
+    
+    return severity;
 }
 
 /**
@@ -262,11 +262,11 @@ int test_semester_distribution_inner(Generation *gp, int scheduleId, Lecture *le
     {
         Lecture *curLect = &gp->schedules[scheduleId][i];
         
-		/* Only check lectures that are in the same week */
+        /* Only check lectures that are in the same week */
         if (curLect->day / DAYS_PER_WEEK != weekNum)
             continue;
         
-		/* Only check lectures that this specialization has */
+        /* Only check lectures that this specialization has */
         if (!specialization_has_lecture(sp, curLect))
             continue;
         
