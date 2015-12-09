@@ -23,6 +23,7 @@ void reset_lecture_flags(Generation *gp, int scheduleId)
 /* Adds lecture to a schedule */
 void add_lecture(Generation *gp, int scheduleId, int lectureId, int day, int period, int roomId, int courseId)
 {
+    printf("schedule %d lecture %d\n", scheduleId, lectureId);
     gp->schedules[scheduleId][lectureId].day = day;
     gp->schedules[scheduleId][lectureId].period = period;
     gp->schedules[scheduleId][lectureId].assignedRoom = &gp->sd->rooms[roomId];

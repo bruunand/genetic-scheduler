@@ -63,20 +63,20 @@ void generate_initial_generation(SemesterData *sd, Generation *gp)
             exit(ERROR_OUT_OF_MEMORY);
     }
 
-    /* Iterate through all courses */
-    for (i = 0; i < sd->numCourses; i++)
+    /* Iterate through all generations */
+    for (i = 0; i < GENERATION_SIZE; i++)
     {
-        Course *course = &sd->courses[i];
+        k = 0;
         
-        /* Randomly generate all lectures for this course */
-        for (j = 0; j < course->totLectures; j++)
+        /* Iterate through all courses */
+        for (j = 0; j < sd->numCourses; j++)
         {
-            k = 0;
+            Course *course = &sd->courses[j];
             
-            /* Generate for all schedules in generation */
-            for (l = 0; l < GENERATION_SIZE; l++)
+            /* Iterate through all lectures for this course */
+            for (l = 0; l < course->totLectures; l++)
             {
-                add_lecture(gp, l, k++, rand() % (DAYS_PER_WEEK * sd->numWeeks), rand() % MAX_PERIODS, rand() % sd->numRooms, i);
+                add_lecture(gp, i, k++, rand() % (DAYS_PER_WEEK * sd->numWeeks), rand() % MAX_PERIODS, rand() % sd->numRooms, j);
             }
         }
     }
