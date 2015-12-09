@@ -20,53 +20,22 @@ int compare_fitness(const void *a, const void *b)
 }
 
 /* Work in progress */
-int generate_next(SemesterData *sd)
+int generate_next(SemesterData **curGen, SemesterData **newGen)
 {
     Lecture **lecturePtrs;
     int i, combinedFitness = 0;
-    
-    /* Initialize array of pointers to lectures */
-    lecturePtrs = malloc(sd->numLectures * sizeof(Lecture*));
-    if (!lecturePtrs)
-        exit(ERROR_OUT_OF_MEMORY);
-    
-    /* Test all parameters for all lectures */
-    for (i = 0; i < sd->numLectures; i++)
+ 
+    for(i = 0; i < GENERATION_SIZE ; i++)
     {
-        Lecture *curLect = &sd->lectures[i];
-        curLect->fitness = 0;
-        
-        /* Test capacity for lecture room */
-        curLect->fitness += test_lecture_capacity(sd, curLect);
-        curLect->fitness += test_doublebooking(sd, curLect);
-        curLect->fitness += test_teacher_availability(sd, curLect);
-        
-        /* Add to combined fitness */
-        combinedFitness += curLect->fitness;
-        
-        /* Insert pointer to this lecture in array */
-        lecturePtrs[i] = curLect;
+        /* Sort array of  by highest fitness */
+        qsort(curGen, GENERATION_SIZE, sizeof(SemesterData), compare_generation_fitness);
     }
     
-    /* Sort array of pointers by highest fitness */
-    qsort(lecturePtrs, sd->numLectures, sizeof(Lecture*), compare_fitness);
+    mutate(curGen, newGen);
+    crossbreed(curGen, newGen);
+    carry_on(curGen, newGen)
     
-    /* Go through the 10 % worst */
-    for (i = 0; i < sd->numLectures / 10; i++)
-    {
-        /* Skip perfect lectures */
-        if (lecturePtrs[i]->fitness == 0)
-            continue;
-        
-        /* printf("%d has a fitness of %d\n", i, lecturePtrs[i]->fitness); */
-        
-        /* Mutate */
-        lecturePtrs[i]->day = rand() % (sd->numWeeks * DAYS_PER_WEEK);
-        lecturePtrs[i]->period = rand() % 2;
-        lecturePtrs[i]->assignedRoom = &sd->rooms[rand() % sd->numRooms];
-    }
-    
-    return combinedFitness;
+    return 1;
 }
 
 int main(void)
@@ -74,7 +43,9 @@ int main(void)
     int i;
     
     SemesterData sd;
-    memset(&sd, 0, sizeof(SemesterData));
+    Generations generation;
+    memset(&sd, 0, sizeof(SemesterData))
+    memset(&generation, 0, sizeof(Generations));
  
     srand(time(NULL));
     
@@ -85,13 +56,15 @@ int main(void)
         exit(1);
     }
     
-    /* Generate schedule */
-    generate_initial_schedule(&sd);
+    /* Generate schedules */
+    generate_initial_schedule(&sd, &generation);
     
     /* WIP: Run max 200 generations */
     for (i = 0; i < 200; i++)
     {
-        int combinedFitness = generate_next(&sd);
+        int combinedFitness = test_gen(curGen);
+        generate_next(curGen, newGen);
+        
         printf("Generation %d has a combined fitness of %d\n", i + 1, combinedFitness);
         
         if (combinedFitness == 0)
@@ -113,26 +86,38 @@ int main(void)
 */
 void generate_initial_schedule(SemesterData *sd)
 {
-    int i, j, k = 0;
+    int i, j, k = 0, l;
 
     /* Get total amount of lectures */
-    sd->numLectures = get_amount_of_lectures(sd);
+    sd->generation->numLectures = get_amount_of_lectures(sd);
     
     /* Allocate memory for the lectures */
-    sd->lectures = malloc(sd->numLectures * sizeof(Lecture));
-    if (!sd->lectures)
-        exit(ERROR_OUT_OF_MEMORY);
-    
+    /*sd->generation = malloc(GENERATION_SIZE * sizeof(Lecture*));
+    if (!sd->generation)
+       exit(ERROR_OUT_OF_MEMORY); */
+    for(i = 0; i < GENERATION_SIZE ; i++)
+    {
+        sd->generation[i] = malloc(sd->generation->numLectures * sizeof(Lecture));
+        if (!sd->generation[i])
+            exit(ERROR_OUT_OF_MEMORY);
+    }
+
     /* Go through all courses */
-    for (i = 0; i < sd->numCourses; i++)
+    for (i = 0, k = 0; i < sd->numCourses; i++)
     {
         Course *crs = &sd->courses[i];
         
         /* Randomly generate all lectures for this course */
         for (j = 0; j < crs->totLectures; j++)
-            add_lecture(sd, k++, rand() % (DAYS_PER_WEEK * sd->numWeeks), rand() % MAX_PERIODS, rand() % sd->numRooms, i);
+        {
+            for(l = 0; l < GENERATION_SIZE ; l++)
+            {
+                add_lecture(sd, l, k++, rand() % (DAYS_PER_WEEK * sd->numWeeks), rand() % MAX_PERIODS, rand() % sd->numRooms, i)
+            }
+        }
     }
 }
+
 
 /*
  * Free all memory associated with the SemesterData struct.

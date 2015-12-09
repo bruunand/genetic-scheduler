@@ -1,28 +1,29 @@
-int mutate(semesterData *sd)
+int mutate(SemesterData **curGen, SemesterData **newGen)
 {
-    int i, mutations = 0;
+    int i, j, mutations = 0;
     
-    /* Show the 10 % worst */
-    for (i = 0; i < sd->numLectures / 10; i++)
-    {
-        /* Skip perfect lectures */
-        if (lecturePtrs[i]->fitness == 0)
-            continue;
+    /* Go through the 10 % worst */
+    for (i = 0; i < GENERATION_SIZE / 10; i++)
+    {            
+        /* Sort array of pointers by highest fitness */
+        qsort(curGen[i].lectures, curGen[i].numLectures, sizeof(Lecture*), compare_fitness);
         
-        /* Mutate room */
-        lecturePtrs[i]->assignedRoom = &sd->rooms[rand() % sd->numRooms];
+        newGen[i] = curGen[i];
+        for(j = 0; j < (newGen[i].numLectures / 10) ; j++)
+        {
+            /* Skip perfect lectures */
+            if (newGen[i].lectures[j].fitness == 0)
+                continue;
+            
+            /* printf("%d has a fitness of %d\n", i, lecturePtrs[i]->fitness); */
+            
+            /* Mutate */
+            newGen[i].lectures[j].day = rand() % (sd->numWeeks * DAYS_PER_WEEK);
+            newGen[i].lectures[j].period = rand() % 2;
+            newGen[i].lectures[j].assignedRoom = &sd->rooms[rand() % sd->numRooms];
+            mutations++;
+        }
     }
-    
-    
-    /* A random amount of lectures are mutated, moving them to a random day, period and room. 
-    for(i = 0;i < numLectures;i += rand() % numLectures) 
-    {
-        sd->lectures[i].day = rand() % (sd->numWeeks * DAYS_PER_WEEK)
-        sd->lectures[i].period = rand() % 2;
-        sd->lectures[i].assignedRoom = rand() % sd->numRooms;
-        mutations++;
-    }
-    */
     
     return mutations;
 }

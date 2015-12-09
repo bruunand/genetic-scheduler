@@ -1,13 +1,26 @@
-int test_gen()
+int test_gen(semesterData **curGen)
 {
-    int fitness = 0;
+    int i, j, combinedFitness;
     
-    /* Requirements are tested and  */
-    fitness += test_doublebooking(sd);
-    fitness += test_room_capacity(sd);
-    fitness += test_coverage(sd);
-    fitness += test_teacher_availability(sd);
-    fitness += test_distribution(sd);
-    
-    return fitness;
+    for(i = 0; i < GENERATION_SIZE ; i++)
+    {
+        /* Test all parameters for all lectures in single generation member*/
+        for (j = 0; j < sd->numLectures; j++)
+        {
+            Lecture *curLect = curGen[i].lectures[j];
+            curLect->fitness = 0;
+            
+            /* Test capacity for lecture room */
+            curLect->fitness += test_lecture_capacity(sd, curLect);
+            curLect->fitness += test_doublebooking(sd, curLect);
+            curLect->fitness += test_teacher_availability(sd, curLect);
+            
+            /* Add to combined schedule fitness */
+            curGen[i].fitness = curLect->fitness;
+            
+            /* Add to combined generation fitness */
+            combinedFitness += curLect->fitness;
+        }
+    }
+    return combinedFitness;
 }
