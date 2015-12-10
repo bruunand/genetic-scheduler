@@ -18,7 +18,7 @@ int specialization_has_lecture(Specialization *sp, Lecture *lect);
 int get_students_on_course(SemesterData *sd, Course* course);
 int get_amount_of_lectures(SemesterData *sd);
 
-int get_specializations_for_course(SemesterData *sd, Course *course, Specialization ***specs);
+int get_specializations_on_course(SemesterData *sd, Course *course, Specialization ***specs);
 
 const char* get_name_of_period(int periodId);
 const char* get_name_of_day(int dayId);

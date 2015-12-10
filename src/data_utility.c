@@ -209,7 +209,7 @@ const char* get_name_of_day(int dayId)
  *  
  *  \details Details
  */
-int get_specializations_for_course(SemesterData *sd, Course *course, Specialization ***specs)
+int get_specializations_on_course(SemesterData *sd, Course *course, Specialization ***specs)
 {
     int i, j, amount = 0;
     

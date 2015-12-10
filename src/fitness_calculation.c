@@ -129,7 +129,7 @@ int calcfit_doublebooking(Schedule *schedule, Lecture *lect)
     }
     
     /* Find out who has this lecture */
-    numSpecs = get_specializations_for_course(schedule->parentGen->sd, lect->assignedCourse, &specs);
+    numSpecs = get_specializations_on_course(schedule->parentGen->sd, lect->assignedCourse, &specs);
     for (i = 0; i < numSpecs; i++)
     {
         /* Find lectures on the same day as the test lecture */
@@ -224,7 +224,7 @@ int calcfit_distribution_semester(Schedule *schedule, Lecture *lect)
     int fitness = 0, numSpecs, i;
     Specialization **specs = 0;
     
-    numSpecs = get_specializations_for_course(schedule->parentGen->sd, lect->assignedCourse, &specs);
+    numSpecs = get_specializations_on_course(schedule->parentGen->sd, lect->assignedCourse, &specs);
     
     /* Get fitness for all specializations */
     for (i = 0; i < numSpecs; i++)
@@ -273,7 +273,7 @@ int calcfit_distribution_semester_inner(Schedule *schedule, Lecture *lect, Speci
 
     /* Distribute most lectures in first 3/4 of the semester */
     if (weekNum > schedule->parentGen->sd->numWeeks * 3 / 4)
-        maxLecturesCurWeek = (7 - (weekNum + 1) * ((float) 6 / schedule->parentGen->sd->numWeeks)) + 0.5;
+        maxLecturesCurWeek = (7 - (weekNum + 1) * ((float) 6 / schedule->parentGen->sd->numWeeks));
     else
         maxLecturesCurWeek = 7;
 
