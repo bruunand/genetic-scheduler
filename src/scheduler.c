@@ -147,7 +147,7 @@ int compare_schedule_fitness(const void *a, const void *b)
  */
 void generate_next_generation(Generation *oldGen, Generation *newGen)
 {
-    int i, x, y, newGenMembers = 0;
+    int i, x, y, carryover, newGenMembers = 0;
 
     /* Calculate fitness for old generation */
     calcfit_generation(oldGen);
@@ -170,11 +170,11 @@ void generate_next_generation(Generation *oldGen, Generation *newGen)
         newGen->schedules[i] = oldGen->schedules[(x > y) ? y : x];
         newGenMembers++;
     }
-    
+    carryover = newGenMembers;
     /* Crossbreed to get a total of 100 genomes */    
-    for(i = newGenMembers; i < GENERATION_SIZE ; i++)
+    while(newGenMembers < GENERATION_SIZE)
     {
-        crossbreed(newGen, newGenMembers);
+        crossbreed(newGen, newGenMembers++, carryover);
     }
     
     /* Mutate randomly */
