@@ -155,24 +155,25 @@ void generate_next_generation(Generation *oldGen, Generation *newGen)
     /* Sort genomes by fitness */
     qsort(oldGen->schedules, GENERATION_SIZE, sizeof(Schedule), compare_schedule_fitness);
     
-    /* Print best half % */
+    /* DEBUG: Print best half % */
     for (i = 0; i < GENERATION_SIZE / 2; i++)
         printf("DEBUG: Genome %02d has a fitness of %04d\n", i + 1, oldGen->schedules[i].fitness);
     
     /* 
      * Let half the population of oldGen survive. Randomly chosen, but weighted 
-     * towards better fittness.
+     * towards better fitness.
      */
-    for(i = 0; i < (GENERATION_SIZE / 2) ; i++)
+    for (i = 0; i < GENERATION_SIZE / 2; i++)
     {
         x = rand() % GENERATION_SIZE;
         y = rand() % GENERATION_SIZE;
-        newGen->schedules[i] = oldGen->schedules[(x > y) ? y : x];
-        newGenMembers++;
+        
+        copy_schedule(&newGen->schedules[i], &oldGen->schedules[(x > y) ? y : x], newGen);
     }
-    carryover = newGenMembers;
-    /* Crossbreed to get a total of 100 genomes */    
-    while(newGenMembers < GENERATION_SIZE)
+
+    /* Crossbreed to get a total of 100 genomes */
+    carryover = newGenMembers;    
+    while (newGenMembers < GENERATION_SIZE)
     {
         crossbreed(newGen, newGenMembers++, carryover);
     }
@@ -181,9 +182,9 @@ void generate_next_generation(Generation *oldGen, Generation *newGen)
     do
     {
         x = rand() % GENERATION_SIZE;
-        if(x < MUTATION_CHANCE)
+        if (x < MUTATION_CHANCE)
             mutate(newGen, rand() % GENERATION_SIZE);
-    } while(x < MUTATION_CHANCE);
+    } while (x < MUTATION_CHANCE);
     
 }
 

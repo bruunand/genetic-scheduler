@@ -6,11 +6,13 @@
 
 void reset_schedule_flags(Schedule *schedule);
 
+void copy_lecture(Lecture *dest, Lecture *src);
 void copy_schedule(Schedule *dest, Schedule *src, Generation *newGen);
 
 void set_lecture(Lecture *lect, int day, int period, Room *room, Course *course);
 
 int teacher_has_offtime(SemesterData *sd, Teacher *teacher, int dayId, int periodId);
+
 int specialization_has_lecture(Specialization *sp, Lecture *lect);
 
 int get_students_on_course(SemesterData *sd, Course* course);
