@@ -9,6 +9,12 @@
 /**
  *  \struct Room
  *  \brief The Room struct contains the name of a specific room
+ *  
+ *  \var Room::name
+ *  The name of the room
+ *  
+ *  \var Room::seats
+ *  The number of seats in the room
  */
 struct Room
 {
@@ -20,6 +26,15 @@ struct Room
 /**
  *  \struct Teacher
  *  \brief The Teacher struct contains information about a specific teacher
+ *  
+ *  \var Teacher::name
+ *  The name of the teacher
+ *  
+ *  \var Teacher::numOffTimes
+ *  The number of OffTimes the teacher has_denorm
+ *  
+ *  \var Teacher::offTimes
+ *  Array of OffTimes
  */
 struct Teacher
 {
@@ -32,6 +47,12 @@ struct Teacher
 /**
  *  \struct OffTime
  *  \brief The OffTime struct contains a day and time period (0 or 1) where the teacher isn't available for a teacher
+ *  
+ *  \var OffTime::day
+ *  A specific day the OffTime effects
+ *  
+ *  \var OffTime::periods
+ *  Array of effected periods
  */
 struct OffTime
 {
@@ -42,19 +63,43 @@ struct OffTime
 /**
  *  \struct Course
  *  \brief The Course struct contains information about a specific course
+ *  
+ *  \var Course::name
+ *  The name of the teacher
+ *  
+ *  \var Course::totLectures
+ *  The total amount of lectures on the course
+ *  
+ *  \var Course::numTeachers
+ *  Number of teachers associated
+ *  
+ *  \var Course::teachers
+ *  Array of associated teachers
  */
 struct Course
 {
     char name[64];
     int totLectures;
     
-    int numTeachers;     /* Number of teachers associated */
-    struct Teacher **teachers;  /* Array of associated teachers */
+    int numTeachers;
+    struct Teacher **teachers;
 };
 
 /**
  *  \struct Specialization
  *  \brief The Specialization struct contains information about a specific Specialization
+ *  
+ *  \var Specialization::name
+ *  The name of the specialization
+ *  
+ *  \var Specialization::numStudents
+ *  The number of students on the specialization
+ *  
+ *  \var Specialization::numCourses
+ *  The number of courses on the specialization
+ *  
+ *  \var specialization::courses
+ *  Array of associated courses
  */
 struct Specialization
 {
@@ -69,6 +114,18 @@ struct Specialization
 /**
  *  \struct Flags
  *  \brief The Flags struct contains a list of flags used to prevent double calculation of fitness
+ *  
+ *  \var Flags::doubleBookingRoom
+ *  ?????????????????????????????
+ *  
+ *  \var Flags::doubleBookingLecture
+ *  ????????????????????????????????
+ *  
+ *  \var Flags::lectureCounted
+ *  ??????????????????????????
+ *  
+ *  \var Flags::semesterCounted
+ *  ???????????????????????????
  */
 struct Flags
 {
@@ -81,6 +138,21 @@ struct Flags
 /**
  *  \struct Lecture
  *  \brief The Lecture struct contains information about a specific Lecture
+ *  
+ *  \var Lecture::day
+ *  The day the lecture is on
+ *  
+ *  \var Lecture::period
+ *  The period of the day the lecture is on
+ *  
+ *  \var Lecture::assignedRoom
+ *  Pointer to the room assigned to the lecture
+ *  
+ *  \var Lecture::assignedCourse
+ *  Pointer to the course the lecture is part of
+ *  
+ *  \var Lecture::flags
+ *  Link to lecture flags
  */
 struct Lecture
 {
@@ -97,58 +169,90 @@ struct Lecture
  *  \struct SemesterData
  *  \brief The SemesterData struct contains all available information about a specific semester
  *  \details A generation would be built with an amount of SemesterData structs
+ *  
+ *  \var SemesterData::numWeeks
+ *  Total amount of weeks in the semester
+ *  
+ *  \var SemesterData::numRooms
+ *  The number of rooms assigned to the semester 
+ *  
+ *  \var SemesterData::rooms
+ *  Array of assigned rooms
+ *  
+ *  \var SemesterData::numTeachers
+ *  The number of teachers assigned to the semester
+ *  
+ *  \var SemesterData::teachers
+ *  Array of assiged teachers
+ *  
+ *  \var SemesterData::numCourses
+ *  The number of courses assigned to the semester
+ *  
+ *  \var SemesterData::courses
+ *  Array of assigned courses
+ *  
+ *  \var SemesterData::numSpecializations
+ *  The number of specializations assigned to the semester
+ *  
+ *  \var SemesterData::specializations
+ *  Array of assigned specializations
+ *  
+ *  \var SemesterData::numLectures
+ *  The number of lectures in each schedule
  */
 struct SemesterData
 {
-	/* Total amount of weeks in the semester */
     int numWeeks;
     
-	/* Size and array of rooms */
     int numRooms;
     struct Room *rooms;
     
-	/* Size and array of teachers */
     int numTeachers;
     struct Teacher *teachers;
     
-	/* Size and array of courses */
     int numCourses;
     struct Course *courses;
     
-	/* Size and array of specializations */
     int numSpecializations;
     struct Specialization *specializations;
     
-    /* The amount of lectures in each schedule. */
     int numLectures;
 };
 
 /**
  *  \struct Schedule
  *  \brief ????????????????
+ *  
+ *  \var Schedule::parentGen
+ *  Pointer to the generation that this schedule belongs to
+ *  
+ *  \var Schedule::lectures
+ *  Array of lectures
+ *  
+ *  \var Schedule::fitness
+ *  Last calculated fitness value
  */
 struct Schedule
 {
-	/* Pointer to the generation that this schedule belongs to */
 	struct Generation *parentGen;
-	
-	/* Array of lectures */
 	struct Lecture *lectures;
-	
-	/* Last calculated fitness value */
+    
 	int fitness;
 };
 
 /**
  *  \struct Generation
  *  \brief The Generation struct contains an array of schedules in the generation and a pointer to SemesterData which contains relevant information
+ *  
+ *  \var Generation::schedules
+ *  Array of schedules
+ *  
+ *  \var Generation::sd
+ *  Pointer to SemesterData, which contains relevant information
  */
 struct Generation
 {    
-    /* Array of schedules */
     struct Schedule schedules[GENERATION_SIZE];
-    
-    /* Pointer to SemesterData, which contains relevant information */
     struct SemesterData *sd;
 };
 
