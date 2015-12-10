@@ -153,6 +153,9 @@ struct Flags
  *  
  *  \var Lecture::flags
  *  Link to lecture flags
+ *  
+ *  \var Lecture::fitness
+ *  Last calculated fitness value
  */
 struct Lecture
 {
@@ -163,6 +166,8 @@ struct Lecture
     struct Course *assignedCourse;
 
     struct Flags flags;
+    
+    int fitness;
 };
 
 /**

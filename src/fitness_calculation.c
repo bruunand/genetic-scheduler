@@ -16,7 +16,7 @@
  *  
  *  \param [in] sd SemesterData contains all the information about the structs needed for this function
  *  \param [in] lect Pointer to lecture to test
- *  \return Returns the fitness of the test. Aka. Fitness
+ *  \return Returns the fitness
  *  
  *  \details This function checks the capacity of the room and the amount of students on the lecture and determins the penalty in fitness by comparing the two.
  */
@@ -42,11 +42,11 @@ int calcfit_capacity(SemesterData *sd, Lecture *lect)
 }
 
 /**
- *  \brief Calculates fitness based on the teacher's availability at the time of the lecture.
+ *  \brief Calculates fitness based on the teacher's availability at the time of the lecture
  *  
  *  \param [in] schedule Pointer to a schedule
  *  \param [in] lect Pointer to lecture to test
- *  \return Returns the fitness of the test. Aka. Fitness
+ *  \return Returns the fitness
  *  
  *  \details Also test whether the teacher is already assigned to a lecture on the same date
  */
@@ -93,11 +93,11 @@ int calcfit_teacher_availability(Schedule *schedule, Lecture *lect)
 }
 
 /**
- *  \brief Calculates fitness based on whether the room or period is doublebooked.
+ *  \brief Calculates fitness based on whether the room or period is doublebooked
  *  
  *  \param [in] schedule Pointer to a schedule
  *  \param [in] lect Pointer to lecture to test
- *  \return Returns the fitness of the test. Aka. Fitness
+ *  \return Returns the fitness
  *  
  *  \details Performs tests for both room and lecture doublebooking
  */
@@ -161,11 +161,11 @@ int calcfit_doublebooking(Schedule *schedule, Lecture *lect)
 }
 
 /**
- *  \brief Calculates how well the lecture fits into its week.
+ *  \brief Calculates how well the lecture fits into its week
  *  
  *  \param [in] schedule Pointer to a schedule
  *  \param [in] lect Pointer to lecture to test
- *  \return Returns the fitness of the lecture distribution.
+ *  \return Returns the fitness of the lecture distribution
  *  
  *  \details Details
  */
@@ -214,8 +214,8 @@ int calcfit_distribution_weekly(Schedule *schedule, Lecture *lect)
  *  \brief Tests the semester distribution
  *  
  *  \param [in] schedule Pointer to a schedule
- *  \param [in] lect Pointer to lecture to test
- *  \return Returns the fitness of the test. Aka. Fitness
+ *  \param [in] lect Pointer to lecture to calculate fitness for
+ *  \return Returns the fitness
  *  
  *  \details Makes a call to the inner test function for every specialization on the specified lecture
  */
@@ -236,12 +236,12 @@ int calcfit_distribution_semester(Schedule *schedule, Lecture *lect)
 }
 
 /**
- *  \brief Test how the lecture fits into the semester distribution
+ *  \brief Calculate how well the lecture fits into the semester distribution
  *  
  *  \param [in] schedule Pointer to a schedule
  *  \param [in] lect Pointer to lecture to test
- *  \param [in] sp ???????????????????????????????????
- *  \return Returns the fitness of the test. Aka. Fitness
+ *  \param [in] sp Pointer to a specialization
+ *  \return Returns the fitness
  *  
  *  \details Details
  */
@@ -284,25 +284,27 @@ int calcfit_distribution_semester_inner(Schedule *schedule, Lecture *lect, Speci
         return 0;
 }
 
-/* Test fitness for a single lecture (gene) */
+/* Calculate fitness for a single lecture (gene) */
 int calcfit_lecture(Schedule *schedule, Lecture *lect)
 {
-    int combinedFitness = 0;
+    lect->fitness = 0;
     
-    combinedFitness += calcfit_capacity(schedule->parentGen->sd, lect);
-    combinedFitness += calcfit_teacher_availability(schedule, lect);
-    combinedFitness += calcfit_doublebooking(schedule, lect);
-    combinedFitness += calcfit_distribution_weekly(schedule, lect);
-    combinedFitness += calcfit_distribution_semester(schedule, lect);
+    lect->fitness += calcfit_capacity(schedule->parentGen->sd, lect);
+    lect->fitness += calcfit_teacher_availability(schedule, lect);
+    lect->fitness += calcfit_doublebooking(schedule, lect);
+    lect->fitness += calcfit_distribution_weekly(schedule, lect);
+    lect->fitness += calcfit_distribution_semester(schedule, lect);
     
-    return combinedFitness;
+    return lect->fitness;
 }
 
-/* Test fitness for a schedule/genome */
+/* Calculate fitness for a schedule/genome */
 int calcfit_schedule(Schedule *schedule)
 {
-    int combinedFitness = 0, i;
+    int i;
 
+    schedule->fitness = 0;
+    
     reset_schedule_flags(schedule);
     
     /* Iterate through all lectures */
@@ -310,12 +312,10 @@ int calcfit_schedule(Schedule *schedule)
     {
         Lecture *curLect = &schedule->lectures[i];
         
-        combinedFitness += calcfit_lecture(schedule, curLect);
+        schedule->fitness += calcfit_lecture(schedule, curLect);
     }
-    
-    schedule->fitness = combinedFitness;
-        
-    return combinedFitness;
+
+    return schedule->fitness;
 }
 
 void calcfit_generation(Generation *gp)
