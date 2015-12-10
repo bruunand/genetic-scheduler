@@ -45,20 +45,10 @@ int main(void)
     /* Generate initial generation */
     generate_initial_generation(&curGen, &sd);
     
-    /* Run up to 200 generations */
-    for (i = 0; i < 1; i++)
-    {
-        Generation nextGen;
-        generate_next_generation(&curGen, &nextGen);
-        
-        /*
-         * free_generation(&curGen);
-         * curGen = nextGen;
-        */
-        
-        /* TODO: Exit if low fitness is found? */
-    }
-
+    Generation nextGen;
+    
+    genetic_optimization(&curGen, &nextGen);
+    
     /* Print schedules to files */
     print_schedule_to_file(&curGen.schedules[0], &sd.specializations[0], "swdat.html");
     print_schedule_to_file(&curGen.schedules[0], &sd.specializations[1], "robotics.html");
@@ -136,57 +126,6 @@ int compare_schedule_fitness(const void *a, const void *b)
     return scheduleA->fitness - scheduleB->fitness;
 }
 
-/**
- *  \brief Generate next generation based on existing generation
- *  
- *  \param [in] oldGen Parameter_Description
- *  \param [in] newGen Parameter_Description
- *  \return Return_Description
- *  
- *  \details Details
- */
-void generate_next_generation(Generation *oldGen, Generation *newGen)
-{
-    int i, x, y, carryover, newGenMembers = 0;
-
-    /* Calculate fitness for old generation */
-    calcfit_generation(oldGen);
-    
-    /* Sort genomes by fitness */
-    qsort(oldGen->schedules, GENERATION_SIZE, sizeof(Schedule), compare_schedule_fitness);
-    
-    /* DEBUG: Print best half % */
-    for (i = 0; i < GENERATION_SIZE / 2; i++)
-        printf("DEBUG: Genome %02d has a fitness of %04d\n", i + 1, oldGen->schedules[i].fitness);
-    
-    /* 
-     * Let half the population of oldGen survive. Randomly chosen, but weighted 
-     * towards better fitness.
-     */
-    for (i = 0; i < GENERATION_SIZE / 2; i++)
-    {
-        x = rand() % GENERATION_SIZE;
-        y = rand() % GENERATION_SIZE;
-        
-        copy_schedule(&newGen->schedules[i], &oldGen->schedules[(x > y) ? y : x], newGen);
-    }
-
-    /* Crossbreed to get a total of 100 genomes */
-    carryover = newGenMembers;    
-    while (newGenMembers < GENERATION_SIZE)
-    {
-        crossbreed(newGen, newGenMembers++, carryover);
-    }
-    
-    /* Mutate randomly */
-    do
-    {
-        x = rand() % GENERATION_SIZE;
-        if (x < MUTATION_CHANCE)
-            mutate(newGen, rand() % GENERATION_SIZE);
-    } while (x < MUTATION_CHANCE);
-    
-}
 
 /**
  *  \brief Brief
