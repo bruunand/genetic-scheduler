@@ -147,20 +147,44 @@ int compare_schedule_fitness(const void *a, const void *b)
  */
 void generate_next_generation(Generation *oldGen, Generation *newGen)
 {
-    int i;
+    int i, x, y, newGenMembers = 0;
 
     /* Calculate fitness for old generation */
     calcfit_generation(oldGen);
     
     /* Sort genomes by fitness */
-    qsort(oldGen->schedules, oldGen->sd->numLectures, sizeof(Schedule), compare_schedule_fitness);
+    qsort(oldGen->schedules, GENERATION_SIZE, sizeof(Schedule), compare_schedule_fitness);
     
     /* Print best half % */
     for (i = 0; i < GENERATION_SIZE / 2; i++)
         printf("DEBUG: Genome %02d has a fitness of %04d\n", i + 1, oldGen->schedules[i].fitness);
     
-    /* Crossbreed best to get a total of 100 genomes */
+    /* 
+     * Let half the population of oldGen survive. Randomly chosen, but weighted 
+     * towards better fittness.
+     */
+     
+    for(i = 0; i < (GENERATION_SIZE / 2) ; i++)
+    {
+        x = rand()%GENERATION_SIZE;
+        y = rand()%GENERATION_SIZE;
+        newGen->schedules[i] = oldGen->schedules[(x>y)?y:x];
+        newGenMembers++;
+    }
+    
+    /* Crossbreed to get a total of 100 genomes */    
+    for(i = newGenMembers; i < GENERATION_SIZE ; i++)
+    {
+        crossbreed(newGen, newGenMembers);
+    }
+    
     /* Mutate randomly, even on the best ones */
+    
+    do{
+        x = rand()%GENERATION_SIZE;
+        mutate(rand()%GENERATION_SIZE);
+    } while();
+    
 }
 
 /**
