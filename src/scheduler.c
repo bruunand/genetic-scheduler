@@ -18,7 +18,7 @@
 int main(void)
 {
     int i, seed;
-    Generation gen;
+    Generation curGen;
     SemesterData sd;
 
     /* Null all SemesterData values */
@@ -36,89 +36,113 @@ int main(void)
     }
     
     /* Generate initial generation */
-    gen = generate_initial_generation(&sd);
+    generate_initial_generation(&curGen, &sd);
     
     /* Run up to 200 generations */
-    for (i = 0; i < MAX_GENERATIONS; i++)
+    for (i = 0; i < 1; i++)
     {
-        gen = generate_next_generation(&gen);
+        Generation nextGen;
+        generate_next_generation(&curGen, &nextGen);
+        
+        /*
+         * free_generation(&curGen);
+         * curGen = nextGen;
+        */
         
         /* TODO: Exit if low fitness is found? */
     }
 
     /* Print schedules to files */
-    print_schedule_to_file(&gen, 0, &sd.specializations[0], "swdat.html");
-    print_schedule_to_file(&gen, 0, &sd.specializations[1], "robotics.html");
+    print_schedule_to_file(&curGen.schedules[0], &sd.specializations[0], "swdat.html");
+    print_schedule_to_file(&curGen.schedules[0], &sd.specializations[1], "robotics.html");
     
-    free_generation(&gen);
+    free_generation(&curGen);
     free_semesterdata(&sd);
     
     return 0;
 }
 
-/* Generate next generation based on existing generation */
-Generation generate_next_generation(Generation *curGen)
+void initialize_schedule(Generation *parentGen, int scheduleIndex)
 {
-    int i, schedules[GENERATION_SIZE];
-    Generation nextGen;
+    Schedule *newSchedule = &parentGen->schedules[scheduleIndex];
     
-    /* Sort genomes by fitness */
-    /* Keep best 5 of the bunch */
-    /* Crossbreed 5 to get a total of 100 genomes */
-    /* Mutate randomly, even on the best ones */
+    /* Allocate memory for the amount of lectures */
+    newSchedule->lectures = malloc(parentGen->sd->numLectures * sizeof(Lecture));
+    if (!newSchedule->lectures)
+        exit(ERROR_OUT_OF_MEMORY);
     
-    return nextGen;
+    /* Set parent generation */
+    newSchedule->parentGen = parentGen;
 }
 
 /* Generate initial generation by generating n schedules */
-Generation generate_initial_generation(SemesterData *sd)
+void generate_initial_generation(Generation *initialGen, SemesterData *sd)
 {
     int i, j, k, l;
-    Generation initialGen;
-
-    initialGen.sd = sd;
+    
+    /* Set parent semesterdata */
+    initialGen->sd = sd;
     
     /* Set total amount of lectures */
     sd->numLectures = get_amount_of_lectures(sd);
-    
-    /* Allocate memory for the lectures in each schedule */
-    for (i = 0; i < GENERATION_SIZE; i++)
-    {
-        initialGen.schedules[i] = malloc(sd->numLectures * sizeof(Lecture));
-        if (!initialGen.schedules[i])
-            exit(ERROR_OUT_OF_MEMORY);
-    }
 
     /* Iterate through all generations */
     for (i = 0; i < GENERATION_SIZE; i++)
     {
         k = 0;
         
+        /* Initialize new schedule/genome */
+        initialize_schedule(initialGen, i);
+        
         /* Iterate through all courses */
         for (j = 0; j < sd->numCourses; j++)
         {
             Course *course = &sd->courses[j];
             
-            /* Iterate through all lectures for this course */
+            /* Iterate through all lectures for this course and add */
             for (l = 0; l < course->totLectures; l++)
             {
-                add_lecture(&initialGen, i, k++, rand() % (DAYS_PER_WEEK * sd->numWeeks), rand() % MAX_PERIODS, rand() % sd->numRooms, j);
+				set_lecture(&initialGen->schedules[i].lectures[k++],
+                    rand() % (DAYS_PER_WEEK * sd->numWeeks),
+                    rand() % MAX_PERIODS, 
+                    &sd->rooms[rand() % sd->numRooms],
+                    &sd->courses[j]);
             }
         }
     }
+}
+
+int compare_schedule_fitness(const void *a, const void *b)
+{
+    Schedule *scheduleA = (Schedule*)a;
+    Schedule *scheduleB = (Schedule*)b;
     
-    /* Debug: Test fitness for all generations */
-    for (i = 0; i < GENERATION_SIZE; i++)
-    {
-        printf("%d has a fitness of %d\n", i, calcfit_schedule(&initialGen, i));
-    }
+    return scheduleA->fitness - scheduleB->fitness;
+}
+
+/* Generate next generation based on existing generation */
+void generate_next_generation(Generation *oldGen, Generation *newGen)
+{
+    int i;
+
+    /* Calculate fitness for old generation */
+    calcfit_generation(oldGen);
     
-    return initialGen;
+    /* Sort genomes by fitness */
+    qsort(oldGen->schedules, oldGen->sd->numLectures, sizeof(Schedule), compare_schedule_fitness);
+    
+    /* Print best half % */
+    for (i = 0; i < GENERATION_SIZE / 2; i++)
+        printf("DEBUG: Genome %02d has a fitness of %04d\n", i + 1, oldGen->schedules[i].fitness);
+    
+    /* Crossbreed best to get a total of 100 genomes */
+    /* Mutate randomly, even on the best ones */
 }
 
 void free_generation(Generation *gp)
 {
     printf("Warning: Free_generation is not implemented yet!\n");
+    /* free gp->schedules->lectures for every schedule */
 }
 
 /*

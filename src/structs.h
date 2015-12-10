@@ -7,100 +7,128 @@
 #include "defs.h"
 
 /* Room struct */
-typedef struct
+struct Room
 {
     char name[32];
     
     int seats;
-} Room;
-
-/* OffTime struct */
-/* A day and time period (0 or 1) where the teacher isn't available */
-typedef struct
-{
-    int day;
-    int periods[MAX_PERIODS];
-} OffTime;
+};
 
 /* Teacher struct */
-typedef struct
+struct Teacher
 {
     char name[32];
     
     int numOffTimes;
-    OffTime *offTimes;
-} Teacher;
+    struct OffTime *offTimes;
+};
+
+/* OffTime struct */
+/* A day and time period (0 or 1) where the teacher isn't available */
+struct OffTime
+{
+    int day;
+    int periods[MAX_PERIODS];
+};
 
 /* Course struct */
-typedef struct
+struct Course
 {
     char name[64];
     int totLectures;
     
     int numTeachers;     /* Number of teachers associated */
-    Teacher **teachers;  /* Array of associated teachers */
-} Course;
+    struct Teacher **teachers;  /* Array of associated teachers */
+};
 
 /* Specialization (major) struct */
-typedef struct
+struct Specialization
 {
     char name[32];
     
     int numStudents;
     
     int numCourses;
-    Course **courses;
-} Specialization;
+    struct Course **courses;
+};
 
 /* Flags struct: Used to prevent double fitness. */
-typedef struct
+struct Flags
 {
     int doubleBookingRoom;
     int doubleBookingLecture;
     int lectureOverflow;
     int semesterOverflow;
-} Flags;
+};
 
 /* Lecture struct */
-typedef struct
+struct Lecture
 {
     int day;
     int period;
 
-    Room   *assignedRoom;
-    Course *assignedCourse;
+    struct Room   *assignedRoom;
+    struct Course *assignedCourse;
 
-    Flags flags;
-} Lecture;
+    struct Flags flags;
+};
 
 /* SemesterData struct */
-typedef struct
+struct SemesterData
 {
+	/* Total amount of weeks in the semester */
     int numWeeks;
     
+	/* Size and array of rooms */
     int numRooms;
-    Room *rooms;
+    struct Room *rooms;
     
+	/* Size and array of teachers */
     int numTeachers;
-    Teacher *teachers;
+    struct Teacher *teachers;
     
+	/* Size and array of courses */
     int numCourses;
-    Course *courses;
+    struct Course *courses;
     
+	/* Size and array of specializations */
     int numSpecializations;
-    Specialization *specializations;
+    struct Specialization *specializations;
     
     /* The amount of lectures in each schedule. */
     int numLectures;
-} SemesterData;
+};
+
+/* Schedule struct */
+struct Schedule
+{
+	/* Pointer to the generation that this schedule belongs to */
+	struct Generation *parentGen;
+	
+	/* Array of lectures */
+	struct Lecture *lectures;
+	
+	/* Last calculated fitness value */
+	int fitness;
+};
 
 /* Generation struct */
-typedef struct
-{
-    /* Contains a pointer to SemesterData, which contains
-     * information about teachers, rooms etc. */
-    SemesterData *sd;
+struct Generation
+{    
+    /* Array of schedules */
+    struct Schedule schedules[GENERATION_SIZE];
     
-    /* Array of schedules. */
-    Lecture *schedules[GENERATION_SIZE];
-} Generation;
+    /* Pointer to SemesterData, which contains relevant information */
+    struct SemesterData *sd;
+};
+
+typedef struct Room Room;
+typedef struct OffTime OffTime;
+typedef struct Teacher Teacher;
+typedef struct Course Course;
+typedef struct Specialization Specialization;
+typedef struct Flags Flags;
+typedef struct Lecture Lecture;
+typedef struct SemesterData SemesterData;
+typedef struct Schedule Schedule;
+typedef struct Generation Generation;

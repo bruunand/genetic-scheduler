@@ -10,6 +10,7 @@
 /* Error codes */
 #define ERROR_OUT_OF_MEMORY 1
 #define ERROR_ARRAY_BOUNDS_EXCEEDED 2
+#define ERROR_FILE_NULL_PTR 3
 
 /* MAX_OVER_CAPACITY is the amount a room is allowed to be over capacity. For example 5 % */
 #define MAX_OVER_CAPACITY 1.05

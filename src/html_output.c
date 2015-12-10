@@ -163,7 +163,7 @@ void end_print_row(FILE *f)
  *  
  *  \details This function adds a period to the schedule and formats it as needed
  */
-void print_period(Generation *gp, int scheduleId, Specialization *sp, FILE *f, int periodId, int weekNumber)
+void print_period(Schedule *schedule, Specialization *sp, FILE *f, int periodId, int weekNumber)
 {
     int i, j, k, foundMatches;
     
@@ -177,9 +177,9 @@ void print_period(Generation *gp, int scheduleId, Specialization *sp, FILE *f, i
     {
         foundMatches = 0;
 
-        for (j = 0; j < gp->sd->numLectures; j++)
+        for (j = 0; j < schedule->parentGen->sd->numLectures; j++)
         {
-            Lecture *lect = &gp->schedules[scheduleId][j];
+            Lecture *lect = &schedule->lectures[j];
             
             /* Validate day and period */
             if (lect->period != periodId || lect->day != i)
@@ -232,18 +232,21 @@ void print_period(Generation *gp, int scheduleId, Specialization *sp, FILE *f, i
  *  
  *  \details The final step of the schedule creation
  */
-void print_schedule_to_file(Generation *gp, int scheduleId, Specialization *sp, const char* fileName)
+void print_schedule_to_file(Schedule *schedule, Specialization *sp, char* fileName)
 {
     int i, j;
     FILE *f;
-    f = fopen(fileName, "w");
     
+    f = fopen(fileName, "w+");
+    if (!f)
+        exit(ERROR_FILE_NULL_PTR);
+
     print_file_header(f, "AAU Scheduler");
     
     print_title(f, sp->name);
 
     /* Print a table for every week */
-    for(i = 0; i < gp->sd->numWeeks; i++)
+    for(i = 0; i < schedule->parentGen->sd->numWeeks; i++)
     {
         begin_print_table(f, 20);
         begin_print_row(f, "#FFFFFF");
@@ -255,10 +258,10 @@ void print_schedule_to_file(Generation *gp, int scheduleId, Specialization *sp, 
             print_row_header(f, (100.0f - WEEK_WIDTH) / (DAYS_PER_WEEK), "%s", get_name_of_day(j));
         
         end_print_row(f);
-        
+
         /* Print a for with lectures for each period */
         for (j = 0; j < MAX_PERIODS; j++)
-            print_period(gp, scheduleId, sp, f, j, i);
+            print_period(schedule, sp, f, j, i);
 
         end_print_table(f);    
     }
