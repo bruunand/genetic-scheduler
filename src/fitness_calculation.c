@@ -186,17 +186,17 @@ int calcfit_distribution_weekly(Schedule *schedule, Lecture *lect)
             continue;
         
         /* Skip flagged lectures */
-        if (curLect->flags.lectureOverflow)
+        if (curLect->flags.lectureCounted)
             continue;
 
         if (curLect->day == lect->day)
         {
-            curLect->flags.lectureOverflow = 1;
+            curLect->flags.lectureCounted = 1;
             totCoursePerDay++;
         }
         if (curLect->day / DAYS_PER_WEEK == weekNum)
         {
-            curLect->flags.lectureOverflow = 1;
+            curLect->flags.lectureCounted = 1;
             totCoursePerWeek++;
         }
     }
@@ -251,7 +251,7 @@ int calcfit_distribution_semester_inner(Schedule *schedule, Lecture *lect, Speci
     
     weekNum = lect->day / DAYS_PER_WEEK;
     
-    if (lect->flags.semesterOverflow)
+    if (lect->flags.semesterCounted)
         return 0;
     
     /* Iterate through all lectures */
@@ -268,7 +268,7 @@ int calcfit_distribution_semester_inner(Schedule *schedule, Lecture *lect, Speci
             continue;
         
         lecturesCurWeek++;
-        curLect->flags.semesterOverflow = 1;
+        curLect->flags.semesterCounted = 1;
     }
 
     /* Distribute most lectures in first 3/4 of the semester */

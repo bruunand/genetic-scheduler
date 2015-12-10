@@ -74,8 +74,8 @@ struct Flags
 {
     int doubleBookingRoom;
     int doubleBookingLecture;
-    int lectureOverflow;
-    int semesterOverflow;
+    int lectureCounted;
+    int semesterCounted;
 };
 
 /**
