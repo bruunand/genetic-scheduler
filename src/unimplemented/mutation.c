@@ -1,4 +1,4 @@
-int crossbreed(Generation *new, int genomeId)
+int mutate(Generation *new, int genomeId)
 {
     int i = 0, mutations;
     
@@ -24,5 +24,5 @@ int crossbreed(Generation *new, int genomeId)
         }
     } while(i < new->sd->numLectures);
 
-    return genesSwitched;
+    return mutations;
 }
