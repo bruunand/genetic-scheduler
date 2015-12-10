@@ -163,12 +163,11 @@ void generate_next_generation(Generation *oldGen, Generation *newGen)
      * Let half the population of oldGen survive. Randomly chosen, but weighted 
      * towards better fittness.
      */
-     
     for(i = 0; i < (GENERATION_SIZE / 2) ; i++)
     {
-        x = rand()%GENERATION_SIZE;
-        y = rand()%GENERATION_SIZE;
-        newGen->schedules[i] = oldGen->schedules[(x>y)?y:x];
+        x = rand() % GENERATION_SIZE;
+        y = rand() % GENERATION_SIZE;
+        newGen->schedules[i] = oldGen->schedules[(x > y) ? y : x];
         newGenMembers++;
     }
     
@@ -178,12 +177,13 @@ void generate_next_generation(Generation *oldGen, Generation *newGen)
         crossbreed(newGen, newGenMembers);
     }
     
-    /* Mutate randomly, even on the best ones */
-    
-    do{
-        x = rand()%GENERATION_SIZE;
-        mutate(rand()%GENERATION_SIZE);
-    } while();
+    /* Mutate randomly */
+    do
+    {
+        x = rand() % GENERATION_SIZE;
+        if(x < MUTATION_CHANCE)
+            mutate(newGen, rand() % GENERATION_SIZE);
+    } while(x < MUTATION_CHANCE);
     
 }
 
