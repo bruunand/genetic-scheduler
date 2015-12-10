@@ -16,10 +16,9 @@ const char* dayNames[] = {"Monday", "Tuesday", "Wednesday", "Thursday", "Friday"
 /**
  *  \brief Reset flags for all lectures in a specific schedule
  *  
- *  \param [in] schedule Parameter_Description
- *  \return Return_Description
+ *  \param [in] schedule Schedule contains the lectures we want to reset
  *  
- *  \details Details
+ *  \details Iterates through all lectures in a given schedule and resets all the flags
  */
 void reset_schedule_flags(Schedule *schedule)
 {
@@ -51,14 +50,11 @@ void copy_schedule(Schedule *dest, Schedule *src, Generation *newGen)
 /**
  *  \brief Set members of a lecture struct
  *  
- *  \param [in] lect Parameter_Description
- *  \param [in] day Parameter_Description
- *  \param [in] period Parameter_Description
- *  \param [in] room Parameter_Description
- *  \param [in] course Parameter_Description
- *  \return Return_Description
- *  
- *  \details Details
+ *  \param [in] lect The lecture we want to work with
+ *  \param [in] day The new value for day
+ *  \param [in] period The new value for period
+ *  \param [in] room The new value for assignedRoom
+ *  \param [in] course The new value for assignedCourse
  */
 void set_lecture(Lecture *lect, int day, int period, Room *room, Course *course)
 {
@@ -69,13 +65,13 @@ void set_lecture(Lecture *lect, int day, int period, Room *room, Course *course)
 }
 
 /**
- *  \brief Brief
+ *  \brief Checks if a specialization has a given lecture
  *  
- *  \param [in] sp Pointer to a specialization
- *  \param [in] lect Parameter_Description
+ *  \param [in] sp Pointer to a specialization we want to check
+ *  \param [in] lect Pointer to a lecture we want to check with
  *  \return Returns whether a specialization is on a specific lecture
  *  
- *  \details Details
+ *  \details Check if a course in the specialization matches the assigned course for the lecture
  */
 int specialization_has_lecture(Specialization *sp, Lecture *lect)
 {
@@ -92,15 +88,15 @@ int specialization_has_lecture(Specialization *sp, Lecture *lect)
 }
 
 /**
- *  \brief Brief
+ *  \brief Check if a teacher has offtime on a given day and period
  *  
- *  \param [in] sd Parameter_Description
- *  \param [in] teacher Parameter_Description
- *  \param [in] dayId Parameter_Description
- *  \param [in] periodId Parameter_Description
+ *  \param [in] sd SemesterData contains some information needed by the function
+ *  \param [in] teacher Pointer to the teacher we are checking
+ *  \param [in] dayId The ID of the day we check for
+ *  \param [in] periodId The ID of the period we check for
  *  \return Returns 1 if a teacher has an offtime (not available) on a day and period
  *  
- *  \details Details
+ *  \details First we validate the period on the day. Then we iterate through all offtimes
  */
 int teacher_has_offtime(SemesterData *sd, Teacher *teacher, int dayId, int periodId)
 {
@@ -123,13 +119,13 @@ int teacher_has_offtime(SemesterData *sd, Teacher *teacher, int dayId, int perio
 }
 
 /**
- *  \brief Brief
+ *  \brief Gets the total number of students on a given course
  *  
- *  \param [in] sd Parameter_Description
- *  \param [in] course Parameter_Description
+ *  \param [in] sd SemesterData has some required information
+ *  \param [in] course Pointer to the couse we check
  *  \return Returns the amount of students on a specific course
  *  
- *  \details Details
+ *  \details First we go through all specializations and add them to a temp. variable. Then we go through all the courses in these specializations and adds the number of students in each specialization that has the course
  */
 int get_students_on_course(SemesterData *sd, Course *course)
 {
@@ -153,12 +149,12 @@ int get_students_on_course(SemesterData *sd, Course *course)
 }
 
 /**
- *  \brief Brief
+ *  \brief Gets the total amount of lectures
  *  
- *  \param [in] sd Parameter_Description
+ *  \param [in] sd SemesterData contains the information required to get the amount
  *  \return Returns the total amount of lectures in the semester
  *  
- *  \details Details
+ *  \details Goes through all the courses in SemesterData and adds the lectures assigned to each course to a variable which is then returned
  */
 int get_amount_of_lectures(SemesterData *sd)
 {
@@ -172,12 +168,12 @@ int get_amount_of_lectures(SemesterData *sd)
 }
 
 /**
- *  \brief Brief
+ *  \brief Gets a name of a period (08:15-12:00 or 12:30-16:15)
  *  
- *  \param [in] periodId Parameter_Description
+ *  \param [in] periodId The ID of the period to check
  *  \return Returns the name of a period specified by the periodId parameter
  *  
- *  \details Details
+ *  \details Checks if the period ID is outside the range. If it is outside the range it returns an UNKNOWN name. Otherwise it returns the name according to it's place on the schedule
  */
 const char* get_name_of_period(int periodId)
 {
@@ -187,12 +183,10 @@ const char* get_name_of_period(int periodId)
 }
 
 /**
- *  \brief Brief
+ *  \brief Gets a name of a day
  *  
- *  \param [in] dayId Parameter_Description
+ *  \param [in] dayId The ID of the day to check
  *  \return Returns the name of a day specified by the dayId parameter
- *  
- *  \details Details
  */
 const char* get_name_of_day(int dayId)
 {
@@ -200,14 +194,14 @@ const char* get_name_of_day(int dayId)
 }
 
 /**
- *  \brief Brief
+ *  \brief Gets all specializations that contains a specific course
  *  
- *  \param [in] sd Parameter_Description
- *  \param [in] course Parameter_Description
- *  \param [in] specs Parameter_Description
+ *  \param [in] sd SemesterData contains information required for the function to work
+ *  \param [in] course The course we check for
+ *  \param [out] specs The specializations that contain the course
  *  \return Returns amount of specializations
  *  
- *  \details Details
+ *  \details Counts and returns the specializations with the specific cause.
  */
 int get_specializations_on_course(SemesterData *sd, Course *course, Specialization ***specs)
 {

@@ -16,7 +16,7 @@
  *  
  *  \param [in] sd SemesterData contains all the information about the structs needed for this function
  *  \param [in] lect Pointer to lecture to test
- *  \return Returns the fitness
+ *  \return Returns the fitness of the test.
  *  
  *  \details This function checks the capacity of the room and the amount of students on the lecture and determins the penalty in fitness by comparing the two.
  */
@@ -46,7 +46,7 @@ int calcfit_capacity(SemesterData *sd, Lecture *lect)
  *  
  *  \param [in] schedule Pointer to a schedule
  *  \param [in] lect Pointer to lecture to test
- *  \return Returns the fitness
+ *  \return Returns the fitness of the test.
  *  
  *  \details Also test whether the teacher is already assigned to a lecture on the same date
  */
@@ -97,7 +97,7 @@ int calcfit_teacher_availability(Schedule *schedule, Lecture *lect)
  *  
  *  \param [in] schedule Pointer to a schedule
  *  \param [in] lect Pointer to lecture to test
- *  \return Returns the fitness
+ *  \return Returns the fitness of the test.
  *  
  *  \details Performs tests for both room and lecture doublebooking
  */
@@ -167,7 +167,7 @@ int calcfit_doublebooking(Schedule *schedule, Lecture *lect)
  *  \param [in] lect Pointer to lecture to test
  *  \return Returns the fitness of the lecture distribution
  *  
- *  \details Details
+ *  \details *PENDING*
  */
 int calcfit_distribution_weekly(Schedule *schedule, Lecture *lect)
 {
@@ -214,8 +214,8 @@ int calcfit_distribution_weekly(Schedule *schedule, Lecture *lect)
  *  \brief Tests the semester distribution
  *  
  *  \param [in] schedule Pointer to a schedule
- *  \param [in] lect Pointer to lecture to calculate fitness for
- *  \return Returns the fitness
+ *  \param [in] lect Pointer to lecture to test
+ *  \return Returns the fitness of the test.
  *  
  *  \details Makes a call to the inner test function for every specialization on the specified lecture
  */
@@ -240,10 +240,10 @@ int calcfit_distribution_semester(Schedule *schedule, Lecture *lect)
  *  
  *  \param [in] schedule Pointer to a schedule
  *  \param [in] lect Pointer to lecture to test
- *  \param [in] sp Pointer to a specialization
- *  \return Returns the fitness
+ *  \param [in] sp Pointer to a specialization that is needed to obtain some information within the function
+ *  \return Returns the fitness of the test.
  *  
- *  \details Details
+ *  \details *PENDING*
  */
 int calcfit_distribution_semester_inner(Schedule *schedule, Lecture *lect, Specialization *sp)
 {
@@ -284,7 +284,15 @@ int calcfit_distribution_semester_inner(Schedule *schedule, Lecture *lect, Speci
         return 0;
 }
 
-/* Calculate fitness for a single lecture (gene) */
+/**
+ *  \brief Calculate fitness for a single lecture (gene)
+ *  
+ *  \param [in] schedule The schedule the lecture is a part of
+ *  \param [in] lect The specific lecture to calculate fitness for
+ *  \return Returns the fitness of the lecture
+ *  
+ *  \details Performs all the fitness calculations on a specific lecture and returns the total fitness for that lecture
+ */
 int calcfit_lecture(Schedule *schedule, Lecture *lect)
 {
     lect->fitness = 0;
@@ -298,7 +306,14 @@ int calcfit_lecture(Schedule *schedule, Lecture *lect)
     return lect->fitness;
 }
 
-/* Calculate fitness for a schedule/genome */
+/**
+ *  \brief Calculate fitness for a schedule/genome
+ *  
+ *  \param [in] schedule The schedule to calculate fitness for
+ *  \return Returns the fitness of the schedule
+ *  
+ *  \details Iterates through all lectures and add their fitness to a variables which is then returned
+ */
 int calcfit_schedule(Schedule *schedule)
 {
     int i;
@@ -318,6 +333,11 @@ int calcfit_schedule(Schedule *schedule)
     return schedule->fitness;
 }
 
+/**
+ *  \brief Calculates the fitness of a generation
+ *  
+ *  \param [in] gp The generation to calulate fitness for
+ */
 void calcfit_generation(Generation *gp)
 {
     int i;
