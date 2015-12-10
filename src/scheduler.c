@@ -15,6 +15,13 @@
 #include "defs.h"
 #include "html_output.h"
 
+/**
+ *  \brief Brief
+ *  
+ *  \return Returns weather the program has exited with an error or success
+ *  
+ *  \details Details
+ */
 int main(void)
 {
     int i, seed;
@@ -112,6 +119,15 @@ void generate_initial_generation(Generation *initialGen, SemesterData *sd)
     }
 }
 
+/**
+ *  \brief Brief
+ *  
+ *  \param [in] a Parameter_Description
+ *  \param [in] b Parameter_Description
+ *  \return Return_Description
+ *  
+ *  \details Details
+ */
 int compare_schedule_fitness(const void *a, const void *b)
 {
     Schedule *scheduleA = (Schedule*)a;
@@ -120,7 +136,15 @@ int compare_schedule_fitness(const void *a, const void *b)
     return scheduleA->fitness - scheduleB->fitness;
 }
 
-/* Generate next generation based on existing generation */
+/**
+ *  \brief Generate next generation based on existing generation
+ *  
+ *  \param [in] oldGen Parameter_Description
+ *  \param [in] newGen Parameter_Description
+ *  \return Return_Description
+ *  
+ *  \details Details
+ */
 void generate_next_generation(Generation *oldGen, Generation *newGen)
 {
     int i;
@@ -139,16 +163,28 @@ void generate_next_generation(Generation *oldGen, Generation *newGen)
     /* Mutate randomly, even on the best ones */
 }
 
+/**
+ *  \brief Brief
+ *  
+ *  \param [in] gp Parameter_Description
+ *  \return Return_Description
+ *  
+ *  \details Details
+ */
 void free_generation(Generation *gp)
 {
     printf("Warning: Free_generation is not implemented yet!\n");
     /* free gp->schedules->lectures for every schedule */
 }
 
-/*
- * Free all memory associated with the SemesterData struct.
- * Dynamically allocated arrays inside the structs are also freed.
-*/
+/**
+ *  \brief Free all memory associated with the SemesterData struct. Dynamically allocated arrays inside the structs are also freed.
+ *  
+ *  \param [in] sd Parameter_Description
+ *  \return Return_Description
+ *  
+ *  \details Details
+ */
 void free_semesterdata(SemesterData *sd)
 {
     int i;

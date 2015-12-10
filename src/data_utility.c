@@ -1,3 +1,7 @@
+/**
+ *  \file data_utility.c
+ *  \brief Brief
+ */
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
@@ -9,7 +13,14 @@
 const char* periodNames[] = {"08:15 - 12:00", "12:30 - 16:15"};
 const char* dayNames[] = {"Monday", "Tuesday", "Wednesday", "Thursday", "Friday"};
 
-/* Reset flags for all lectures in a specific schedule */
+/**
+ *  \brief Reset flags for all lectures in a specific schedule
+ *  
+ *  \param [in] schedule Parameter_Description
+ *  \return Return_Description
+ *  
+ *  \details Details
+ */
 void reset_schedule_flags(Schedule *schedule)
 {
     int i;
@@ -19,7 +30,18 @@ void reset_schedule_flags(Schedule *schedule)
         memset(&schedule->lectures[i].flags, 0, sizeof(Flags));
 }
 
-/* Set members of a lecture struct */
+/**
+ *  \brief Set members of a lecture struct
+ *  
+ *  \param [in] lect Parameter_Description
+ *  \param [in] day Parameter_Description
+ *  \param [in] period Parameter_Description
+ *  \param [in] room Parameter_Description
+ *  \param [in] course Parameter_Description
+ *  \return Return_Description
+ *  
+ *  \details Details
+ */
 void set_lecture(Lecture *lect, int day, int period, Room *room, Course *course)
 {
     lect->day = day;
@@ -28,11 +50,15 @@ void set_lecture(Lecture *lect, int day, int period, Room *room, Course *course)
     lect->assignedCourse = course;
 }
 
-/*
- * Returns whether a specialization is on a specific lecture.
- *
- * sp: Pointer to a specialization.
-*/
+/**
+ *  \brief Brief
+ *  
+ *  \param [in] sp Pointer to a specialization
+ *  \param [in] lect Parameter_Description
+ *  \return Returns whether a specialization is on a specific lecture
+ *  
+ *  \details Details
+ */
 int specialization_has_lecture(Specialization *sp, Lecture *lect)
 {
     int i;
@@ -47,7 +73,17 @@ int specialization_has_lecture(Specialization *sp, Lecture *lect)
     return 0;
 }
 
-/* Returns 1 if a teacher has an offtime (not available) on a day and period. */
+/**
+ *  \brief Brief
+ *  
+ *  \param [in] sd Parameter_Description
+ *  \param [in] teacher Parameter_Description
+ *  \param [in] dayId Parameter_Description
+ *  \param [in] periodId Parameter_Description
+ *  \return Returns 1 if a teacher has an offtime (not available) on a day and period
+ *  
+ *  \details Details
+ */
 int teacher_has_offtime(SemesterData *sd, Teacher *teacher, int dayId, int periodId)
 {
     int i;
@@ -68,7 +104,15 @@ int teacher_has_offtime(SemesterData *sd, Teacher *teacher, int dayId, int perio
     return 0;
 }
 
-/* Returns the amount of students on a specific course */
+/**
+ *  \brief Brief
+ *  
+ *  \param [in] sd Parameter_Description
+ *  \param [in] course Parameter_Description
+ *  \return Returns the amount of students on a specific course
+ *  
+ *  \details Details
+ */
 int get_students_on_course(SemesterData *sd, Course *course)
 {
     int i, j, totStudents = 0;
@@ -90,7 +134,14 @@ int get_students_on_course(SemesterData *sd, Course *course)
     return totStudents;
 }
 
-/* Returns the total amount of lectures in the semester */
+/**
+ *  \brief Brief
+ *  
+ *  \param [in] sd Parameter_Description
+ *  \return Returns the total amount of lectures in the semester
+ *  
+ *  \details Details
+ */
 int get_amount_of_lectures(SemesterData *sd)
 {
     int totLectureAmount = 0, i;
@@ -102,7 +153,14 @@ int get_amount_of_lectures(SemesterData *sd)
     return totLectureAmount;
 }
 
-/* Returns the name of a period specified by the periodId parameter */
+/**
+ *  \brief Brief
+ *  
+ *  \param [in] periodId Parameter_Description
+ *  \return Returns the name of a period specified by the periodId parameter
+ *  
+ *  \details Details
+ */
 const char* get_name_of_period(int periodId)
 {
     if (periodId < 0 || periodId > MAX_PERIODS - 1)
@@ -110,13 +168,29 @@ const char* get_name_of_period(int periodId)
     return periodNames[periodId];
 }
 
-/* Returns the name of a day specified by the dayId parameter */
+/**
+ *  \brief Brief
+ *  
+ *  \param [in] dayId Parameter_Description
+ *  \return Returns the name of a day specified by the dayId parameter
+ *  
+ *  \details Details
+ */
 const char* get_name_of_day(int dayId)
 {
     return dayNames[dayId % DAYS_PER_WEEK];
 }
 
-/* Returns amount of specializations */
+/**
+ *  \brief Brief
+ *  
+ *  \param [in] sd Parameter_Description
+ *  \param [in] course Parameter_Description
+ *  \param [in] specs Parameter_Description
+ *  \return Returns amount of specializations
+ *  
+ *  \details Details
+ */
 int get_specializations_for_course(SemesterData *sd, Course *course, Specialization ***specs)
 {
     int i, j, amount = 0;
