@@ -17,7 +17,7 @@
  *  \brief Initial function for the config reader
  *  
  *  \param [in] fileName The name of the file to read from
- *  \param [in] sd SemesterData is a link to our structs that we will need for this function
+ *  \param [in] sd SemesterData is a link to our structs that are needed for this function
  *  \return Returns 1 or 0 depending weather the function succeded or failed
  *  
  *  \details The function reads the file line by line and formats them to the format we need for further processing, then sends it to handle_line

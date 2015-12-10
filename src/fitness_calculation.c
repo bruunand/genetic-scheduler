@@ -44,8 +44,7 @@ int calcfit_capacity(SemesterData *sd, Lecture *lect)
 /**
  *  \brief Calculates fitness based on the teacher's availability at the time of the lecture.
  *  
- *  \param [in] gp Generation contains the required information about the data that should be printed
- *  \param [in] scheduleId ???????????????
+ *  \param [in] schedule Pointer to a schedule
  *  \param [in] lect Pointer to lecture to test
  *  \return Returns the fitness of the test. Aka. Fitness
  *  
@@ -96,8 +95,7 @@ int calcfit_teacher_availability(Schedule *schedule, Lecture *lect)
 /**
  *  \brief Calculates fitness based on whether the room or period is doublebooked.
  *  
- *  \param [in] gp Generation contains the required information about the data that should be printed
- *  \param [in] scheduleId ???????????????
+ *  \param [in] schedule Pointer to a schedule
  *  \param [in] lect Pointer to lecture to test
  *  \return Returns the fitness of the test. Aka. Fitness
  *  
@@ -165,8 +163,7 @@ int calcfit_doublebooking(Schedule *schedule, Lecture *lect)
 /**
  *  \brief Calculates how well the lecture fits into its week.
  *  
- *  \param [in] gp Generation contains the required information about the data that should be printed
- *  \param [in] scheduleId ???????????????
+ *  \param [in] schedule Pointer to a schedule
  *  \param [in] lect Pointer to lecture to test
  *  \return Returns the fitness of the lecture distribution.
  *  
@@ -216,8 +213,7 @@ int calcfit_distribution_weekly(Schedule *schedule, Lecture *lect)
  /**
  *  \brief Tests the semester distribution
  *  
- *  \param [in] gp Generation contains the required information about the data that should be printed
- *  \param [in] scheduleId ???????????????
+ *  \param [in] schedule Pointer to a schedule
  *  \param [in] lect Pointer to lecture to test
  *  \return Returns the fitness of the test. Aka. Fitness
  *  
@@ -242,8 +238,7 @@ int calcfit_distribution_semester(Schedule *schedule, Lecture *lect)
 /**
  *  \brief Test how the lecture fits into the semester distribution
  *  
- *  \param [in] gp Generation contains the required information about the data that should be printed
- *  \param [in] scheduleId ???????????????
+ *  \param [in] schedule Pointer to a schedule
  *  \param [in] lect Pointer to lecture to test
  *  \param [in] sp ???????????????????????????????????
  *  \return Returns the fitness of the test. Aka. Fitness
