@@ -16,7 +16,11 @@
  *  
  *  \param [in] sd SemesterData contains all the information about the structs needed for this function
  *  \param [in] lect Pointer to lecture to test
+<<<<<<< HEAD
+ *  \return Returns the fitness of the test.
+=======
  *  \return Returns the fitness
+>>>>>>> b5563395618b0132fd9679679b7f7e5d5099327e
  *  
  *  \details This function checks the capacity of the room and the amount of students on the lecture and determins the penalty in fitness by comparing the two.
  */
@@ -46,7 +50,11 @@ int calcfit_capacity(SemesterData *sd, Lecture *lect)
  *  
  *  \param [in] schedule Pointer to a schedule
  *  \param [in] lect Pointer to lecture to test
+<<<<<<< HEAD
+ *  \return Returns the fitness of the test.
+=======
  *  \return Returns the fitness
+>>>>>>> b5563395618b0132fd9679679b7f7e5d5099327e
  *  
  *  \details Also test whether the teacher is already assigned to a lecture on the same date
  */
@@ -97,7 +105,11 @@ int calcfit_teacher_availability(Schedule *schedule, Lecture *lect)
  *  
  *  \param [in] schedule Pointer to a schedule
  *  \param [in] lect Pointer to lecture to test
+<<<<<<< HEAD
+ *  \return Returns the fitness of the test.
+=======
  *  \return Returns the fitness
+>>>>>>> b5563395618b0132fd9679679b7f7e5d5099327e
  *  
  *  \details Performs tests for both room and lecture doublebooking
  */
@@ -214,8 +226,13 @@ int calcfit_distribution_weekly(Schedule *schedule, Lecture *lect)
  *  \brief Tests the semester distribution
  *  
  *  \param [in] schedule Pointer to a schedule
+<<<<<<< HEAD
+ *  \param [in] lect Pointer to lecture to test
+ *  \return Returns the fitness of the test.
+=======
  *  \param [in] lect Pointer to lecture to calculate fitness for
  *  \return Returns the fitness
+>>>>>>> b5563395618b0132fd9679679b7f7e5d5099327e
  *  
  *  \details Makes a call to the inner test function for every specialization on the specified lecture
  */
@@ -240,10 +257,15 @@ int calcfit_distribution_semester(Schedule *schedule, Lecture *lect)
  *  
  *  \param [in] schedule Pointer to a schedule
  *  \param [in] lect Pointer to lecture to test
+<<<<<<< HEAD
+ *  \param [in] sp Pointer to a specialization that is needed to obtain some information within the function
+ *  \return Returns the fitness of the test.
+=======
  *  \param [in] sp Pointer to a specialization
  *  \return Returns the fitness
+>>>>>>> b5563395618b0132fd9679679b7f7e5d5099327e
  *  
- *  \details Details
+ *  \details *PENDING*
  */
 int calcfit_distribution_semester_inner(Schedule *schedule, Lecture *lect, Specialization *sp)
 {
