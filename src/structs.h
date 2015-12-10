@@ -6,7 +6,10 @@
 
 #include "defs.h"
 
-/* Room struct */
+/**
+ *  \struct struct Room
+ *  \brief The Room struct contains the name of a specific room
+ */
 struct Room
 {
     char name[32];
@@ -14,7 +17,10 @@ struct Room
     int seats;
 };
 
-/* Teacher struct */
+/**
+ *  \struct struct Teacher
+ *  \brief The Teacher struct contains information about a specific teacher
+ */
 struct Teacher
 {
     char name[32];
@@ -23,15 +29,20 @@ struct Teacher
     struct OffTime *offTimes;
 };
 
-/* OffTime struct */
-/* A day and time period (0 or 1) where the teacher isn't available */
+/**
+ *  \struct struct OffTime
+ *  \brief The OffTime struct contains a day and time period (0 or 1) where the teacher isn't available for a teacher
+ */
 struct OffTime
 {
     int day;
     int periods[MAX_PERIODS];
 };
 
-/* Course struct */
+/**
+ *  \struct struct Course
+ *  \brief The Course struct contains information about a specific course
+ */
 struct Course
 {
     char name[64];
@@ -41,7 +52,10 @@ struct Course
     struct Teacher **teachers;  /* Array of associated teachers */
 };
 
-/* Specialization (major) struct */
+/**
+ *  \struct struct Specialization
+ *  \brief The Specialization struct contains information about a specific Specialization
+ */
 struct Specialization
 {
     char name[32];
@@ -52,7 +66,10 @@ struct Specialization
     struct Course **courses;
 };
 
-/* Flags struct: Used to prevent double fitness. */
+/**
+ *  \struct struct Flags
+ *  \brief The Flags struct contains a list of flags used to prevent double calculation of fitness
+ */
 struct Flags
 {
     int doubleBookingRoom;
@@ -61,7 +78,10 @@ struct Flags
     int semesterOverflow;
 };
 
-/* Lecture struct */
+/**
+ *  \struct struct Lecture
+ *  \brief The Lecture struct contains information about a specific Lecture
+ */
 struct Lecture
 {
     int day;
@@ -73,7 +93,11 @@ struct Lecture
     struct Flags flags;
 };
 
-/* SemesterData struct */
+/**
+ *  \struct struct SemesterData
+ *  \brief The SemesterData struct contains all available information about a specific semester
+ *  \details A generation would be built with an amount of SemesterData structs
+ */
 struct SemesterData
 {
 	/* Total amount of weeks in the semester */
@@ -99,7 +123,10 @@ struct SemesterData
     int numLectures;
 };
 
-/* Schedule struct */
+/**
+ *  \struct struct Schedule
+ *  \brief ????????????????
+ */
 struct Schedule
 {
 	/* Pointer to the generation that this schedule belongs to */
@@ -112,7 +139,10 @@ struct Schedule
 	int fitness;
 };
 
-/* Generation struct */
+/**
+ *  \struct struct Generation
+ *  \brief The Generation struct contains an array of schedules in the generation and a pointer to SemesterData which contains relevant information
+ */
 struct Generation
 {    
     /* Array of schedules */
