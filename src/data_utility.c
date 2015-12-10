@@ -10,23 +10,22 @@ const char* periodNames[] = {"08:15 - 12:00", "12:30 - 16:15"};
 const char* dayNames[] = {"Monday", "Tuesday", "Wednesday", "Thursday", "Friday"};
 
 /* Reset flags for all lectures in a specific schedule */
-void reset_schedule_flags(Generation *gp, int scheduleId)
+void reset_schedule_flags(Schedule *schedule)
 {
     int i;
 
-    for (i = 0; i < gp->sd->numLectures; i++)
-    {
-        memset(&gp->schedules[scheduleId][i].flags, 0, sizeof(Flags));
-    }
+    /* Reset flags for all lectures in schedule */
+    for (i = 0; i < schedule->parentGen->sd->numLectures; i++)
+        memset(&schedule->lectures[i].flags, 0, sizeof(Flags));
 }
 
-/* Adds lecture to a schedule */
-void add_lecture(Generation *gp, int scheduleId, int lectureId, int day, int period, int roomId, int courseId)
+/* Set members of a lecture struct */
+void set_lecture(Lecture *lect, int day, int period, Room *room, Course *course)
 {
-    gp->schedules[scheduleId][lectureId].day = day;
-    gp->schedules[scheduleId][lectureId].period = period;
-    gp->schedules[scheduleId][lectureId].assignedRoom = &gp->sd->rooms[roomId];
-    gp->schedules[scheduleId][lectureId].assignedCourse = &gp->sd->courses[courseId];
+    lect->day = day;
+    lect->period = period;
+    lect->assignedRoom = room;
+    lect->assignedCourse = course;
 }
 
 /*
@@ -38,7 +37,7 @@ int specialization_has_lecture(Specialization *sp, Lecture *lect)
 {
     int i;
     
-    /* Iterate through all courses for this */
+    /* Iterate through all courses */
     for (i = 0; i < sp->numCourses; i++)
     {
         if (sp->courses[i] == lect->assignedCourse)

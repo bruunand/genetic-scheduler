@@ -51,7 +51,7 @@ int calcfit_capacity(SemesterData *sd, Lecture *lect)
  *  
  *  \details Also test whether the teacher is already assigned to a lecture on the same date
  */
-int calcfit_teacher_availability(Generation *gp, int scheduleId, Lecture *lect)
+int calcfit_teacher_availability(Schedule *schedule, Lecture *lect)
 {
     int fitness = 0, i, j, k;
     
@@ -65,13 +65,13 @@ int calcfit_teacher_availability(Generation *gp, int scheduleId, Lecture *lect)
         Teacher *curTeacher = lect->assignedCourse->teachers[i];
         
         /* Test if they are off on this day */
-        if (teacher_has_offtime(gp->sd, curTeacher, lect->day, lect->period))
+        if (teacher_has_offtime(schedule->parentGen->sd, curTeacher, lect->day, lect->period))
             fitness += 100;
         
         /* Test if they have another lecture at this time */
-        for (j = 0; j < gp->sd->numLectures; j++)
+        for (j = 0; j < schedule->parentGen->sd->numLectures; j++)
         {
-            Lecture *curLect = &gp->schedules[scheduleId][j];
+            Lecture *curLect = &schedule->lectures[i];
             
             /* Skip lecture being tested */
             if (curLect == lect)
@@ -103,15 +103,15 @@ int calcfit_teacher_availability(Generation *gp, int scheduleId, Lecture *lect)
  *  
  *  \details Performs tests for both room and lecture doublebooking
  */
-int calcfit_doublebooking(Generation *gp, int scheduleId, Lecture *lect)
+int calcfit_doublebooking(Schedule *schedule, Lecture *lect)
 {
     Specialization **specs;
     int fitness = 0, numSpecs, i, j;
     
     /* Test room doublebooking */
-    for(i = 0; i < gp->sd->numLectures; i++)
+    for(i = 0; i < schedule->parentGen->sd->numLectures; i++)
     {
-        Lecture *curLect = &gp->schedules[scheduleId][i];
+        Lecture *curLect = &schedule->lectures[i];
 
         if (curLect == lect)
             continue;
@@ -131,13 +131,13 @@ int calcfit_doublebooking(Generation *gp, int scheduleId, Lecture *lect)
     }
     
     /* Find out who has this lecture */
-    numSpecs = get_specializations_for_course(gp->sd, lect->assignedCourse, &specs);
+    numSpecs = get_specializations_for_course(schedule->parentGen->sd, lect->assignedCourse, &specs);
     for (i = 0; i < numSpecs; i++)
     {
         /* Find lectures on the same day as the test lecture */
-        for (j = 0; j < gp->sd->numLectures; j++)
+        for (j = 0; j < schedule->parentGen->sd->numLectures; j++)
         {
-            Lecture *curLect = &gp->schedules[scheduleId][j];
+            Lecture *curLect = &schedule->lectures[j];
             
             if (curLect == lect)
                 continue;
@@ -172,7 +172,7 @@ int calcfit_doublebooking(Generation *gp, int scheduleId, Lecture *lect)
  *  
  *  \details Details
  */
-int calcfit_distribution_weekly(Generation *gp, int scheduleId, Lecture *lect)
+int calcfit_distribution_weekly(Schedule *schedule, Lecture *lect)
 {
     int fitness = 0, i, weekNum;
     int totCoursePerWeek = 0, totCoursePerDay = 0;
@@ -180,9 +180,9 @@ int calcfit_distribution_weekly(Generation *gp, int scheduleId, Lecture *lect)
     weekNum = lect->day / DAYS_PER_WEEK;
 
     /* Test distribution for this course */
-    for (i = 0; i < gp->sd->numLectures; i++)
+    for (i = 0; i < schedule->parentGen->sd->numLectures; i++)
     {
-        Lecture *curLect = &gp->schedules[scheduleId][i];
+        Lecture *curLect = &schedule->lectures[i];
         
         /* Skip other courses */
         if (curLect->assignedCourse != lect->assignedCourse)
@@ -223,19 +223,16 @@ int calcfit_distribution_weekly(Generation *gp, int scheduleId, Lecture *lect)
  *  
  *  \details Makes a call to the inner test function for every specialization on the specified lecture
  */
-int calcfit_distribution_semester(Generation *gp, int scheduleId, Lecture *lect)
+int calcfit_distribution_semester(Schedule *schedule, Lecture *lect)
 {
     int fitness = 0, numSpecs, i;
     Specialization **specs = 0;
     
-    numSpecs = get_specializations_for_course(gp->sd, lect->assignedCourse, &specs);
+    numSpecs = get_specializations_for_course(schedule->parentGen->sd, lect->assignedCourse, &specs);
     
     /* Get fitness for all specializations */
     for (i = 0; i < numSpecs; i++)
-    {
-    int tmp = calcfit_distribution_semester_inner(gp, scheduleId, lect, specs[i]);
-        fitness += tmp;
-    }
+        fitness += calcfit_distribution_semester_inner(schedule, lect, specs[i]);
     
     free(specs);
     
@@ -253,7 +250,7 @@ int calcfit_distribution_semester(Generation *gp, int scheduleId, Lecture *lect)
  *  
  *  \details Details
  */
-int calcfit_distribution_semester_inner(Generation *gp, int scheduleId, Lecture *lect, Specialization *sp)
+int calcfit_distribution_semester_inner(Schedule *schedule, Lecture *lect, Specialization *sp)
 {
     int i, weekNum, lecturesCurWeek = 0, maxLecturesCurWeek;
     
@@ -263,9 +260,9 @@ int calcfit_distribution_semester_inner(Generation *gp, int scheduleId, Lecture 
         return 0;
     
     /* Iterate through all lectures */
-    for (i = 0; i < gp->sd->numLectures; i++)
+    for (i = 0; i < schedule->parentGen->sd->numLectures; i++)
     {
-        Lecture *curLect = &gp->schedules[scheduleId][i];
+        Lecture *curLect = &schedule->lectures[i];
         
         /* Only check lectures that are in the same week */
         if (curLect->day / DAYS_PER_WEEK != weekNum)
@@ -280,8 +277,8 @@ int calcfit_distribution_semester_inner(Generation *gp, int scheduleId, Lecture 
     }
 
     /* Distribute most lectures in first 3/4 of the semester */
-    if (weekNum > gp->sd->numWeeks * 3 / 4)
-        maxLecturesCurWeek = 7 - weekNum * ((float) 6 / gp->sd->numWeeks);
+    if (weekNum > schedule->parentGen->sd->numWeeks * 3 / 4)
+        maxLecturesCurWeek = 7 - weekNum * ((float) 6 / schedule->parentGen->sd->numWeeks);
     else
         maxLecturesCurWeek = 7;
 
@@ -293,33 +290,44 @@ int calcfit_distribution_semester_inner(Generation *gp, int scheduleId, Lecture 
 }
 
 /* Test fitness for a single lecture (gene) */
-int calcfit_lecture(Generation *gp, int scheduleId, Lecture *lect)
+int calcfit_lecture(Schedule *schedule, Lecture *lect)
 {
     int combinedFitness = 0;
     
-    combinedFitness += calcfit_capacity(gp->sd, lect);
-    combinedFitness += calcfit_teacher_availability(gp, scheduleId, lect);
-    combinedFitness += calcfit_doublebooking(gp, scheduleId, lect);
-    combinedFitness += calcfit_distribution_weekly(gp, scheduleId, lect);
-    combinedFitness += calcfit_distribution_semester(gp, scheduleId, lect);
+    combinedFitness += calcfit_capacity(schedule->parentGen->sd, lect);
+    combinedFitness += calcfit_teacher_availability(schedule, lect);
+    combinedFitness += calcfit_doublebooking(schedule, lect);
+    combinedFitness += calcfit_distribution_weekly(schedule, lect);
+    combinedFitness += calcfit_distribution_semester(schedule, lect);
     
     return combinedFitness;
 }
 
 /* Test fitness for a schedule/genome */
-int calcfit_schedule(Generation *gp, int scheduleId)
+int calcfit_schedule(Schedule *schedule)
 {
     int combinedFitness = 0, i;
 
-    reset_schedule_flags(gp, scheduleId);
+    reset_schedule_flags(schedule);
     
     /* Iterate through all lectures */
-    for (i = 0; i < gp->sd->numLectures; i++)
+    for (i = 0; i < schedule->parentGen->sd->numLectures; i++)
     {
-        Lecture *curLect = &gp->schedules[scheduleId][i];
+        Lecture *curLect = &schedule->lectures[i];
         
-        combinedFitness += calcfit_lecture(gp, scheduleId, curLect);
+        combinedFitness += calcfit_lecture(schedule, curLect);
     }
     
+    schedule->fitness = combinedFitness;
+        
     return combinedFitness;
+}
+
+void calcfit_generation(Generation *gp)
+{
+    int i;
+
+    /* Calculate fitness for old generation */
+    for (i = 0; i < GENERATION_SIZE; i++)
+        calcfit_schedule(&gp->schedules[i]);
 }

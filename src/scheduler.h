@@ -6,5 +6,6 @@
 void free_generation(Generation *gp);
 void free_semesterdata(SemesterData *sd);
 
-Generation generate_next_generation(Generation *curGen);
-Generation generate_initial_generation(SemesterData *sd);
+void initialize_schedule(Generation *parentGen, int scheduleIndex);
+void generate_next_generation(Generation *oldGen, Generation *newGen);
+void generate_initial_generation(Generation *initialGen, SemesterData *sd);
