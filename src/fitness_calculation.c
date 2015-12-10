@@ -273,7 +273,7 @@ int calcfit_distribution_semester_inner(Schedule *schedule, Lecture *lect, Speci
 
     /* Distribute most lectures in first 3/4 of the semester */
     if (weekNum > schedule->parentGen->sd->numWeeks * 3 / 4)
-        maxLecturesCurWeek = 7 - weekNum * ((float) 6 / schedule->parentGen->sd->numWeeks);
+        maxLecturesCurWeek = (7 - (weekNum + 1) * ((float) 6 / schedule->parentGen->sd->numWeeks)) + 0.5;
     else
         maxLecturesCurWeek = 7;
 
