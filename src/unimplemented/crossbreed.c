@@ -1,19 +1,19 @@
 int crossbreed(Generation *new, int numGenomes, int carryover)
 {
-    int i, genesSwitched = 0, dad, mom;
+    int i, genesSwitched = 0, parentA, parentB;
     
     do
     {
-        dad = rand() % carryover;
-        mom = rand() % carryover;
-    } while(dad == mom);
+        parentA = rand() % carryover;
+        parentB = rand() % carryover;
+    } while(parentA == parentB);
     
     for(i = 0; i < new->sd->numLectures ; i++)
     {
-        if(new->schedules[dad].lectures[i].fitness >= new->schedules[mom].lectures[i].fitness)
-            new->schedules[numGenomes].lectures[i] = new->schedules[dad].lectures[i];
+        if(new->schedules[parentA].lectures[i].fitness >= new->schedules[parentB].lectures[i].fitness)
+            new->schedules[numGenomes].lectures[i] = new->schedules[parentA].lectures[i];
         else{
-            new->schedules[i][j] = old->schedules[mate][j];
+            new->schedules[numGenomes].lectures[i] = new->schedules[parentA].lectures[i];
             genesSwitched++;
         } 
     }
