@@ -72,7 +72,6 @@ void end_print_table(FILE *f)
  *  \param [in] f The file in which the schedule is being generated
  *  \param [in] width The width of the row
  *  \param [in] str The name of the row
- *  \param [in] ... ??????????????
  *  
  *  \details This function creates a row with the given width and name
  */
@@ -157,7 +156,7 @@ void end_print_row(FILE *f)
  *  \param [in] schedule Pointer to a schedule
  *  \param [in] sp Specialization contains information about the specialization the schedule is generated for
  *  \param [in] f The file in which the schedule is being generated
- *  \param [in] periodId ?????????????
+ *  \param [in] periodId Period to print
  *  \param [in] weekNumber The number of the current week
  *  
  *  \details This function adds a period to the schedule and formats it as needed
