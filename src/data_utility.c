@@ -9,9 +9,46 @@
 #include "data_utility.h"
 #include "structs.h"
 #include "defs.h"
+#include "fitness_calculation.h"
 
 const char* periodNames[] = {"08:15 - 12:00", "12:30 - 16:15"};
 const char* dayNames[] = {"Monday", "Tuesday", "Wednesday", "Thursday", "Friday"};
+
+/* Print the issues with a lecture */
+void print_schedule_issues(Schedule *schedule)
+{
+    int i, capacity = 0, teacher = 0, doublebooking = 0, distWeekly = 0, distSemester = 0;
+    
+    reset_schedule_flags(schedule);
+    
+    /* Calculate fitness values */
+    for (i = 0; i < schedule->parentGen->sd->numLectures; i++)
+    {
+        Lecture *curLect = &schedule->lectures[i];
+        
+        capacity       += calcfit_capacity(schedule->parentGen->sd, curLect);
+        teacher        += calcfit_teacher_availability(schedule, curLect);
+        doublebooking  += calcfit_doublebooking(schedule, curLect);
+        distWeekly     += calcfit_distribution_weekly(schedule, curLect);
+        distSemester   += calcfit_distribution_semester(schedule, curLect);
+    }
+    
+    /* Print issues */
+    if (capacity)
+        printf("Room capacity score: %3d\n", capacity);
+    
+    if (teacher)
+        printf("Teacher availability score: %3d\n", teacher);
+    
+    if (doublebooking)
+        printf("Doublebooking score: %3d\n", doublebooking);
+    
+    if (distWeekly)
+        printf("Weekly distribution score: %3d\n", distWeekly);
+    
+    if (distSemester)
+        printf("Semester distribution score: %3d\n", distSemester);
+}
 
 /**
  *  \brief Reset flags for all lectures in a specific schedule

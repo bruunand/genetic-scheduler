@@ -4,6 +4,8 @@
  */
 #include "structs.h"
 
+void print_schedule_issues(Schedule *schedule);
+
 void reset_schedule_flags(Schedule *schedule);
 
 void copy_lecture(Lecture *dest, Lecture *src);

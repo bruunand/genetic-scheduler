@@ -4,9 +4,9 @@
  */
 #define MAX_PERIODS   2
 #define DAYS_PER_WEEK 5
-#define GENERATION_SIZE 100
+#define GENERATION_SIZE 1000
 #define MAX_GENERATIONS 200
-#define MUTATION_CHANCE 25
+#define MUTATION_CHANCE 15
 
 /* Error codes */
 #define ERROR_OUT_OF_MEMORY 1
@@ -15,3 +15,12 @@
 
 /* MAX_OVER_CAPACITY is the amount a room is allowed to be over capacity. For example 5 % */
 #define MAX_OVER_CAPACITY 1.05
+#define MAX_LECTURES_PER_WEEK 7
+
+#define PENALTY_DOUBLEBOOKING     250
+#define PENALTY_TEACHER_BOOKED    300
+#define PENALTY_TEACHER_OFFTIME   250
+#define PENALTY_DAILY_LIMIT       25
+#define PENALTY_WEEKLY_LIMIT      0
+#define PENALTY_SEMESTER_DISTRIB  100
+

@@ -65,7 +65,7 @@ int calcfit_teacher_availability(Schedule *schedule, Lecture *lect)
         
         /* Test if they are off on this day */
         if (teacher_has_offtime(schedule->parentGen->sd, curTeacher, lect->day, lect->period))
-            fitness += 100;
+            fitness += PENALTY_TEACHER_OFFTIME;
         
         /* Test if they have another lecture at this time */
         for (j = 0; j < schedule->parentGen->sd->numLectures; j++)
@@ -84,7 +84,7 @@ int calcfit_teacher_availability(Schedule *schedule, Lecture *lect)
             for (k = 0; k < curLect->assignedCourse->numTeachers; k++)
             {
                 if (curLect->assignedCourse->teachers[k] == curTeacher)
-                    fitness += 100;
+                    fitness += PENALTY_TEACHER_BOOKED;
             }
         }
     }
@@ -124,7 +124,7 @@ int calcfit_doublebooking(Schedule *schedule, Lecture *lect)
         {
             curLect->flags.doubleBookingRoom = 1;
             
-            fitness += 500;
+            fitness += PENALTY_DOUBLEBOOKING;
         }
     }
     
@@ -150,7 +150,7 @@ int calcfit_doublebooking(Schedule *schedule, Lecture *lect)
             {
                 curLect->flags.doubleBookingLecture = 1;
 
-                fitness += 500;
+                fitness += PENALTY_DOUBLEBOOKING;
             }
         }
     }
@@ -203,9 +203,9 @@ int calcfit_distribution_weekly(Schedule *schedule, Lecture *lect)
     
     /* Compute fitness */
     if (totCoursePerDay > 1)
-        fitness += pow(25, totCoursePerDay - 1);
+        fitness += pow(PENALTY_DAILY_LIMIT, totCoursePerDay - 1);
     if (totCoursePerWeek > 3)
-        fitness += pow(10, totCoursePerWeek - 3);
+        fitness += pow(PENALTY_WEEKLY_LIMIT, totCoursePerWeek - 3);
     
     return fitness;
 }
@@ -273,13 +273,13 @@ int calcfit_distribution_semester_inner(Schedule *schedule, Lecture *lect, Speci
 
     /* Distribute most lectures in first 3/4 of the semester */
     if (weekNum > schedule->parentGen->sd->numWeeks * 3 / 4)
-        maxLecturesCurWeek = (7 - (weekNum + 1) * ((float) 6 / schedule->parentGen->sd->numWeeks));
+        maxLecturesCurWeek = (MAX_LECTURES_PER_WEEK - (weekNum + 1) * ((float) (MAX_LECTURES_PER_WEEK - 1) / schedule->parentGen->sd->numWeeks));
     else
-        maxLecturesCurWeek = 7;
+        maxLecturesCurWeek = MAX_LECTURES_PER_WEEK;
 
     /* Check if this week exceeds the allowed lectures */
     if (lecturesCurWeek > maxLecturesCurWeek)
-        return (lecturesCurWeek - maxLecturesCurWeek) * 50;
+        return (lecturesCurWeek - maxLecturesCurWeek) * PENALTY_SEMESTER_DISTRIB;
     else
         return 0;
 }
