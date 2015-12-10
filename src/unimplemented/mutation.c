@@ -4,7 +4,7 @@ int mutate(Generation *new, int genomeId)
     
     do
     {
-        i += rand() % new->sd->numLectures;
+        i++;/*= rand() % new->sd->numLectures;*/
         if(!(rand() % 2))
         {
             new->schedules[genomeId].lectures[i].day = rand() % (sd->numWeeks * DAYS_PER_WEEK);

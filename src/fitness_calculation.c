@@ -124,7 +124,7 @@ int calcfit_doublebooking(Schedule *schedule, Lecture *lect)
         {
             curLect->flags.doubleBookingRoom = 1;
             
-            fitness += 100;
+            fitness += 500;
         }
     }
     
@@ -150,7 +150,7 @@ int calcfit_doublebooking(Schedule *schedule, Lecture *lect)
             {
                 curLect->flags.doubleBookingLecture = 1;
 
-                fitness += 100;
+                fitness += 500;
             }
         }
     }
@@ -338,11 +338,13 @@ int calcfit_schedule(Schedule *schedule)
  *  
  *  \param [in] gp The generation to calulate fitness for
  */
-void calcfit_generation(Generation *gp)
+int calcfit_generation(Generation *gp)
 {
-    int i;
+    int i, combinedFitness = 0;
 
     /* Calculate fitness for old generation */
     for (i = 0; i < GENERATION_SIZE; i++)
-        calcfit_schedule(&gp->schedules[i]);
+        combinedFitness += calcfit_schedule(&gp->schedules[i]);
+    
+    return combinedFitness;
 }

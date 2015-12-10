@@ -17,4 +17,4 @@ int calcfit_lecture(Schedule *schedule, Lecture *lect);
 
 int calcfit_schedule(Schedule *schedule);
 
-void calcfit_generation(Generation *gp);
+int calcfit_generation(Generation *gp);
