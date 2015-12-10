@@ -16,11 +16,11 @@
 #include "html_output.h"
 
 /**
- *  \brief Brief
+ *  \brief The starting point of the program
  *  
  *  \return Returns weather the program has exited with an error or success
  *  
- *  \details Details
+ *  \details *PENDING*
  */
 int main(void)
 {
@@ -69,6 +69,12 @@ int main(void)
     return 0;
 }
 
+/**
+ *  \brief Initializes a schedule
+ *  
+ *  \param [in] parentGen Pointer to the parent generation
+ *  \param [in] scheduleIndex The index of the schedule
+ */
 void initialize_schedule(Generation *parentGen, int scheduleIndex)
 {
     Schedule *newSchedule = &parentGen->schedules[scheduleIndex];
@@ -82,7 +88,14 @@ void initialize_schedule(Generation *parentGen, int scheduleIndex)
     newSchedule->parentGen = parentGen;
 }
 
-/* Generate initial generation by generating n schedules */
+/**
+ *  \brief Generate initial generation by generating n schedules
+ *  
+ *  \param [in] initialGen Pointer to the initial generation
+ *  \param [in] sd SemesterData contains data needed by the function
+ *  
+ *  \details *PENDING*
+ */
 void generate_initial_generation(Generation *initialGen, SemesterData *sd)
 {
     int i, j, k, l;
@@ -120,13 +133,11 @@ void generate_initial_generation(Generation *initialGen, SemesterData *sd)
 }
 
 /**
- *  \brief Brief
+ *  \brief Compares the fitness of two schedules. Used by qsort
  *  
- *  \param [in] a Parameter_Description
- *  \param [in] b Parameter_Description
- *  \return Return_Description
- *  
- *  \details Details
+ *  \param [in] a The first schedule
+ *  \param [in] b The second schedule
+ *  \return Returns a number that tells qsort how to sort the schedules
  */
 int compare_schedule_fitness(const void *a, const void *b)
 {
@@ -139,11 +150,10 @@ int compare_schedule_fitness(const void *a, const void *b)
 /**
  *  \brief Generate next generation based on existing generation
  *  
- *  \param [in] oldGen Parameter_Description
- *  \param [in] newGen Parameter_Description
- *  \return Return_Description
+ *  \param [in] oldGen Pointer to the old generation
+ *  \param [out] newGen Pointer to the new generation
  *  
- *  \details Details
+ *  \details *PENDING*
  */
 void generate_next_generation(Generation *oldGen, Generation *newGen)
 {
@@ -189,12 +199,9 @@ void generate_next_generation(Generation *oldGen, Generation *newGen)
 }
 
 /**
- *  \brief Brief
+ *  \brief Free the generation from memory
  *  
- *  \param [in] gp Parameter_Description
- *  \return Return_Description
- *  
- *  \details Details
+ *  \param [in] gp Pointer to the generation to free
  */
 void free_generation(Generation *gp)
 {
@@ -208,7 +215,7 @@ void free_generation(Generation *gp)
  *  \param [in] sd Parameter_Description
  *  \return Return_Description
  *  
- *  \details Details
+ *  \details *PENDING*
  */
 void free_semesterdata(SemesterData *sd)
 {
