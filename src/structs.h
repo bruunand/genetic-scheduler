@@ -7,7 +7,7 @@
 #include "defs.h"
 
 /**
- *  \struct struct Room
+ *  \struct Room
  *  \brief The Room struct contains the name of a specific room
  */
 struct Room
@@ -18,7 +18,7 @@ struct Room
 };
 
 /**
- *  \struct struct Teacher
+ *  \struct Teacher
  *  \brief The Teacher struct contains information about a specific teacher
  */
 struct Teacher
@@ -30,7 +30,7 @@ struct Teacher
 };
 
 /**
- *  \struct struct OffTime
+ *  \struct OffTime
  *  \brief The OffTime struct contains a day and time period (0 or 1) where the teacher isn't available for a teacher
  */
 struct OffTime
@@ -40,7 +40,7 @@ struct OffTime
 };
 
 /**
- *  \struct struct Course
+ *  \struct Course
  *  \brief The Course struct contains information about a specific course
  */
 struct Course
@@ -53,7 +53,7 @@ struct Course
 };
 
 /**
- *  \struct struct Specialization
+ *  \struct Specialization
  *  \brief The Specialization struct contains information about a specific Specialization
  */
 struct Specialization
@@ -67,7 +67,7 @@ struct Specialization
 };
 
 /**
- *  \struct struct Flags
+ *  \struct Flags
  *  \brief The Flags struct contains a list of flags used to prevent double calculation of fitness
  */
 struct Flags
@@ -79,7 +79,7 @@ struct Flags
 };
 
 /**
- *  \struct struct Lecture
+ *  \struct Lecture
  *  \brief The Lecture struct contains information about a specific Lecture
  */
 struct Lecture
@@ -94,7 +94,7 @@ struct Lecture
 };
 
 /**
- *  \struct struct SemesterData
+ *  \struct SemesterData
  *  \brief The SemesterData struct contains all available information about a specific semester
  *  \details A generation would be built with an amount of SemesterData structs
  */
@@ -124,7 +124,7 @@ struct SemesterData
 };
 
 /**
- *  \struct struct Schedule
+ *  \struct Schedule
  *  \brief ????????????????
  */
 struct Schedule
@@ -140,7 +140,7 @@ struct Schedule
 };
 
 /**
- *  \struct struct Generation
+ *  \struct Generation
  *  \brief The Generation struct contains an array of schedules in the generation and a pointer to SemesterData which contains relevant information
  */
 struct Generation
