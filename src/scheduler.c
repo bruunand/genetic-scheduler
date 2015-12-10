@@ -163,13 +163,13 @@ void genetic_optimization(Generation *curGen, Generation *nextGen, FILE* output)
                 
         fprintf(output, "%d\t%d\n", i + 1, curGen->schedules[0].fitness);
         
-        /* Determine best scheduel */
+        /* Determine best schedule */
         if (curGen->schedules[0].fitness < lowestGenomeFitness || lowestGenomeFitness == -1)
             lowestGenomeFitness = curGen->schedules[0].fitness;
         
         if (curGen->schedules[0].fitness < 150)
         {
-            printf("Schedule issues\n");
+            printf("Schedule issues:\n");
             print_schedule_issues(&curGen->schedules[0]);
         }
         
