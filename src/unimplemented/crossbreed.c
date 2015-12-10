@@ -1,21 +1,21 @@
-int crossbreed(Generation *old, Generation *new, int mutations)
+int crossbreed(Generation *new, int numGenomes, int carryover)
 {
-    int i, j, mate, genesSwitched = 0;
+    int i, genesSwitched = 0, dad, mom;
     
-    /*  */
-    for (i = mutations + 5; i < GENERATION_SIZE; i++)
-    {    
-        for(j = 0; j < old->sd.numLectures ; j++)
-        {
-            mate = GENERATION_SIZE - (GENERATION_SIZE / 5) + (rand() % (GENERATION_SIZE / 5));
-            
-            if(old->schedules[i][j].fitness >= old->schedules[mate][j].fitness)
-                new->schedules[i][j] = old->schedules[i][j];
-            else{
-                new->schedules[i][j] = old->schedules[mate][j];
-                genesSwitched++;
-            }
-        }
+    do
+    {
+        dad = rand() % carryover;
+        mom = rand() % carryover;
+    } while(dad == mom);
+    
+    for(i = 0; i < new->sd->numLectures ; i++)
+    {
+        if(new->schedules[dad].lectures[i].fitness >= new->schedules[mom].lectures[i].fitness)
+            new->schedules[numGenomes].lectures[i] = new->schedules[dad].lectures[i];
+        else{
+            new->schedules[i][j] = old->schedules[mate][j];
+            genesSwitched++;
+        } 
     }
     
     return genesSwitched;
