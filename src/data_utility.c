@@ -30,6 +30,18 @@ void reset_schedule_flags(Schedule *schedule)
         memset(&schedule->lectures[i].flags, 0, sizeof(Flags));
 }
 
+/*
+ * Copy a schedule to another destination.
+ * Set parent generation if not null.
+*/
+void copy_schedule(Schedule *dest, Schedule *src, Generation *newGen)
+{
+    memcpy(dest, src, sizeof(Schedule));
+    
+    if (newGen)
+        dest->parentGen = newGen;
+}
+
 /**
  *  \brief Set members of a lecture struct
  *  

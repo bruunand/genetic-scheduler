@@ -6,6 +6,8 @@
 
 void reset_schedule_flags(Schedule *schedule);
 
+void copy_schedule(Schedule *dest, Schedule *src, Generation *newGen);
+
 void set_lecture(Lecture *lect, int day, int period, Room *room, Course *course);
 
 int teacher_has_offtime(SemesterData *sd, Teacher *teacher, int dayId, int periodId);
