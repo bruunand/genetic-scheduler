@@ -105,7 +105,7 @@ int calcfit_doublebooking(Schedule *schedule, Lecture *lect)
 {
     Specialization **specs;
     int fitness = 0, numSpecs, i, j;
-    
+        
     /* Test room doublebooking */
     for(i = 0; i < schedule->parentGen->sd->numLectures; i++)
     {

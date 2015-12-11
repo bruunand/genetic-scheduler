@@ -53,7 +53,6 @@ int main(void)
     fclose(output);
     
     /* Print schedules to files */
-    printf("best %d\n", nextGen.schedules[0].fitness);
     print_schedule_to_file(&nextGen.schedules[0], &sd.specializations[0], "swdat.html");
     print_schedule_to_file(&nextGen.schedules[0], &sd.specializations[1], "robotics.html");
     
@@ -71,19 +70,22 @@ int mutate(Generation *new, int genomeId)
     {
         i++;
         
-        if(rand() % 2)
+        if (rand() % 100 > MUTATION_CHANCE)
+            continue;
+        
+        if(rand() % 2 == 0)
         {
             new->schedules[genomeId].lectures[i].day = rand() % (new->sd->numWeeks * DAYS_PER_WEEK);
             mutations++;
         }
 
-        if(rand() % 2)
+        if(rand() % 2 == 0)
         {
-            new->schedules[genomeId].lectures[i].period = rand() % MAX_PERIODS;
+            new->schedules[genomeId].lectures[i].period ^= 1; /* Flip period */
             mutations++;
         }
       
-        if(rand() % 2)
+        if(rand() % 2 == 0)
         {
             new->schedules[genomeId].lectures[i].assignedRoom = &new->sd->rooms[rand() % new->sd->numRooms];
             mutations++;
@@ -222,7 +224,7 @@ void generate_next_generation(Generation *oldGen, Generation *newGen)
         copy_schedule(&newGen->schedules[newGenMembers++], &oldGen->schedules[(x < y) ? x : y], newGen);
     }
 
-    /* Crossbreed to get a total of 100 genomes */
+    /* Crossbreed to get remaining genomes */
     carryover = newGenMembers; 
     while (newGenMembers < GENERATION_SIZE)
     {
@@ -230,13 +232,13 @@ void generate_next_generation(Generation *oldGen, Generation *newGen)
     }
 
     /* Mutate randomly */
-    do
+    for (i = 0; i < GENERATION_SIZE; i++)
     {
         x = rand() % 100;
         
         if (x < MUTATION_CHANCE)
-            mutate(newGen, rand() % GENERATION_SIZE);
-    } while (x < MUTATION_CHANCE);
+            mutate(newGen, i);
+    }
 }
 
 /* Generate initial generation by generating n schedules */
