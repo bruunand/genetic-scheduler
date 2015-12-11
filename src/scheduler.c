@@ -175,8 +175,8 @@ void genetic_optimization(Generation *curGen, Generation *nextGen, FILE* output)
             print_schedule_issues(&curGen->schedules[0]);
         }
         
-        if (curGen->schedules[0].fitness < 15)
-            break;
+        /*if (curGen->schedules[0].fitness < 15)
+            break;*/
         
         /* Put next generation into nextGen */
         generate_next_generation(curGen, nextGen);
