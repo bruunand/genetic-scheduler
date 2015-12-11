@@ -18,7 +18,7 @@
  *  
  *  \param [in] fileName The name of the file to read from
  *  \param [in] sd SemesterData is a link to our structs that are needed for this function
- *  \return Returns 1 or 0 depending weather the function succeded or failed
+ *  \return Returns 1 or 0 depending whether the function succeded or failed
  *  
  *  \details The function reads the file line by line and formats them to the format we need for further processing, then sends it to handle_line
  */
@@ -220,7 +220,7 @@ void handle_line(char *line, SemesterData *sd)
  *  \param [in] line The string to read
  *  \param [in] position Current position in the string
  *  \param [out] out A pointer to an int where the final number will be stored
- *  \return Returns weather the function has failed or succeded
+ *  \return Returns whether the function has failed or succeded
  *  
  *  \details The function goes through the string (line) until there are no more characters. It then converts the content of the string to int and outputs it to the out variable
  */
@@ -253,7 +253,7 @@ int read_int(char* line, int* position, int* out)
  *  \param [in] line The string to read from
  *  \param [in] position The current position in the string
  *  \param [out] out The output string
- *  \return Returns weather the function succeded or not
+ *  \return Returns whether the function succeded or not
  *  
  *  \details This function reads from the line string and outputs everything between two apostrophes to the output string
  */
