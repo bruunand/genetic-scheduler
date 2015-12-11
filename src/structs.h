@@ -226,7 +226,7 @@ struct SemesterData
 
 /**
  *  \struct Schedule
- *  \brief Contains all lectures for a given time spand
+ *  \brief The Schedule struct contains all lectures for a given time spand
  *  
  *  \var Schedule::parentGen
  *  Pointer to the generation that this schedule belongs to
