@@ -203,9 +203,9 @@ int calcfit_distribution_weekly(Schedule *schedule, Lecture *lect)
     
     /* Compute fitness */
     if (totCoursePerDay > 1)
-        fitness += pow(PENALTY_DAILY_LIMIT, totCoursePerDay - 1);
+        fitness += MIN(500, pow(PENALTY_DAILY_LIMIT, totCoursePerDay - 1));
     if (totCoursePerWeek > 3)
-        fitness += pow(PENALTY_WEEKLY_LIMIT, totCoursePerWeek - 3);
+        fitness += MIN(500, pow(PENALTY_WEEKLY_LIMIT, totCoursePerWeek - 3));
     
     return fitness;
 }
@@ -340,11 +340,13 @@ int calcfit_schedule(Schedule *schedule)
  */
 int calcfit_generation(Generation *gp)
 {
-    int i, combinedFitness = 0;
+    int i;
 
+    gp->fitness = 0;
+    
     /* Calculate fitness for old generation */
     for (i = 0; i < GENERATION_SIZE; i++)
-        combinedFitness += calcfit_schedule(&gp->schedules[i]);
+        gp->fitness += calcfit_schedule(&gp->schedules[i]);
     
-    return combinedFitness;
+    return gp->fitness;
 }

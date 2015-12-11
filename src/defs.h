@@ -4,9 +4,9 @@
  */
 #define MAX_PERIODS   2
 #define DAYS_PER_WEEK 5
-#define GENERATION_SIZE 1000
-#define MAX_GENERATIONS 250
-#define MUTATION_CHANCE 15
+#define GENERATION_SIZE 500
+#define MAX_GENERATIONS 10000
+#define MUTATION_CHANCE 5
 
 /* Error codes */
 #define ERROR_OUT_OF_MEMORY 1
@@ -23,3 +23,6 @@
 #define PENALTY_DAILY_LIMIT       25
 #define PENALTY_WEEKLY_LIMIT      10
 #define PENALTY_SEMESTER_DISTRIB  50
+
+#define MIN(a,b) (((a)<(b))?(a):(b))
+#define MAX(a,b) (((a)>(b))?(a):(b))
