@@ -5,8 +5,8 @@
 #define MAX_PERIODS   2
 #define DAYS_PER_WEEK 5
 #define GENERATION_SIZE 1000
-#define MAX_GENERATIONS 100
-#define MUTATION_CHANCE 5
+#define MAX_GENERATIONS 250
+#define MUTATION_CHANCE 10
 
 /* Error codes */
 #define ERROR_OUT_OF_MEMORY 1
