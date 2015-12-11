@@ -167,7 +167,7 @@ int calcfit_doublebooking(Schedule *schedule, Lecture *lect)
  *  \param [in] lect Pointer to lecture to test
  *  \return Returns the fitness of the lecture distribution
  *  
- *  \details *PENDING*
+ *  \details Goes through each lecture and comparing it to another lecture in a schedule. When a lecture has been compared, is is flagged as such and will not be compared again
  */
 int calcfit_distribution_weekly(Schedule *schedule, Lecture *lect)
 {
@@ -243,7 +243,7 @@ int calcfit_distribution_semester(Schedule *schedule, Lecture *lect)
  *  \param [in] sp Pointer to a specialization that is needed to obtain some information within the function
  *  \return Returns the fitness of the test.
  *  
- *  \details *PENDING*
+ *  \details Goes through all lectures in a week within the specialization and see how well they are distributed. When a lecture is checked, it is flagged as such and will not be checked again
  */
 int calcfit_distribution_semester_inner(Schedule *schedule, Lecture *lect, Specialization *sp)
 {

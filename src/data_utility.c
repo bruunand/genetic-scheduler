@@ -1,6 +1,6 @@
 /**
  *  \file data_utility.c
- *  \brief Brief
+ *  \brief A set of utility functions when parts of code can be used more than once
  */
 #include <stdlib.h>
 #include <stdio.h>
