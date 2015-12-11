@@ -6,6 +6,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
+#include <assert.h>
 
 #include "structs.h"
 #include "scheduler.h"
@@ -62,37 +63,21 @@ int main(void)
     return 0;
 }
 
-int mutate(Generation *new, int genomeId)
+void mutate(Generation *new, int genomeId)
 {
-    int i = 0, mutations = 0;
+    int i = 0;
     do
     {
         i++;
         
         if (rand() % 100 > MUTATION_CHANCE)
             continue;
-        
-        if(rand() % 2 == 0)
-        {
-            new->schedules[genomeId].lectures[i].day = rand() % (new->sd->numWeeks * DAYS_PER_WEEK);
-            mutations++;
-        }
 
-        if(rand() % 2 == 0)
-        {
-            new->schedules[genomeId].lectures[i].period ^= 1; /* Flip period */
-            mutations++;
-        }
-      
-        if(rand() % 2 == 0)
-        {
-            new->schedules[genomeId].lectures[i].assignedRoom = &new->sd->rooms[rand() % new->sd->numRooms];
-            mutations++;
-        }
+        new->schedules[genomeId].lectures[i].day = rand() % (new->sd->numWeeks * DAYS_PER_WEEK);
+        new->schedules[genomeId].lectures[i].period ^= 1; /* Flip period */
+        new->schedules[genomeId].lectures[i].assignedRoom = &new->sd->rooms[rand() % new->sd->numRooms];
         
     } while(i < new->sd->numLectures);
-
-    return mutations;
 }
 
 int crossbreed(Generation *new, int genomeId, int carryover)
@@ -148,7 +133,6 @@ void genetic_optimization(Generation *curGen, Generation *nextGen, FILE* output)
 {
     int i, j, lowestGenomeFitness = -1, startTime;
     Generation *tmpGen;
-    unsigned long genFitness = 0;
     
     startTime = time(NULL);
     
@@ -160,16 +144,10 @@ void genetic_optimization(Generation *curGen, Generation *nextGen, FILE* output)
         
         /* Sort genomes by fitness */
         qsort(curGen->schedules, GENERATION_SIZE, sizeof(Schedule), compare_schedule_fitness);
-        
-        for(j=0, genFitness = 0;j<GENERATION_SIZE;j++)
-        {
-            
-            genFitness += curGen->schedules[j].fitness;
-        }
-        
-        printf("%3d: %5d -> %5lu\n", i + 1, curGen->schedules[0].fitness, genFitness/GENERATION_SIZE);
+
+        printf("%3d: %5d-> %5lu\n", i + 1, curGen->schedules[0].fitness, curGen->fitness/GENERATION_SIZE);
                 
-        fprintf(output, "%d\t%d\t%lu\n", i + 1, curGen->schedules[0].fitness, genFitness/GENERATION_SIZE);
+        fprintf(output, "%d\t%d\t%lu\n", i + 1, curGen->schedules[0].fitness, curGen->fitness/GENERATION_SIZE);
         
         /* Determine best schedule */
         if (curGen->schedules[0].fitness < lowestGenomeFitness || lowestGenomeFitness == -1)
@@ -181,7 +159,7 @@ void genetic_optimization(Generation *curGen, Generation *nextGen, FILE* output)
             print_schedule_issues(&curGen->schedules[0]);
         }
         
-        if (curGen->schedules[0].fitness <= 0)
+        if (curGen->schedules[0].fitness <= -1)
             break;
         
         /* Put next generation into nextGen */
@@ -190,9 +168,7 @@ void genetic_optimization(Generation *curGen, Generation *nextGen, FILE* output)
         /* Set new current generation */
         tmpGen = curGen;
         curGen = nextGen;
-        
-        /* Free temp (old) generation */
-        free_generation(tmpGen);
+        nextGen = tmpGen;
     }        
     
     printf("GA Done: Took %d seconds.\n Lowest fit %d\n", time(NULL) - startTime, lowestGenomeFitness);
@@ -209,48 +185,26 @@ void genetic_optimization(Generation *curGen, Generation *nextGen, FILE* output)
  */
 void generate_next_generation(Generation *oldGen, Generation *newGen)
 {
-    int i, j, k, x, y, alreadySaved, carryover, newGenMembers = 0;
-    int savedGenomes[GENERATION_SIZE] = { -1 }, numSaved = 0, BestSaved = -1;
+    int i, j, x, y, carryover, newGenMembers = 0;
 
     /* Set semesterdata */
     newGen->sd = oldGen->sd;
 
-    /* 
-     * Let half the population of oldGen survive. Randomly chosen, but weighted 
-     * towards better fitness.
-    */
     for (i = 0; i < GENERATION_SIZE / 2; i++)
     {
         x = rand() % GENERATION_SIZE;
-        for (j = 0; j < 3; j++)
+        y = rand() % GENERATION_SIZE;
+        
+        if (x < y)
         {
-            y = rand() % GENERATION_SIZE;
-            if(y < x)
-                x = y;
+            /*printf("%d has a fitness of %d vs %d with a fitness of %d\n", x, oldGen->schedules[x].fitness, y, oldGen->schedules[y].fitness);*/
+            assert(oldGen->schedules[x].fitness <= oldGen->schedules[y].fitness);
             
-            for (k = 0; k < numSaved; k++)
-                if (savedGenomes[k] == x)
-                {
-                    x = rand() % GENERATION_SIZE;
-                    j--;
-                }
         }
         
-        /* Add to saved genomes */
-        savedGenomes[numSaved++] = x;
+        copy_schedule(&newGen->schedules[newGenMembers], &oldGen->schedules[x], newGen);
         
-        if(x==0)
-        {
-            printf("save %d\n", x);
-            BestSaved=i;
-         
-        }
-        
-        /*
-         * Copy schedule to the new generation.
-         * The lowest value between x and y is picked, prioriziting good genomes.
-        */
-        copy_schedule(&newGen->schedules[newGenMembers++], &oldGen->schedules[x], newGen);
+        newGenMembers++;
     }
 
     /* Crossbreed to get remaining genomes */
@@ -266,11 +220,7 @@ void generate_next_generation(Generation *oldGen, Generation *newGen)
         x = rand() % 100;
         
         if (x < MUTATION_CHANCE)
-        {
-            if (i == BestSaved)
-                printf("mutate best\n");
             mutate(newGen, i);
-        }
     }
 }
 
@@ -338,8 +288,15 @@ int compare_schedule_fitness(const void *a, const void *b)
  */
 void free_generation(Generation *gp)
 {
+    int i;
+    
     if (gp->schedules)
+    {
+        for (i = 0; i < GENERATION_SIZE; i++)
+            free(gp->schedules[i].lectures);
+        
         free(gp->schedules);
+    }
     
     free(gp);
 }

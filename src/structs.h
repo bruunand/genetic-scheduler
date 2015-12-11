@@ -249,6 +249,9 @@ struct Schedule
  *  \struct Generation
  *  \brief The Generation struct contains an array of schedules in the generation and a pointer to SemesterData which contains relevant information
  *  
+ *  \var int:fitness
+ *  Combined fitness of generation
+ *  
  *  \var Generation::schedules
  *  Array of schedules
  *  
@@ -256,7 +259,8 @@ struct Schedule
  *  Pointer to SemesterData, which contains relevant information
  */
 struct Generation
-{    
+{
+    int fitness;
     struct Schedule schedules[GENERATION_SIZE];
     struct SemesterData *sd;
 };
