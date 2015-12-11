@@ -87,7 +87,7 @@ struct Course
 
 /**
  *  \struct Specialization
- *  \brief The Specialization struct contains information about a specific Specialization
+ *  \brief The Specialization struct contains information about a specific specialization
  *  
  *  \var Specialization::name
  *  The name of the specialization
@@ -137,7 +137,7 @@ struct Flags
 
 /**
  *  \struct Lecture
- *  \brief The Lecture struct contains information about a specific Lecture
+ *  \brief The Lecture struct contains information about a specific lecture
  *  
  *  \var Lecture::day
  *  The day the lecture is on
