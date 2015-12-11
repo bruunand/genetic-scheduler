@@ -118,10 +118,16 @@ int crossbreed(Generation *new, int genomeId, int carryover)
     for(i = 0; i < new->sd->numLectures; i++)
     {
         /* Select best fit */
-        if (new->schedules[parentA].lectures[i].fitness <= new->schedules[parentB].lectures[i].fitness)
-            selectedParent = parentA;
-        else
-            selectedParent = parentB;
+        if(rand() % 2)
+        {
+                selectedParent = (rand() % 2) ? parentA : parentB;            
+        } else
+        {
+            if (new->schedules[parentA].lectures[i].fitness <= new->schedules[parentB].lectures[i].fitness)
+                selectedParent = parentA;
+            else
+                selectedParent = parentB;
+        }
         
         /* Copy lecture */
         copy_lecture(&new->schedules[genomeId].lectures[i], &new->schedules[selectedParent].lectures[i]);
