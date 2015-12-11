@@ -65,7 +65,6 @@ int main(void)
 int mutate(Generation *new, int genomeId)
 {
     int i = 0, mutations = 0;
-
     do
     {
         i++;
@@ -118,16 +117,10 @@ int crossbreed(Generation *new, int genomeId, int carryover)
     for(i = 0; i < new->sd->numLectures; i++)
     {
         /* Select best fit */
-        if(rand() % 1)
-        {
-                selectedParent = (rand() % 2) ? parentA : parentB;            
-        } else
-        {
-            if (new->schedules[parentA].lectures[i].fitness <= new->schedules[parentB].lectures[i].fitness)
-                selectedParent = parentA;
-            else
-                selectedParent = parentB;
-        }
+        if (new->schedules[parentA].lectures[i].fitness <= new->schedules[parentB].lectures[i].fitness)
+            selectedParent = parentA;
+        else
+            selectedParent = parentB;
         
         /* Copy lecture */
         copy_lecture(&new->schedules[genomeId].lectures[i], &new->schedules[selectedParent].lectures[i]);
@@ -216,7 +209,8 @@ void genetic_optimization(Generation *curGen, Generation *nextGen, FILE* output)
  */
 void generate_next_generation(Generation *oldGen, Generation *newGen)
 {
-    int i, j, x, y, carryover, newGenMembers = 0;
+    int i, j, k, x, y, alreadySaved, carryover, newGenMembers = 0;
+    int savedGenomes[GENERATION_SIZE] = { -1 }, numSaved = 0, BestSaved = -1;
 
     /* Set semesterdata */
     newGen->sd = oldGen->sd;
@@ -228,12 +222,30 @@ void generate_next_generation(Generation *oldGen, Generation *newGen)
     for (i = 0; i < GENERATION_SIZE / 2; i++)
     {
         x = rand() % GENERATION_SIZE;
-        for(j = 0; j < 3 ; j++)
+        for (j = 0; j < 3; j++)
         {
             y = rand() % GENERATION_SIZE;
-            if(x>y)
+            if(y < x)
                 x = y;
+            
+            for (k = 0; k < numSaved; k++)
+                if (savedGenomes[k] == x)
+                {
+                    x = rand() % GENERATION_SIZE;
+                    j--;
+                }
         }
+        
+        /* Add to saved genomes */
+        savedGenomes[numSaved++] = x;
+        
+        if(x==0)
+        {
+            printf("save %d\n", x);
+            BestSaved=i;
+         
+        }
+        
         /*
          * Copy schedule to the new generation.
          * The lowest value between x and y is picked, prioriziting good genomes.
@@ -254,7 +266,11 @@ void generate_next_generation(Generation *oldGen, Generation *newGen)
         x = rand() % 100;
         
         if (x < MUTATION_CHANCE)
+        {
+            if (i == BestSaved)
+                printf("mutate best\n");
             mutate(newGen, i);
+        }
     }
 }
 
