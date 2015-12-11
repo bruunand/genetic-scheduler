@@ -277,7 +277,7 @@ int read_multiple_words(char* line, int* position, char* out)
  *  \param [in] sd The teachers array is part of the SemesterData struct
  *  \param [in] name The name of the teacher
  *  \param [in] numOffTimes The amount of off times
- *  \param [in] offTimes An array of offTimes
+ *  \param [in] offTimes An array of OffTime
  *  
  *  \details Allocates the memory needed and updates relevant variables and values
  */
