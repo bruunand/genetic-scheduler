@@ -78,8 +78,13 @@ void copy_lecture(Lecture *dest, Lecture *src)
 */
 void copy_schedule(Schedule *dest, Schedule *src, Generation *newGen)
 {
-    memcpy(dest, src, sizeof(Schedule));
+    int i;
     
+    /* Copy all lectures */
+    for (i = 0; i < src->parentGen->sd->numLectures; i++)
+        dest->lectures[i] = src->lectures[i];
+
+    /* Set parent gen */
     if (newGen)
         dest->parentGen = newGen;
 }
@@ -186,22 +191,21 @@ int get_students_on_course(SemesterData *sd, Course *course)
 }
 
 /**
- *  \brief Gets the total amount of lectures
+ *  \brief Sets the total amount of lectures for a SemesterData
  *  
  *  \param [in] sd SemesterData contains the information required to get the amount
- *  \return Returns the total amount of lectures in the semester
  *  
  *  \details Goes through all the courses in SemesterData and adds the lectures assigned to each course to a variable which is then returned
  */
-int get_amount_of_lectures(SemesterData *sd)
+void calc_amount_of_lectures(SemesterData *sd)
 {
-    int totLectureAmount = 0, i;
+    int i;
+    
+    sd->numLectures = 0;
     
     /* Add amount of lectures from each course */
     for (i = 0; i < sd->numCourses; i++)
-        totLectureAmount += sd->courses[i].totLectures;
-    
-    return totLectureAmount;
+        sd->numLectures += sd->courses[i].totLectures;
 }
 
 /**
