@@ -247,8 +247,6 @@ void print_schedule_to_file(Schedule *schedule, Specialization *sp, char* fileNa
     printf("SD 0x%X\n", schedule->parentGen->sd);
     for(i = 0; i < schedule->parentGen->sd->numWeeks; i++)
     {
-            printf("week %d\n", i);
-            
         begin_print_table(f, 20);
         begin_print_row(f, "#FFFFFF");
         

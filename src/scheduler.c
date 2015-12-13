@@ -109,10 +109,13 @@ void copy_generation(Generation *dest, Generation *src)
     
     free_generation(dest);
     
+    /* Creates a deep copy of all schedules in source generation */
     for (i = 0; i < GENERATION_SIZE; i++)
     {
         initialize_schedule(dest, i);
+        
         copy_schedule(&dest->schedules[i], &src->schedules[i]);
+        
         dest->schedules[i].parentGen = dest;
     }
     
@@ -120,14 +123,19 @@ void copy_generation(Generation *dest, Generation *src)
 void run_ga(Generation **curGen)
 {
     int i, j, x, y, newGenMembers, carriedOver, lowestFit;
+    FILE *output;
     Generation *nextGen = 0;
     
+    output = fopen("output.txt", "w+");
+    if (!output)
+        exit(ERROR_FILE_NULL_PTR);
+    
+    initialize_generation(&nextGen, (*curGen)->sd);
+            
     for (i = 0; i < MAX_GENERATIONS; i++)
     {
         newGenMembers = 0;
         
-        initialize_generation(&nextGen, (*curGen)->sd);
-            
         /* Calculate fitness of current generation */
         calcfit_generation(*curGen);
         
@@ -136,7 +144,8 @@ void run_ga(Generation **curGen)
 
         /* Print best schedule */
         lowestFit = (*curGen)->schedules[0].fitness;
-        printf("%3d: %5d (%5d)\n", i, lowestFit, (*curGen)->fitness / GENERATION_SIZE);
+        printf("%3d: %5d (%5d)\n", i + 1, lowestFit, (*curGen)->fitness / GENERATION_SIZE);
+        fprintf(output, "%d\t%d\t%d\n", i + 1, lowestFit, (*curGen)->fitness / GENERATION_SIZE);
         
         if (lowestFit == 0)
             break;
@@ -172,8 +181,9 @@ void run_ga(Generation **curGen)
 
         /* Copy nextgen to current generation */
         copy_generation(*curGen, nextGen);
-        free_generation(nextGen);
     }
+    
+    fclose(output);
 }
 
 /**
