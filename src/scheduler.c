@@ -53,11 +53,11 @@ int main(void)
     genetic_optimization(&curGen, &nextGen, output);
     fclose(output);
     
+    printf("print\n");
     /* Print schedules to files */
     print_schedule_to_file(&nextGen.schedules[0], &sd.specializations[0], "swdat.html");
     print_schedule_to_file(&nextGen.schedules[0], &sd.specializations[1], "robotics.html");
-    
-    free_generation(&curGen);
+
     free_semesterdata(&sd);
     
     return 0;
@@ -83,9 +83,6 @@ void mutate(Generation *new, int genomeId)
 int crossbreed(Generation *new, int genomeId, int carryover)
 {
     int i, genesSwitched = 0, parentA, parentB, selectedParent;
-    
-    /* Initialize schedule */
-    initialize_schedule(new, genomeId);
     
     /* Find two different parents to be mated */
     do
@@ -132,7 +129,9 @@ void initialize_schedule(Generation *parentGen, int scheduleIndex)
 void genetic_optimization(Generation *curGen, Generation *nextGen, FILE* output)
 {
     int i, j, lowestGenomeFitness = -1, startTime;
-    Generation *tmpGen;
+    Generation *tmpGen = 0;
+    
+    generate_initial_generation(nextGen, curGen->sd);
     
     startTime = time(NULL);
     
@@ -159,7 +158,7 @@ void genetic_optimization(Generation *curGen, Generation *nextGen, FILE* output)
             print_schedule_issues(&curGen->schedules[0]);
         }
         
-        if (curGen->schedules[0].fitness <= -1)
+        if (curGen->schedules[0].fitness <= 0)
             break;
         
         /* Put next generation into nextGen */
@@ -202,7 +201,7 @@ void generate_next_generation(Generation *oldGen, Generation *newGen)
             
         }
         
-        copy_schedule(&newGen->schedules[newGenMembers], &oldGen->schedules[x], newGen);
+        copy_schedule(&newGen->schedules[newGenMembers], &oldGen->schedules[MIN(x, y)], newGen);
         
         newGenMembers++;
     }

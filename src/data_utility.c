@@ -78,8 +78,11 @@ void copy_lecture(Lecture *dest, Lecture *src)
 */
 void copy_schedule(Schedule *dest, Schedule *src, Generation *newGen)
 {
-    memcpy(dest, src, sizeof(Schedule));
+    int i;
     
+    for (i = 0; i < newGen->sd->numLectures; i++)
+        dest->lectures[i] = src->lectures[i];
+
     if (newGen)
         dest->parentGen = newGen;
 }
