@@ -16,73 +16,81 @@
 #include "defs.h"
 #include "html_output.h"
 
-/**
- *  \brief Brief
- *  
- *  \return Returns weather the program has exited with an error or success
- *  
- *  \details Details
- */
-int main(void)
+void mutate(Generation *new, int genomeId)
 {
-    int i, seed;
-    Generation curGen;
-    Generation nextGen;
-    SemesterData sd;
+    int i;
 
-    /* Null all SemesterData values */
-    memset(&sd, 0, sizeof(SemesterData));
- 
-    /*if (!scanf("%d", &seed))*/
-		seed = time(NULL);
-    srand(seed);
-    
-    /* Read configuration file */
-    if (!read_config("scheduler.input", &sd))
+    for (i = 0; i < new->sd->numLectures; i++)
     {
-        printf("Error: Could not read configuration file.\n");
-        exit(1);
+        if (rand() % 100 > MUTATION_CHANCE)
+            continue;
+        
+        if (rand() % 2)
+            new->schedules[genomeId].lectures[i].day = rand() % (new->sd->numWeeks * DAYS_PER_WEEK);
+        
+        if (rand() % 2)
+            new->schedules[genomeId].lectures[i].period = rand() % MAX_PERIODS;
+        
+        if (rand() % 2)
+            new->schedules[genomeId].lectures[i].assignedRoom = &new->sd->rooms[rand() % new->sd->numRooms];
     }
-    
-    /* Generate initial generation */
-    printf("init\n");
-    generate_initial_generation(&curGen, &sd);
+}
 
-    printf("opti\n");
-    FILE *output = fopen("output.txt", "w+");
-    genetic_optimization(&curGen, &nextGen, output);
-    fclose(output);
+void initialize_generation(Generation **gen, SemesterData *sd)
+{
+    int i, j, k, l;
     
+<<<<<<< HEAD
     printf("print\n");
     /* Print schedules to files */
     print_schedule_to_file(&nextGen.schedules[0], &sd.specializations[0], "swdat.html");
     print_schedule_to_file(&nextGen.schedules[0], &sd.specializations[1], "robotics.html");
 
     free_semesterdata(&sd);
+=======
+    /* Allocate memory for generation */
+    *gen = malloc(sizeof(Generation));
+    if (!*gen)
+        exit(ERROR_OUT_OF_MEMORY);
     
-    return 0;
-}
-
-void mutate(Generation *new, int genomeId)
-{
-    int i = 0;
-    do
+    /* Set parent SemesterData */
+    (*gen)->sd = sd;
+>>>>>>> exp
+    
+    /* Initiate schedules */
+    /* Iterate through all generations */
+    for (i = 0; i < GENERATION_SIZE; i++)
     {
-        i++;
+        k = 0;
         
-        if (rand() % 100 > MUTATION_CHANCE)
-            continue;
-
-        new->schedules[genomeId].lectures[i].day = rand() % (new->sd->numWeeks * DAYS_PER_WEEK);
-        new->schedules[genomeId].lectures[i].period ^= 1; /* Flip period */
-        new->schedules[genomeId].lectures[i].assignedRoom = &new->sd->rooms[rand() % new->sd->numRooms];
+        /* Initialize new schedule/genome */
+        initialize_schedule(*gen, i);
         
-    } while(i < new->sd->numLectures);
+        /* Iterate through all courses */
+        for (j = 0; j < sd->numCourses; j++)
+        {
+            Course *course = &sd->courses[j];
+            
+            /* Iterate through all lectures for this course and add */
+            for (l = 0; l < course->totLectures; l++)
+            {
+				set_lecture(&(*gen)->schedules[i].lectures[k++],
+                    rand() % (DAYS_PER_WEEK * sd->numWeeks),
+                    rand() % MAX_PERIODS, 
+                    &sd->rooms[rand() % sd->numRooms],
+                    &sd->courses[j]);
+            }
+        }
+    }
 }
 
-int crossbreed(Generation *new, int genomeId, int carryover)
+void crossbreed(Generation *new, int genomeId, int carryover)
 {
+<<<<<<< HEAD
     int i, genesSwitched = 0, parentA, parentB, selectedParent;
+=======
+    int i, parentA, parentB, selectedParent;
+>>>>>>> exp
     
     /* Find two different parents to be mated */
     do
@@ -96,68 +104,87 @@ int crossbreed(Generation *new, int genomeId, int carryover)
      * Note: This assumes that the lectures fall in the same order
      * for both parents!
     */
-    for(i = 0; i < new->sd->numLectures; i++)
+    for (i = 0; i < new->sd->numLectures; i++)
     {
         /* Select best fit */
         if (new->schedules[parentA].lectures[i].fitness <= new->schedules[parentB].lectures[i].fitness)
             selectedParent = parentA;
         else
             selectedParent = parentB;
+
+        new->schedules[genomeId].lectures[i] = new->schedules[selectedParent].lectures[i];
+    }
+}
+
+void copy_generation(Generation *dest, Generation *src)
+{
+    int i;
+    
+    free_generation(dest);
+    
+    /* Creates a deep copy of all schedules in source generation */
+    for (i = 0; i < GENERATION_SIZE; i++)
+    {
+        initialize_schedule(dest, i);
         
-        /* Copy lecture */
-        copy_lecture(&new->schedules[genomeId].lectures[i], &new->schedules[selectedParent].lectures[i]);
+        copy_schedule(&dest->schedules[i], &src->schedules[i]);
         
-        genesSwitched++;
+        dest->schedules[i].parentGen = dest;
     }
     
-    return genesSwitched;
 }
-
-void initialize_schedule(Generation *parentGen, int scheduleIndex)
+void run_ga(Generation **curGen)
 {
-    Schedule *newSchedule = &parentGen->schedules[scheduleIndex];
-    
-    /* Allocate memory for the amount of lectures */
-    newSchedule->lectures = malloc(parentGen->sd->numLectures * sizeof(Lecture));
-    if (!newSchedule->lectures)
-        exit(ERROR_OUT_OF_MEMORY);
-    
-    /* Set parent generation */
-    newSchedule->parentGen = parentGen;
-}
-
-void genetic_optimization(Generation *curGen, Generation *nextGen, FILE* output)
-{
+<<<<<<< HEAD
     int i, j, lowestGenomeFitness = -1, startTime;
     Generation *tmpGen = 0;
     
     generate_initial_generation(nextGen, curGen->sd);
+=======
+    int i, j, x, y, newGenMembers, carriedOver, lowestFit;
+    FILE *output;
+    Generation *nextGen = 0;
+>>>>>>> exp
     
-    startTime = time(NULL);
+    output = fopen("output.txt", "w+");
+    if (!output)
+        exit(ERROR_FILE_NULL_PTR);
     
-    /* Run up to n generations */
+    initialize_generation(&nextGen, (*curGen)->sd);
+            
     for (i = 0; i < MAX_GENERATIONS; i++)
     {
-        /* Calculate fitness of curGen (old) generation */
-        calcfit_generation(curGen);
+        newGenMembers = 0;
         
-        /* Sort genomes by fitness */
-        qsort(curGen->schedules, GENERATION_SIZE, sizeof(Schedule), compare_schedule_fitness);
+        /* Calculate fitness of current generation */
+        calcfit_generation(*curGen);
+        
+        /* Sort current generation by fitness */
+        qsort((*curGen)->schedules, GENERATION_SIZE, sizeof(Schedule), compare_schedule_fitness);
 
-        printf("%3d: %5d-> %5lu\n", i + 1, curGen->schedules[0].fitness, curGen->fitness/GENERATION_SIZE);
-                
-        fprintf(output, "%d\t%d\t%lu\n", i + 1, curGen->schedules[0].fitness, curGen->fitness/GENERATION_SIZE);
+        /* Print best schedule */
+        lowestFit = (*curGen)->schedules[0].fitness;
+        printf("%3d: %5d (%5d)\n", i + 1, lowestFit, (*curGen)->fitness / GENERATION_SIZE);
+        fprintf(output, "%d\t%d\t%d\n", i + 1, lowestFit, (*curGen)->fitness / GENERATION_SIZE);
         
-        /* Determine best schedule */
-        if (curGen->schedules[0].fitness < lowestGenomeFitness || lowestGenomeFitness == -1)
-            lowestGenomeFitness = curGen->schedules[0].fitness;
+        if (lowestFit == 0)
+            break;
         
-        if (curGen->schedules[0].fitness < 150)
+        /*
+         * Tournament selection.
+         * Half of the population is kept alive.
+        */
+        for (j = 0; j < GENERATION_SIZE / 2; j++)
         {
-            printf("Schedule issues:\n");
-            print_schedule_issues(&curGen->schedules[0]);
+            x = rand() % GENERATION_SIZE;
+            y = rand() % GENERATION_SIZE;
+            
+            /* Copy element with highest fitness of the two */
+            copy_schedule(&nextGen->schedules[newGenMembers], &(*curGen)->schedules[MIN(x, y)]);
+            newGenMembers++;
         }
         
+<<<<<<< HEAD
         if (curGen->schedules[0].fitness <= 0)
             break;
         
@@ -169,28 +196,54 @@ void genetic_optimization(Generation *curGen, Generation *nextGen, FILE* output)
         curGen = nextGen;
         nextGen = tmpGen;
     }        
+=======
+        /* Save the amount of genomes carried over,
+         * since crossbreed will only breed from these. */
+        carriedOver = newGenMembers;
+
+        /* Crossbreed rest of the elements */
+        for (; newGenMembers < GENERATION_SIZE; newGenMembers++)
+            crossbreed(nextGen, newGenMembers, carriedOver);
+
+        /* Mutate randomly */
+        for (j = 0; j < GENERATION_SIZE; j++)
+        {
+            if (rand() % 100 <= MUTATION_CHANCE)
+                mutate(nextGen, j);
+        }
+
+        /* Copy nextgen to current generation */
+        copy_generation(*curGen, nextGen);
+    }
+>>>>>>> exp
     
-    printf("GA Done: Took %d seconds.\n Lowest fit %d\n", time(NULL) - startTime, lowestGenomeFitness);
+    fclose(output);
 }
 
 /**
- *  \brief Generate next generation based on existing generation
+ *  \brief Brief
  *  
- *  \param [in] oldGen Parameter_Description
- *  \param [in] newGen Parameter_Description
- *  \return Return_Description
+ *  \return Returns weather the program has exited with an error or success
  *  
  *  \details Details
  */
-void generate_next_generation(Generation *oldGen, Generation *newGen)
+int main(void)
 {
-    int i, j, x, y, carryover, newGenMembers = 0;
+    int i, seed;
+    Generation *gen = 0;
+    SemesterData sd;
 
-    /* Set semesterdata */
-    newGen->sd = oldGen->sd;
-
-    for (i = 0; i < GENERATION_SIZE / 2; i++)
+    /* Null all SemesterData values */
+    memset(&sd, 0, sizeof(SemesterData));
+ 
+    /*if (!scanf("%d", &seed))*/
+		seed = time(NULL);
+    srand(seed);
+    
+    /* Read configuration file */
+    if (!read_config("scheduler.input", &sd))
     {
+<<<<<<< HEAD
         x = rand() % GENERATION_SIZE;
         y = rand() % GENERATION_SIZE;
         
@@ -204,60 +257,41 @@ void generate_next_generation(Generation *oldGen, Generation *newGen)
         copy_schedule(&newGen->schedules[newGenMembers], &oldGen->schedules[MIN(x, y)], newGen);
         
         newGenMembers++;
+=======
+        printf("Error: Could not read configuration file.\n");
+        exit(1);
+>>>>>>> exp
     }
 
-    /* Crossbreed to get remaining genomes */
-    carryover = newGenMembers; 
-    while (newGenMembers < GENERATION_SIZE)
-    {
-        crossbreed(newGen, newGenMembers++, carryover);
-    }
+    /* Calculate amount of lectures (genes) */
+    calc_amount_of_lectures(&sd);
+    
+    /* Generate initial generation */
+    initialize_generation(&gen, &sd);
+    
+    /* Run genetic algorithm */
+    run_ga(&gen);
+    
+    /* Print schedules to files */
+    print_schedule_to_file(&gen->schedules[0], &sd.specializations[0], "swdat.html");
+    print_schedule_to_file(&gen->schedules[0], &sd.specializations[1], "robotics.html");
 
-    /* Mutate randomly */
-    for (i = 0; i < GENERATION_SIZE; i++)
-    {
-        x = rand() % 100;
-        
-        if (x < MUTATION_CHANCE)
-            mutate(newGen, i);
-    }
+    free_semesterdata(&sd);
+    
+    return 0;
 }
 
-/* Generate initial generation by generating n schedules */
-void generate_initial_generation(Generation *initialGen, SemesterData *sd)
+void initialize_schedule(Generation *parentGen, int scheduleIndex)
 {
-    int i, j, k, l;
+    Schedule *newSchedule = &parentGen->schedules[scheduleIndex];
     
-    /* Set parent semesterdata */
-    initialGen->sd = sd;
+    /* Allocate memory for the amount of lectures */
+    newSchedule->lectures = malloc(parentGen->sd->numLectures * sizeof(Lecture));
+    if (!newSchedule->lectures)
+        exit(ERROR_OUT_OF_MEMORY);
     
-    /* Set total amount of lectures */
-    sd->numLectures = get_amount_of_lectures(sd);
-
-    /* Iterate through all generations */
-    for (i = 0; i < GENERATION_SIZE; i++)
-    {
-        k = 0;
-        
-        /* Initialize new schedule/genome */
-        initialize_schedule(initialGen, i);
-        
-        /* Iterate through all courses */
-        for (j = 0; j < sd->numCourses; j++)
-        {
-            Course *course = &sd->courses[j];
-            
-            /* Iterate through all lectures for this course and add */
-            for (l = 0; l < course->totLectures; l++)
-            {
-				set_lecture(&initialGen->schedules[i].lectures[k++],
-                    rand() % (DAYS_PER_WEEK * sd->numWeeks),
-                    rand() % MAX_PERIODS, 
-                    &sd->rooms[rand() % sd->numRooms],
-                    &sd->courses[j]);
-            }
-        }
-    }
+    /* Set parent generation */
+    newSchedule->parentGen = parentGen;
 }
 
 /**
@@ -289,15 +323,11 @@ void free_generation(Generation *gp)
 {
     int i;
     
-    if (gp->schedules)
+    for (i = 0; i < GENERATION_SIZE; i++)
     {
-        for (i = 0; i < GENERATION_SIZE; i++)
+        if (gp->schedules[i].lectures)
             free(gp->schedules[i].lectures);
-        
-        free(gp->schedules);
     }
-    
-    free(gp);
 }
 
 /**

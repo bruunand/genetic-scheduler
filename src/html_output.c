@@ -231,9 +231,10 @@ void print_period(Schedule *schedule, Specialization *sp, FILE *f, int periodId,
  */
 void print_schedule_to_file(Schedule *schedule, Specialization *sp, char* fileName)
 {
+    
     int i, j;
     FILE *f;
-    
+
     f = fopen(fileName, "w+");
     if (!f)
         exit(ERROR_FILE_NULL_PTR);
@@ -243,6 +244,7 @@ void print_schedule_to_file(Schedule *schedule, Specialization *sp, char* fileNa
     print_title(f, sp->name);
 
     /* Print a table for every week */
+    printf("SD 0x%X\n", schedule->parentGen->sd);
     for(i = 0; i < schedule->parentGen->sd->numWeeks; i++)
     {
         begin_print_table(f, 20);

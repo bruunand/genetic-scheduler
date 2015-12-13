@@ -4,8 +4,13 @@
  */
 #define MAX_PERIODS   2
 #define DAYS_PER_WEEK 5
+<<<<<<< HEAD
 #define GENERATION_SIZE 500
 #define MAX_GENERATIONS 200
+=======
+#define GENERATION_SIZE 100
+#define MAX_GENERATIONS 2000
+>>>>>>> exp
 #define MUTATION_CHANCE 10
 
 /* Error codes */
