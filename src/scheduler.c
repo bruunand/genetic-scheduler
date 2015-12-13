@@ -18,19 +18,14 @@
 
 void mutate(Generation *new, int genomeId)
 {
-    int i = 0;
-    do
-    {
-        i++;
-        
-        if (rand() % 100 > MUTATION_CHANCE)
-            continue;
+    int i;
 
+    for (i = 0; i < new->sd->numLectures; i++)
+    {
         new->schedules[genomeId].lectures[i].day = rand() % (new->sd->numWeeks * DAYS_PER_WEEK);
         new->schedules[genomeId].lectures[i].period = rand() % MAX_PERIODS;
         new->schedules[genomeId].lectures[i].assignedRoom = &new->sd->rooms[rand() % new->sd->numRooms];
-        
-    } while(i < new->sd->numLectures);
+    }
 }
 
 void initialize_generation(Generation **gen, SemesterData *sd)
@@ -96,23 +91,35 @@ void crossbreed(Generation *new, int genomeId, int carryover)
         else
             selectedParent = parentB;
 
-        copy_lecture(&new->schedules[genomeId].lectures[i], &new->schedules[selectedParent].lectures[i]);
-        
-        new->schedules[genomeId].parentGen = new;
+        new->schedules[genomeId].lectures[i] = new->schedules[selectedParent].lectures[i];
     }
 }
 
+void copy_generation(Generation *dest, Generation *src)
+{
+    int i;
+    
+    free_generation(dest);
+    
+    for (i = 0; i < GENERATION_SIZE; i++)
+    {
+        initialize_schedule(dest, i);
+        copy_schedule(&dest->schedules[i], &src->schedules[i]);
+        dest->schedules[i].parentGen = dest;
+    }
+    
+}
 void run_ga(Generation **curGen)
 {
     int i, j, x, y, newGenMembers, carriedOver;
     Generation *nextGen = 0, *tmpGen = 0;
     
-    initialize_generation(&nextGen, (*curGen)->sd);
-            
     for (i = 0; i < MAX_GENERATIONS; i++)
     {
         newGenMembers = 0;
-
+        
+        initialize_generation(&nextGen, (*curGen)->sd);
+            
         /* Calculate fitness of current generation */
         calcfit_generation(*curGen);
         
@@ -132,7 +139,7 @@ void run_ga(Generation **curGen)
             y = rand() % GENERATION_SIZE;
             
             /* Copy element with highest fitness of the two */
-            copy_schedule(&nextGen->schedules[newGenMembers], &(*curGen)->schedules[MIN(x, y)], nextGen);
+            copy_schedule(&nextGen->schedules[newGenMembers], &(*curGen)->schedules[MIN(x, y)]);
             newGenMembers++;
         }
         
@@ -144,15 +151,16 @@ void run_ga(Generation **curGen)
         for (; newGenMembers < GENERATION_SIZE; newGenMembers++)
             crossbreed(nextGen, newGenMembers, carriedOver);
 
-        /* Mutate all new elements */
+        /* Mutate randomly */
         for (j = 0; j < GENERATION_SIZE; j++)
         {
             if (rand() % 100 <= MUTATION_CHANCE)
                 mutate(nextGen, j);
         }
 
-        /* Set new generation */
-        *(*curGen) = *nextGen;
+        /* Copy nextgen to current generation */
+        copy_generation(*curGen, nextGen);
+        free_generation(nextGen);
     }
 }
 
@@ -182,9 +190,7 @@ int main(void)
         printf("Error: Could not read configuration file.\n");
         exit(1);
     }
-    
-    printf("SD 0x%X\n", &sd);
-    
+
     /* Calculate amount of lectures (genes) */
     calc_amount_of_lectures(&sd);
     
@@ -246,9 +252,10 @@ void free_generation(Generation *gp)
     int i;
     
     for (i = 0; i < GENERATION_SIZE; i++)
-        free(gp->schedules[i].lectures);
-    
-    free(gp);
+    {
+        if (gp->schedules[i].lectures)
+            free(gp->schedules[i].lectures);
+    }
 }
 
 /**

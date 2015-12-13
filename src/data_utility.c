@@ -66,24 +66,16 @@ void reset_schedule_flags(Schedule *schedule)
         memset(&schedule->lectures[i].flags, 0, sizeof(Flags));
 }
 
-/* Copy a lecture to another destination. */
-void copy_lecture(Lecture *dest, Lecture *src)
-{
-    memcpy(dest, src, sizeof(Lecture));
-}
-
 /*
  * Copy a schedule to another destination.
 */
-void copy_schedule(Schedule *dest, Schedule *src, Generation *parentGen)
+void copy_schedule(Schedule *dest, Schedule *src)
 {
     int i;
     
     /* Copy all lectures */
     for (i = 0; i < src->parentGen->sd->numLectures; i++)
-        memcpy(&dest->lectures[i], &src->lectures[i], sizeof(Lecture));
-    
-    dest->parentGen = parentGen;
+        dest->lectures[i] = src->lectures[i];
 }
 
 /**
