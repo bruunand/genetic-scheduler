@@ -74,19 +74,16 @@ void copy_lecture(Lecture *dest, Lecture *src)
 
 /*
  * Copy a schedule to another destination.
- * Set parent generation if not null.
 */
-void copy_schedule(Schedule *dest, Schedule *src, Generation *newGen)
+void copy_schedule(Schedule *dest, Schedule *src, Generation *parentGen)
 {
     int i;
     
     /* Copy all lectures */
     for (i = 0; i < src->parentGen->sd->numLectures; i++)
-        dest->lectures[i] = src->lectures[i];
-
-    /* Set parent gen */
-    if (newGen)
-        dest->parentGen = newGen;
+        memcpy(&dest->lectures[i], &src->lectures[i], sizeof(Lecture));
+    
+    dest->parentGen = parentGen;
 }
 
 /**

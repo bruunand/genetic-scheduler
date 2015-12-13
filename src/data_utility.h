@@ -9,7 +9,7 @@ void print_schedule_issues(Schedule *schedule);
 void reset_schedule_flags(Schedule *schedule);
 
 void copy_lecture(Lecture *dest, Lecture *src);
-void copy_schedule(Schedule *dest, Schedule *src, Generation *newGen);
+void copy_schedule(Schedule *dest, Schedule *src, Generation *parentGen);
 
 void set_lecture(Lecture *lect, int day, int period, Room *room, Course *course);
 
