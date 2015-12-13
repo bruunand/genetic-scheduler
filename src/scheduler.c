@@ -22,9 +22,17 @@ void mutate(Generation *new, int genomeId)
 
     for (i = 0; i < new->sd->numLectures; i++)
     {
-        new->schedules[genomeId].lectures[i].day = rand() % (new->sd->numWeeks * DAYS_PER_WEEK);
-        new->schedules[genomeId].lectures[i].period = rand() % MAX_PERIODS;
-        new->schedules[genomeId].lectures[i].assignedRoom = &new->sd->rooms[rand() % new->sd->numRooms];
+        if (rand() % 100 > MUTATION_CHANCE)
+            continue;
+        
+        if (rand() % 2)
+            new->schedules[genomeId].lectures[i].day = rand() % (new->sd->numWeeks * DAYS_PER_WEEK);
+        
+        if (rand() % 2)
+            new->schedules[genomeId].lectures[i].period = rand() % MAX_PERIODS;
+        
+        if (rand() % 2)
+            new->schedules[genomeId].lectures[i].assignedRoom = &new->sd->rooms[rand() % new->sd->numRooms];
     }
 }
 
@@ -111,8 +119,8 @@ void copy_generation(Generation *dest, Generation *src)
 }
 void run_ga(Generation **curGen)
 {
-    int i, j, x, y, newGenMembers, carriedOver;
-    Generation *nextGen = 0, *tmpGen = 0;
+    int i, j, x, y, newGenMembers, carriedOver, lowestFit;
+    Generation *nextGen = 0;
     
     for (i = 0; i < MAX_GENERATIONS; i++)
     {
@@ -127,8 +135,12 @@ void run_ga(Generation **curGen)
         qsort((*curGen)->schedules, GENERATION_SIZE, sizeof(Schedule), compare_schedule_fitness);
 
         /* Print best schedule */
-        printf("%3d: %5d (%5d)\n", i, (*curGen)->schedules[0].fitness, (*curGen)->fitness / GENERATION_SIZE);
-
+        lowestFit = (*curGen)->schedules[0].fitness;
+        printf("%3d: %5d (%5d)\n", i, lowestFit, (*curGen)->fitness / GENERATION_SIZE);
+        
+        if (lowestFit == 0)
+            break;
+        
         /*
          * Tournament selection.
          * Half of the population is kept alive.
