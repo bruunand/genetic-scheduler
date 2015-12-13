@@ -13,7 +13,10 @@ gcc -g -c -ansi -pedantic -Wall src/config_reader.c -o obj/config_reader.o
 :: Compile HTML-output object
 gcc -g -c -ansi -pedantic -Wall src/html_output.c -o obj/html_output.o
 
+:: Compile genetic algorithm object
+gcc -g -c -ansi -pedantic -Wall src/genetic_algorithm.c -o obj/genetic_algorithm.o
+
 :: Compile executable
-gcc -g -ansi -pedantic -Wall src/scheduler.c obj/html_output.o obj/fitness_calculation.o obj/config_reader.o obj/data_utility.o -o bin/Scheduler.exe
+gcc -g -ansi -pedantic -Wall src/scheduler.c obj/html_output.o obj/fitness_calculation.o obj/config_reader.o obj/data_utility.o obj/genetic_algorithm.o -o bin/Scheduler.exe
 
 pause

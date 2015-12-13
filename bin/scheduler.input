@@ -1,6 +1,6 @@
 # AAU Scheduler Configuration
 #   [type] [value]
-set WEEKS 14
+set WEEKS 13
 
 # Add teachers
 #           '[name]'            [offDay period1 period2...]

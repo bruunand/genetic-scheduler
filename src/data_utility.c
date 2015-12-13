@@ -14,6 +14,90 @@
 const char* periodNames[] = {"08:15 - 12:00", "12:30 - 16:15"};
 const char* dayNames[] = {"Monday", "Tuesday", "Wednesday", "Thursday", "Friday"};
 
+/* Allocate memory for all Schedules in a generation. */
+void initialize_generation(Generation **gen, SemesterData *sd)
+{
+    int i, j, k, l;
+    
+    /* Allocate memory for generation */
+    *gen = malloc(sizeof(Generation));
+    if (!*gen)
+        exit(ERROR_OUT_OF_MEMORY);
+    
+    /* Set parent SemesterData */
+    (*gen)->sd = sd;
+
+    /* Initiate schedules */
+    /* Iterate through all generations */
+    for (i = 0; i < GENERATION_SIZE; i++)
+    {
+        k = 0;
+        
+        /* Initialize new schedule/genome */
+        initialize_schedule(*gen, i);
+        
+        /* Iterate through all courses */
+        for (j = 0; j < sd->numCourses; j++)
+        {
+            Course *course = &sd->courses[j];
+            
+            /* Iterate through all lectures for this course and add */
+            for (l = 0; l < course->totLectures; l++)
+            {
+				set_lecture(&(*gen)->schedules[i].lectures[k++],
+                    rand() % (DAYS_PER_WEEK * sd->numWeeks),
+                    rand() % MAX_PERIODS, 
+                    &sd->rooms[rand() % sd->numRooms],
+                    &sd->courses[j]);
+            }
+        }
+    }
+}
+
+/*
+ * Allocate memory for lectures in a schedule.
+ * Also set parent generation.
+*/
+void initialize_schedule(Generation *parentGen, int scheduleIndex)
+{
+    Schedule *newSchedule = &parentGen->schedules[scheduleIndex];
+    
+    /* Allocate memory for the amount of lectures */
+    newSchedule->lectures = malloc(parentGen->sd->numLectures * sizeof(Lecture));
+    if (!newSchedule->lectures)
+        exit(ERROR_OUT_OF_MEMORY);
+    
+    /* Set parent generation */
+    newSchedule->parentGen = parentGen;
+}
+
+/* Creates a deep copy of a Schedule */
+void copy_schedule(Schedule *dest, Schedule *src)
+{
+    int i;
+
+    /* Copy all lectures */
+    for (i = 0; i < src->parentGen->sd->numLectures; i++)
+        dest->lectures[i] = src->lectures[i];
+}
+
+/* Creates a deep copy of a Generation */
+void copy_generation(Generation *dest, Generation *src)
+{
+    int i;
+    
+    free_generation(dest);
+    
+    for (i = 0; i < GENERATION_SIZE; i++)
+    {
+        initialize_schedule(dest, i);
+        
+        copy_schedule(&dest->schedules[i], &src->schedules[i]);
+        
+        dest->schedules[i].parentGen = dest;
+    }
+}
+
 /* Print the issues with a lecture */
 void print_schedule_issues(Schedule *schedule)
 {
@@ -66,18 +150,6 @@ void reset_schedule_flags(Schedule *schedule)
         memset(&schedule->lectures[i].flags, 0, sizeof(Flags));
 }
 
-/*
- * Copy a schedule to another destination.
-*/
-void copy_schedule(Schedule *dest, Schedule *src)
-{
-    int i;
-
-    /* Copy all lectures */
-    for (i = 0; i < src->parentGen->sd->numLectures; i++)
-        dest->lectures[i] = src->lectures[i];
-}
-
 /**
  *  \brief Set members of a lecture struct
  *  
@@ -93,29 +165,6 @@ void set_lecture(Lecture *lect, int day, int period, Room *room, Course *course)
     lect->period = period;
     lect->assignedRoom = room;
     lect->assignedCourse = course;
-}
-
-/**
- *  \brief Checks if a specialization has a given lecture
- *  
- *  \param [in] sp Pointer to a specialization we want to check
- *  \param [in] lect Pointer to a lecture we want to check with
- *  \return Returns whether a specialization is on a specific lecture
- *  
- *  \details Check if a course in the specialization matches the assigned course for the lecture
- */
-int specialization_has_lecture(Specialization *sp, Lecture *lect)
-{
-    int i;
-    
-    /* Iterate through all courses */
-    for (i = 0; i < sp->numCourses; i++)
-    {
-        if (sp->courses[i] == lect->assignedCourse)
-            return 1;
-    }
-
-    return 0;
 }
 
 /**
@@ -146,6 +195,29 @@ int teacher_has_offtime(SemesterData *sd, Teacher *teacher, int dayId, int perio
             return 1;
     }
     
+    return 0;
+}
+
+/**
+ *  \brief Checks if a specialization has a given lecture
+ *  
+ *  \param [in] sp Pointer to a specialization we want to check
+ *  \param [in] lect Pointer to a lecture we want to check with
+ *  \return Returns whether a specialization is on a specific lecture
+ *  
+ *  \details Check if a course in the specialization matches the assigned course for the lecture
+ */
+int specialization_has_lecture(Specialization *sp, Lecture *lect)
+{
+    int i;
+    
+    /* Iterate through all courses */
+    for (i = 0; i < sp->numCourses; i++)
+    {
+        if (sp->courses[i] == lect->assignedCourse)
+            return 1;
+    }
+
     return 0;
 }
 
@@ -198,32 +270,6 @@ void calc_amount_of_lectures(SemesterData *sd)
 }
 
 /**
- *  \brief Gets a name of a period (08:15-12:00 or 12:30-16:15)
- *  
- *  \param [in] periodId The ID of the period to check
- *  \return Returns the name of a period specified by the periodId parameter
- *  
- *  \details Checks if the period ID is outside the range. If it is outside the range it returns an UNKNOWN name. Otherwise it returns the name according to it's place on the schedule
- */
-const char* get_name_of_period(int periodId)
-{
-    if (periodId < 0 || periodId > MAX_PERIODS - 1)
-        return "UNKNOWN";
-    return periodNames[periodId];
-}
-
-/**
- *  \brief Gets a name of a day
- *  
- *  \param [in] dayId The ID of the day to check
- *  \return Returns the name of a day specified by the dayId parameter
- */
-const char* get_name_of_day(int dayId)
-{
-    return dayNames[dayId % DAYS_PER_WEEK];
-}
-
-/**
  *  \brief Gets all specializations that contains a specific course
  *  
  *  \param [in] sd SemesterData contains information required for the function to work
@@ -257,4 +303,96 @@ int get_specializations_on_course(SemesterData *sd, Course *course, Specializati
     }
     
     return amount;
+}
+
+/**
+ *  \brief Brief
+ *  
+ *  \param [in] gp Parameter_Description
+ *  \return Return_Description
+ *  
+ *  \details Details
+ */
+void free_generation(Generation *gp)
+{
+    int i;
+    
+    for (i = 0; i < GENERATION_SIZE; i++)
+    {
+        if (gp->schedules[i].lectures)
+            free(gp->schedules[i].lectures);
+    }
+}
+
+/**
+ *  \brief Free all memory associated with the SemesterData struct. Dynamically allocated arrays inside the structs are also freed.
+ *  
+ *  \param [in] sd Parameter_Description
+ *  \return Return_Description
+ *  
+ *  \details Details
+ */
+void free_semesterdata(SemesterData *sd)
+{
+    int i;
+
+    /* Free teachers */
+    if (sd->teachers)
+    {
+        /* Free offtimes arrays inside teachers */
+        for (i = 0; i < sd->numTeachers; i++)
+            free(sd->teachers[i].offTimes);
+        
+        free(sd->teachers);
+    }
+    
+    /* Free rooms */
+    if (sd->rooms)
+        free(sd->rooms);
+    
+    /* Free courses */
+    if (sd->courses)
+    {
+        /* Free teacher arrays inside courses */
+        for (i = 0; i < sd->numCourses; i++)
+            free(sd->courses[i].teachers);
+        
+        free(sd->courses);
+    }
+
+    /* Free specializations */
+    if (sd->specializations)
+    {
+        /* Free course arrays inside specializations */
+        for (i = 0; i < sd->numSpecializations; i++)
+            free(sd->specializations[i].courses);
+        
+        free(sd->specializations);
+    }
+}
+
+/**
+ *  \brief Gets a name of a period (08:15-12:00 or 12:30-16:15)
+ *  
+ *  \param [in] periodId The ID of the period to check
+ *  \return Returns the name of a period specified by the periodId parameter
+ *  
+ *  \details Checks if the period ID is outside the range. If it is outside the range it returns an UNKNOWN name. Otherwise it returns the name according to it's place on the schedule
+ */
+const char* get_name_of_period(int periodId)
+{
+    if (periodId < 0 || periodId > MAX_PERIODS - 1)
+        return "UNKNOWN";
+    return periodNames[periodId];
+}
+
+/**
+ *  \brief Gets a name of a day
+ *  
+ *  \param [in] dayId The ID of the day to check
+ *  \return Returns the name of a day specified by the dayId parameter
+ */
+const char* get_name_of_day(int dayId)
+{
+    return dayNames[dayId % DAYS_PER_WEEK];
 }
