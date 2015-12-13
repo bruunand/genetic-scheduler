@@ -40,14 +40,6 @@ void initialize_generation(Generation **gen, SemesterData *sd)
 {
     int i, j, k, l;
     
-<<<<<<< HEAD
-    printf("print\n");
-    /* Print schedules to files */
-    print_schedule_to_file(&nextGen.schedules[0], &sd.specializations[0], "swdat.html");
-    print_schedule_to_file(&nextGen.schedules[0], &sd.specializations[1], "robotics.html");
-
-    free_semesterdata(&sd);
-=======
     /* Allocate memory for generation */
     *gen = malloc(sizeof(Generation));
     if (!*gen)
@@ -55,8 +47,7 @@ void initialize_generation(Generation **gen, SemesterData *sd)
     
     /* Set parent SemesterData */
     (*gen)->sd = sd;
->>>>>>> exp
-    
+
     /* Initiate schedules */
     /* Iterate through all generations */
     for (i = 0; i < GENERATION_SIZE; i++)
@@ -86,11 +77,7 @@ void initialize_generation(Generation **gen, SemesterData *sd)
 
 void crossbreed(Generation *new, int genomeId, int carryover)
 {
-<<<<<<< HEAD
-    int i, genesSwitched = 0, parentA, parentB, selectedParent;
-=======
     int i, parentA, parentB, selectedParent;
->>>>>>> exp
     
     /* Find two different parents to be mated */
     do
@@ -135,16 +122,9 @@ void copy_generation(Generation *dest, Generation *src)
 }
 void run_ga(Generation **curGen)
 {
-<<<<<<< HEAD
-    int i, j, lowestGenomeFitness = -1, startTime;
-    Generation *tmpGen = 0;
-    
-    generate_initial_generation(nextGen, curGen->sd);
-=======
     int i, j, x, y, newGenMembers, carriedOver, lowestFit;
     FILE *output;
     Generation *nextGen = 0;
->>>>>>> exp
     
     output = fopen("output.txt", "w+");
     if (!output)
@@ -184,19 +164,6 @@ void run_ga(Generation **curGen)
             newGenMembers++;
         }
         
-<<<<<<< HEAD
-        if (curGen->schedules[0].fitness <= 0)
-            break;
-        
-        /* Put next generation into nextGen */
-        generate_next_generation(curGen, nextGen);
-        
-        /* Set new current generation */
-        tmpGen = curGen;
-        curGen = nextGen;
-        nextGen = tmpGen;
-    }        
-=======
         /* Save the amount of genomes carried over,
          * since crossbreed will only breed from these. */
         carriedOver = newGenMembers;
@@ -215,7 +182,6 @@ void run_ga(Generation **curGen)
         /* Copy nextgen to current generation */
         copy_generation(*curGen, nextGen);
     }
->>>>>>> exp
     
     fclose(output);
 }
@@ -243,24 +209,8 @@ int main(void)
     /* Read configuration file */
     if (!read_config("scheduler.input", &sd))
     {
-<<<<<<< HEAD
-        x = rand() % GENERATION_SIZE;
-        y = rand() % GENERATION_SIZE;
-        
-        if (x < y)
-        {
-            /*printf("%d has a fitness of %d vs %d with a fitness of %d\n", x, oldGen->schedules[x].fitness, y, oldGen->schedules[y].fitness);*/
-            assert(oldGen->schedules[x].fitness <= oldGen->schedules[y].fitness);
-            
-        }
-        
-        copy_schedule(&newGen->schedules[newGenMembers], &oldGen->schedules[MIN(x, y)], newGen);
-        
-        newGenMembers++;
-=======
         printf("Error: Could not read configuration file.\n");
         exit(1);
->>>>>>> exp
     }
 
     /* Calculate amount of lectures (genes) */

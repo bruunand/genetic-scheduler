@@ -72,18 +72,10 @@ void reset_schedule_flags(Schedule *schedule)
 void copy_schedule(Schedule *dest, Schedule *src)
 {
     int i;
-    
-<<<<<<< HEAD
-    for (i = 0; i < newGen->sd->numLectures; i++)
-        dest->lectures[i] = src->lectures[i];
 
-    if (newGen)
-        dest->parentGen = newGen;
-=======
     /* Copy all lectures */
     for (i = 0; i < src->parentGen->sd->numLectures; i++)
         dest->lectures[i] = src->lectures[i];
->>>>>>> exp
 }
 
 /**
