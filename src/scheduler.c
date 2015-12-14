@@ -10,7 +10,7 @@
 
 #include "structs.h"
 #include "scheduler.h"
-#include "config_reader.h"
+#include "input_reader.h"
 #include "data_utility.h"
 #include "fitness_calculation.h"
 #include "defs.h"

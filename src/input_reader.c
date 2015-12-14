@@ -1,5 +1,5 @@
 /**
- *  \file config_reader.c
+ *  \file input_reader.c
  *  \brief This script is responsible for reading the data file
  */
 #include <stdio.h>
@@ -8,7 +8,7 @@
 #include <ctype.h>
 
 #include "structs.h"
-#include "config_reader.h"
+#include "input_reader.h"
 #include "defs.h"
 
 #define BUFFER_SIZE 512
@@ -75,7 +75,7 @@ int read_config(char *fileName, SemesterData *sd)
 /**
  *  \brief This function handles the lines from the main config reader function
  *  
- *  \param [in] line This line is given by the config_reader function
+ *  \param [in] line This line is given by the input_reader function
  *  \param [in] sd SemesterData is a link to the structs the function needs
  *  
  *  \details This function goes through the line and checks it for commands and parameters. Essentially it works like a parser
