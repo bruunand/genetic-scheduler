@@ -20,7 +20,8 @@
  *  \param [in] sd SemesterData is a link to our structs that are needed for this function
  *  \return Returns 1 or 0 depending whether the function succeded or failed
  *  
- *  \details The function reads the file line by line and formats them to the format we need for further processing, then sends it to handle_line
+ *  \details The function reads the file line by line and formats them to the
+ *  format we need for further processing, then sends it to handle_line
  */
 int read_config(char *fileName, SemesterData *sd)
 {
@@ -78,7 +79,8 @@ int read_config(char *fileName, SemesterData *sd)
  *  \param [in] line This line is given by the input_reader function
  *  \param [in] sd SemesterData is a link to the structs the function needs
  *  
- *  \details This function goes through the line and checks it for commands and parameters. Essentially it works like a parser
+ *  \details This function goes through the line and checks it for commands and parameters.
+ *  Essentially it works like a parser
  */
 void handle_line(char *line, SemesterData *sd)
 {
@@ -222,7 +224,8 @@ void handle_line(char *line, SemesterData *sd)
  *  \param [out] out A pointer to an int where the final number will be stored
  *  \return Returns whether the function has failed or succeded
  *  
- *  \details The function goes through the string (line) until there are no more characters. It then converts the content of the string to int and outputs it to the out variable
+ *  \details The function goes through the string (line) until there are no more characters.
+ *  It then converts the content of the string to int and outputs it to the out variable
  */
 int read_int(char* line, int* position, int* out)
 {
@@ -255,7 +258,8 @@ int read_int(char* line, int* position, int* out)
  *  \param [out] out The output string
  *  \return Returns whether the function succeded or not
  *  
- *  \details This function reads from the line string and outputs everything between two apostrophes to the output string
+ *  \details This function reads from the line string and outputs
+ *  everything between two apostrophes to the output string
  */
 int read_multiple_words(char* line, int* position, char* out)
 {

@@ -93,7 +93,8 @@ void print_row_header(FILE *f, double width, const char* str, ...)
  *  \param [in] f The file in which the schedule is being generated
  *  \param [in] title The title
  *  
- *  \details This defines a title for the schedule. An example could be "Schedule for Robotics"
+ *  \details This defines a title for the schedule.
+ *  An example could be "Schedule for Robotics"
  */
 void print_title(FILE *f, const char* title)
 {
@@ -154,7 +155,8 @@ void end_print_row(FILE *f)
  *  \brief Prints a period to the schedule
  *  
  *  \param [in] schedule Pointer to a schedule
- *  \param [in] sp Specialization contains information about the specialization the schedule is generated for
+ *  \param [in] sp Specialization contains information about the specialization
+ *  the schedule is generated for
  *  \param [in] f The file in which the schedule is being generated
  *  \param [in] periodId Period to print
  *  \param [in] weekNumber The number of the current week
@@ -224,7 +226,8 @@ void print_period(Schedule *schedule, Specialization *sp, FILE *f, int periodId,
  *  \brief Prints a schedule for a specific specialization to a file
  *  
  *  \param [in] schedule Pointer to a schedule
- *  \param [in] sp Specialization contains information about the specialization the schedule is generated for
+ *  \param [in] sp Specialization contains information about the specialization
+ *  the schedule is generated for
  *  \param [in] fileName The name of the file in which the schedule should be generated
  *  
  *  \details The final step of the schedule creation

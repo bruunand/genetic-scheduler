@@ -228,7 +228,9 @@ int specialization_has_lecture(Specialization *sp, Lecture *lect)
  *  \param [in] course Pointer to the couse we check
  *  \return Returns the amount of students on a specific course
  *  
- *  \details First we go through all specializations and add them to a temp. variable. Then we go through all the courses in these specializations and adds the number of students in each specialization that has the course
+ *  \details First we go through all specializations and add them to a temp. variable.
+ *  Then we go through all the courses in these specializations and adds the number of
+ *  students in each specialization that has the course
  */
 int get_students_on_course(SemesterData *sd, Course *course)
 {
@@ -256,7 +258,8 @@ int get_students_on_course(SemesterData *sd, Course *course)
  *  
  *  \param [in] sd SemesterData contains the information required to get the amount
  *  
- *  \details Goes through all the courses in SemesterData and adds the lectures assigned to each course to a variable which is then returned
+ *  \details Goes through all the courses in SemesterData and adds the lectures
+ *  assigned to each course to a variable which is then returned
  */
 void calc_amount_of_lectures(SemesterData *sd)
 {
@@ -325,7 +328,8 @@ void free_generation(Generation *gp)
 }
 
 /**
- *  \brief Free all memory associated with the SemesterData struct. Dynamically allocated arrays inside the structs are also freed.
+ *  \brief Free all memory associated with the SemesterData struct.
+ *  Dynamically allocated arrays inside the structs are also freed
  *  
  *  \param [in] sd Parameter_Description
  *  \return Return_Description
@@ -377,7 +381,9 @@ void free_semesterdata(SemesterData *sd)
  *  \param [in] periodId The ID of the period to check
  *  \return Returns the name of a period specified by the periodId parameter
  *  
- *  \details Checks if the period ID is outside the range. If it is outside the range it returns an UNKNOWN name. Otherwise it returns the name according to it's place on the schedule
+ *  \details Checks if the period ID is outside the range. If it is outside
+ *  the range it returns an UNKNOWN name. Otherwise it returns the name according
+ *  to it's place on the schedule
  */
 const char* get_name_of_period(int periodId)
 {
