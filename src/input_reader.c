@@ -11,8 +11,6 @@
 #include "input_reader.h"
 #include "defs.h"
 
-#define BUFFER_SIZE 512
-
 /**
  *  \brief Initial function for the config reader
  *  

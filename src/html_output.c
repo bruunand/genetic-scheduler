@@ -11,9 +11,6 @@
 #include "structs.h"
 #include "data_utility.h"
 
-#define WEEK_WIDTH  10.0f
-#define TABLE_WIDTH 100.0f
-
 /**
  *  \brief Prints the file header
  *  

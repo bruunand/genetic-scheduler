@@ -11,7 +11,15 @@
 #include "defs.h"
 #include "fitness_calculation.h"
 
+/**
+ *  \var char* periodNames[]
+ *  The names of the two periods on a day
+ */
 const char* periodNames[] = {"08:15 - 12:00", "12:30 - 16:15"};
+/**
+ *  \var char* dayNames[]
+ *  The names of the weekdays of a standart work week
+ */
 const char* dayNames[] = {"Monday", "Tuesday", "Wednesday", "Thursday", "Friday"};
 
 /**
