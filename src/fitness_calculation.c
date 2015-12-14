@@ -1,6 +1,6 @@
 /**
  *  \file fitness_calculation.c
- *  \brief This script contains the functions responsible for calculating fitness values for the population.
+ *  \brief This script contains the functions responsible for calculating fitness values for the population
  */
 #include <stdio.h>
 #include <stdlib.h>

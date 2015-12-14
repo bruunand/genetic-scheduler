@@ -1,6 +1,6 @@
 /**
- *  \file scheduler.c
- *  \brief The main script of the program, the magic starts here
+ *  \file genetic_algorithm.c
+ *  \brief This script contains the functions related to our algorithm
  */
 #include <stdio.h>
 #include <stdlib.h>
