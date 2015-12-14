@@ -30,13 +30,15 @@ int calcfit_capacity(SemesterData *sd, Lecture *lect)
     numStudents = get_students_on_course(sd, lect->assignedCourse);
 
     /*
-     * Severity is increased by 1 per 5% room capacity exceeded.
+     * Fitness is increased by 1 per 5% room capacity exceeded.
      * Set to 1 if half or less of the seats are used.
     */
     if (roomCap < numStudents)
         fitness = 1 + (numStudents - roomCap) / ((roomCap > roomSeats) ? (roomCap - roomSeats) : 1);
     else if ((roomSeats / numStudents) >= 2)
         fitness = 1;
+    
+    printf("%d students in %d room gives %d points\n", numStudents, roomSeats, fitness);
     
     return fitness;
 }
