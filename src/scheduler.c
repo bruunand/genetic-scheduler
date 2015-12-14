@@ -18,11 +18,11 @@
 #include "genetic_algorithm.h"
 
 /**
- *  \brief Brief
+ *  \brief The starting point of the program
  *  
- *  \return Returns weather the program has exited with an error or success
+ *  \return Returns whether the program has exited with an error or success
  *  
- *  \details Details
+ *  \details In here, the function that reads the config file is run and then the genetic algorithm is run. Lastly, the schedules are being generated in html documents and ready to be implemented to a web interface for example.
  */
 int main(void)
 {
