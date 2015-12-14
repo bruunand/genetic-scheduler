@@ -1,6 +1,6 @@
 # AAU Scheduler Configuration
 #   [type] [value]
-set WEEKS 13
+set WEEKS 14
 
 # Add teachers
 #           '[name]'            [offDay period1 period2...]
@@ -24,7 +24,8 @@ add COURSE 'Imperative Programming' 14 1
 add COURSE 'Robot mechanics, Modelling, and Simulation' 30 3
 add COURSE 'Robot Programming' 22 4
 
-# Add specialization
+# Add specializations
+# Names cannot contain forward- nor backslashes
 #                  '[name]'   [#numStudents] [courses...]
-add SPECIALIZATION 'SW1/DAT1' 160 0 1 2
+add SPECIALIZATION 'SW1-DAT1' 160 0 1 2
 add SPECIALIZATION 'Robotics' 40 3 4 1

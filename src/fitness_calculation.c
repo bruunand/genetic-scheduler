@@ -37,9 +37,7 @@ int calcfit_capacity(SemesterData *sd, Lecture *lect)
         fitness = 1 + (numStudents - roomCap) / ((roomCap > roomSeats) ? (roomCap - roomSeats) : 1);
     else if ((roomSeats / numStudents) >= 2)
         fitness = 1;
-    
-    printf("%d students in %d room gives %d points\n", numStudents, roomSeats, fitness);
-    
+
     return fitness;
 }
 

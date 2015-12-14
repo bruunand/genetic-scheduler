@@ -26,7 +26,8 @@
  */
 int main(void)
 {
-    int seed;
+    char specName[32];
+    int i, seed, startTime;
     Generation *gen = 0;
     SemesterData sd;
 
@@ -36,6 +37,9 @@ int main(void)
     /*if (!scanf("%d", &seed))*/
 		seed = time(NULL);
     srand(seed);
+    
+    /* Set start time to now */
+    startTime = time(NULL);
     
     /* Read configuration file */
     if (!read_config("scheduler.input", &sd))
@@ -50,11 +54,19 @@ int main(void)
     /* Run genetic algorithm */
     run_ga(&gen, &sd);
     
-    /* Print schedules to files */
-    print_schedule_to_file(&gen->schedules[0], &sd.specializations[0], "swdat.html");
-    print_schedule_to_file(&gen->schedules[0], &sd.specializations[1], "robotics.html");
-
+    /* Print best schedule for each specialization to file */
+    for (i = 0; i < sd.numSpecializations; i++)
+    {
+        sprintf(specName, "%s.html", sd.specializations[i].name);
+        
+        printf("Writing to file %s..\n", specName);
+        print_schedule_to_file(&gen->schedules[0], &sd.specializations[i], specName);
+    }
+    
     free_semesterdata(&sd);
+    free_generation(gen);
+    
+    printf("Finished, ran for %d seconds.\n", time(NULL) - startTime);
     
     return 0;
 }
