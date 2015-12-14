@@ -32,8 +32,8 @@ int calcfit_capacity(SemesterData *sd, Lecture *lect)
     numStudents = get_students_on_course(sd, lect->assignedCourse);
 
     /*
-     * Fitness is increased by 1 per 5% room capacity exceeded.
-     * Set to 1 if half or less of the seats are used.
+     * Fitness is increased every time by PENALTY_ROOM_TOO_SMALL per 5% room capacity exceeded.
+     * Set to PENALTY_ROOM_TOO_BIG if half or less of the seats are used.
     */
     if (numStudents > roomCap)
         fitness = PENALTY_ROOM_TOO_SMALL * ((numStudents - roomCap) / (roomCap - roomSeats));

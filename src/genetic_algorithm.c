@@ -78,17 +78,50 @@ void run_ga(Generation **curGen, SemesterData *sd)
  */
 int ga_select(Generation *curGen, Generation *newGen)
 {
-    int carriedOver = 0, i, x, y;
+    int carriedOver = 0, i, j, x, y, smallest, numSaved = 0, alreadySaved;
+    int *saved;
+    
+    saved = malloc(GENERATION_SIZE / 2 * sizeof(int));
+    if (!saved)
+        exit(ERROR_OUT_OF_MEMORY);
     
     for (i = 0; i < GENERATION_SIZE / 2; i++)
     {
+        alreadySaved = 0;
+        
         x = rand() % GENERATION_SIZE;
         y = rand() % GENERATION_SIZE;
         
+        smallest = MIN(x, y);
+        
+        /* Go through already saved ints */
+        for (j = 0; j < numSaved; j++)
+        {
+            if (saved[j] == smallest)
+            {
+                alreadySaved = 1;
+                break;
+            }
+        }
+            
+        /* Get new if already saved */
+        if (alreadySaved)
+        {
+            i--;
+            continue;
+        }
+        else
+        {
+            /* Mark this as already saved */
+            saved[numSaved++] = smallest;
+        }
+        
         /* Copy best Schedule of the two randomly selected */
-        copy_schedule(&newGen->schedules[carriedOver], &curGen->schedules[MIN(x, y)]);
+        copy_schedule(&newGen->schedules[carriedOver], &curGen->schedules[smallest]);
         carriedOver++;
     }
+
+    free(saved);
     
     return carriedOver;
 }

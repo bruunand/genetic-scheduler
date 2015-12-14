@@ -10,3 +10,4 @@ obj/
 *.DS_Store
 *.o
 *.html
+bin/output.txt
