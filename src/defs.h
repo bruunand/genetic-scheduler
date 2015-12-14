@@ -8,7 +8,7 @@
 #define GENERATION_SIZE 500
 #define MAX_GENERATIONS 200
 
-#define MUTATION_CHANCE 15
+#define MUTATION_CHANCE 10
 
 /* Error codes */
 #define ERROR_OUT_OF_MEMORY 1

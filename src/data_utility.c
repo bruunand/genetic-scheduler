@@ -63,7 +63,7 @@ void initialize_schedule(Generation *parentGen, int scheduleIndex)
     Schedule *newSchedule = &parentGen->schedules[scheduleIndex];
     
     /* Allocate memory for the amount of lectures */
-    newSchedule->lectures = malloc(parentGen->sd->numLectures * sizeof(Lecture));
+    newSchedule->lectures = calloc(parentGen->sd->numLectures, sizeof(Lecture));
     if (!newSchedule->lectures)
         exit(ERROR_OUT_OF_MEMORY);
     
