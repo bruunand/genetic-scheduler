@@ -12,13 +12,13 @@
 #include "fitness_calculation.h"
 
 /**
- *  \brief Test how well the lecture fits into the assigned room
+ *  \brief Calculates how well the lecture fits into the assigned room
  *  
  *  \param [in] sd SemesterData contains all the information about the structs needed for this function
- *  \param [in] lect Pointer to lecture to test
- *  \return Returns the fitness of the test.
+ *  \param [in] lect Pointer to lecture to calculate for
+ *  \return Returns the fitness of the calculation
  *  
- *  \details This function checks the capacity of the room and the amount of students on the lecture and determins the penalty in fitness by comparing the two.
+ *  \details This function checks the capacity of the room and the amount of students on the lecture and determins the penalty in fitness by comparing the two
  */
 int calcfit_capacity(SemesterData *sd, Lecture *lect)
 {
@@ -45,8 +45,8 @@ int calcfit_capacity(SemesterData *sd, Lecture *lect)
  *  \brief Calculates fitness based on the teacher's availability at the time of the lecture
  *  
  *  \param [in] schedule Pointer to a schedule
- *  \param [in] lect Pointer to lecture to test
- *  \return Returns the fitness of the test.
+ *  \param [in] lect Pointer to lecture to calculate
+ *  \return Returns the fitness of the calculation
  *  
  *  \details Also test whether the teacher is already assigned to a lecture on the same date
  */
@@ -96,10 +96,10 @@ int calcfit_teacher_availability(Schedule *schedule, Lecture *lect)
  *  \brief Calculates fitness based on whether the room or period is doublebooked
  *  
  *  \param [in] schedule Pointer to a schedule
- *  \param [in] lect Pointer to lecture to test
- *  \return Returns the fitness of the test.
+ *  \param [in] lect Pointer to lecture to calculate
+ *  \return Returns the fitness of the calculation
  *  
- *  \details Performs tests for both room and lecture doublebooking
+ *  \details Performs calculations for both room and lecture doublebooking
  */
 int calcfit_doublebooking(Schedule *schedule, Lecture *lect)
 {
@@ -164,10 +164,10 @@ int calcfit_doublebooking(Schedule *schedule, Lecture *lect)
  *  \brief Calculates how well the lecture fits into its week
  *  
  *  \param [in] schedule Pointer to a schedule
- *  \param [in] lect Pointer to lecture to test
+ *  \param [in] lect Pointer to lecture to calculate
  *  \return Returns the fitness of the lecture distribution
  *  
- *  \details Goes through each lecture and comparing it to another lecture in a schedule. When a lecture has been compared, is is flagged as such and will not be compared again
+ *  \details Goes through each lecture and comparing it to another lecture in a schedule. When a lecture has been compared, it is flagged as such and will not be compared again
  */
 int calcfit_distribution_weekly(Schedule *schedule, Lecture *lect)
 {
@@ -211,13 +211,13 @@ int calcfit_distribution_weekly(Schedule *schedule, Lecture *lect)
 }
 
  /**
- *  \brief Tests the semester distribution
+ *  \brief Calculates the semester distribution
  *  
  *  \param [in] schedule Pointer to a schedule
- *  \param [in] lect Pointer to lecture to test
- *  \return Returns the fitness of the test.
+ *  \param [in] lect Pointer to lecture to calculate
+ *  \return Returns the fitness of the calculation
  *  
- *  \details Makes a call to the inner test function for every specialization on the specified lecture
+ *  \details Goes through each specialization on the course and calculates their fitness
  */
 int calcfit_distribution_semester(Schedule *schedule, Lecture *lect)
 {
@@ -239,9 +239,9 @@ int calcfit_distribution_semester(Schedule *schedule, Lecture *lect)
  *  \brief Calculate how well the lecture fits into the semester distribution
  *  
  *  \param [in] schedule Pointer to a schedule
- *  \param [in] lect Pointer to lecture to test
+ *  \param [in] lect Pointer to lecture to calculate
  *  \param [in] sp Pointer to a specialization that is needed to obtain some information within the function
- *  \return Returns the fitness of the test.
+ *  \return Returns the fitness of the calculation
  *  
  *  \details Goes through all lectures in a week within the specialization and see how well they are distributed. When a lecture is checked, it is flagged as such and will not be checked again
  */

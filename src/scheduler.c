@@ -22,7 +22,9 @@
  *  
  *  \return Returns whether the program has exited with an error or success
  *  
- *  \details In here, the function that reads the config file is run and then the genetic algorithm is run. Lastly, the schedules are being generated in html documents and ready to be implemented to a web interface for example.
+ *  \details In here, the function that reads the config file is run
+ *  and then the genetic algorithm is run. Lastly, the schedules are being generated in html documents
+ *  and ready to be implemented to a web interface for example
  */
 int main(void)
 {
