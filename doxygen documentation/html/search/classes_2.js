@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['generations',['Generations',['../struct_generations.html',1,'']]]
+  ['generation',['Generation',['../struct_generation.html',1,'']]]
 ];

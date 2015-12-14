@@ -1,5 +1,5 @@
 var struct_room =
 [
-    [ "name", "struct_room.html#abc1e86d7c344fe34ff09e72d4595ab7e", null ],
-    [ "seats", "struct_room.html#a428772406a47cfcc05a47bb811c8133e", null ]
+    [ "name", "struct_room.html#a5e226cbfde7350be3bcdbd8b174187e7", null ],
+    [ "seats", "struct_room.html#a1b426a1982d7a38f0ce69aed73cf6667", null ]
 ];

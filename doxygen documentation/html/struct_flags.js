@@ -1,7 +1,7 @@
 var struct_flags =
 [
-    [ "doubleBookingLecture", "struct_flags.html#a6bb427558fbca6248860d760487f55d6", null ],
-    [ "doubleBookingRoom", "struct_flags.html#a53c68ccee23dcd3823110e2a17406373", null ],
-    [ "lectureOverflow", "struct_flags.html#a9bae439b5cc5f9663dc5efdb6c1d8534", null ],
-    [ "semesterOverflow", "struct_flags.html#a93302264c6ea0ed65a4544182e0fb481", null ]
+    [ "doubleBookingLecture", "struct_flags.html#ae19216b5065900163a3e273a0aae8ed2", null ],
+    [ "doubleBookingRoom", "struct_flags.html#ad78d49e3924d047873621bef4c04cf0b", null ],
+    [ "lectureCounted", "struct_flags.html#ad6471f493aefff3d58beb68bfad9f045", null ],
+    [ "semesterCounted", "struct_flags.html#a7b5b45ee267b59145ae7a24a17da8289", null ]
 ];

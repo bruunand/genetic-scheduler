@@ -1,4 +1,6 @@
 var searchData=
 [
-  ['main',['main',['../scheduler_8c.html#a840291bc02cba5474a4cb46a9b9566fe',1,'scheduler.c']]]
+  ['lecture',['Lecture',['../struct_lecture.html',1,'']]],
+  ['lecturecounted',['lectureCounted',['../struct_flags.html#ad6471f493aefff3d58beb68bfad9f045',1,'Flags']]],
+  ['lectures',['lectures',['../struct_schedule.html#a21df3431de9a78686c7d1abbba22fad8',1,'Schedule']]]
 ];
