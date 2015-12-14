@@ -14,7 +14,14 @@
 const char* periodNames[] = {"08:15 - 12:00", "12:30 - 16:15"};
 const char* dayNames[] = {"Monday", "Tuesday", "Wednesday", "Thursday", "Friday"};
 
-/* Allocate memory for all Schedules in a generation. */
+/**
+ *  \brief Allocate memory for all schedules in a generation
+ *  
+ *  \param [in] gen The generation that contains the schedules
+ *  \param [in] sd SemesterData contains information needed by the function
+ *  
+ *  \details *PENDING*
+ */
 void initialize_generation(Generation **gen, SemesterData *sd)
 {
     int i, j, k, l;
@@ -54,10 +61,14 @@ void initialize_generation(Generation **gen, SemesterData *sd)
     }
 }
 
-/*
- * Allocate memory for lectures in a schedule.
- * Also set parent generation.
-*/
+/**
+ *  \brief Allocate memory for lectures in a schedule and sets parent generation
+ *  
+ *  \param [in] parentGen Pointer to the parent generation
+ *  \param [in] scheduleIndex The index of the current schedule
+ *  
+ *  \details *PENDING*
+ */
 void initialize_schedule(Generation *parentGen, int scheduleIndex)
 {
     Schedule *newSchedule = &parentGen->schedules[scheduleIndex];
@@ -71,7 +82,14 @@ void initialize_schedule(Generation *parentGen, int scheduleIndex)
     newSchedule->parentGen = parentGen;
 }
 
-/* Creates a deep copy of a Schedule */
+/**
+ *  \brief Creates a deep copy of a Schedule
+ *  
+ *  \param [in] dest Pointer to the destination Schedule
+ *  \param [in] src Pointer to the source Schedule
+ *  
+ *  \details *PENDING*
+ */
 void copy_schedule(Schedule *dest, Schedule *src)
 {
     int i;
@@ -81,7 +99,14 @@ void copy_schedule(Schedule *dest, Schedule *src)
         dest->lectures[i] = src->lectures[i];
 }
 
-/* Creates a deep copy of a Generation */
+/**
+ *  \brief Creates a deep copy of a Generation
+ *  
+ *  \param [in] dest Pointer to the destination Generation
+ *  \param [in] src Pointer to the source Generation
+ *  
+ *  \details *PENDING*
+ */
 void copy_generation(Generation *dest, Generation *src)
 {
     int i;
@@ -98,7 +123,13 @@ void copy_generation(Generation *dest, Generation *src)
     }
 }
 
-/* Print the issues with a lecture */
+/**
+ *  \brief Print the issues with a lecture
+ *  
+ *  \param [in] schedule Pointer to the schedule that has issues
+ *  
+ *  \details *PENDING*
+ */
 void print_schedule_issues(Schedule *schedule)
 {
     int i, capacity = 0, teacher = 0, doublebooking = 0, distWeekly = 0, distSemester = 0;
@@ -228,7 +259,9 @@ int specialization_has_lecture(Specialization *sp, Lecture *lect)
  *  \param [in] course Pointer to the couse we check
  *  \return Returns the amount of students on a specific course
  *  
- *  \details First we go through all specializations and add them to a temp. variable. Then we go through all the courses in these specializations and adds the number of students in each specialization that has the course
+ *  \details First we go through all specializations and add them to a temp. variable.
+ *  Then we go through all the courses in these specializations and adds the number of
+ *  students in each specialization that has the course
  */
 int get_students_on_course(SemesterData *sd, Course *course)
 {
@@ -256,7 +289,8 @@ int get_students_on_course(SemesterData *sd, Course *course)
  *  
  *  \param [in] sd SemesterData contains the information required to get the amount
  *  
- *  \details Goes through all the courses in SemesterData and adds the lectures assigned to each course to a variable which is then returned
+ *  \details Goes through all the courses in SemesterData and adds the lectures
+ *  assigned to each course to a variable which is then returned
  */
 void calc_amount_of_lectures(SemesterData *sd)
 {
@@ -325,7 +359,8 @@ void free_generation(Generation *gp)
 }
 
 /**
- *  \brief Free all memory associated with the SemesterData struct. Dynamically allocated arrays inside the structs are also freed.
+ *  \brief Free all memory associated with the SemesterData struct.
+ *  Dynamically allocated arrays inside the structs are also freed
  *  
  *  \param [in] sd Parameter_Description
  *  \return Return_Description
@@ -377,7 +412,9 @@ void free_semesterdata(SemesterData *sd)
  *  \param [in] periodId The ID of the period to check
  *  \return Returns the name of a period specified by the periodId parameter
  *  
- *  \details Checks if the period ID is outside the range. If it is outside the range it returns an UNKNOWN name. Otherwise it returns the name according to it's place on the schedule
+ *  \details Checks if the period ID is outside the range. If it is outside
+ *  the range it returns an UNKNOWN name. Otherwise it returns the name according
+ *  to it's place on the schedule
  */
 const char* get_name_of_period(int periodId)
 {

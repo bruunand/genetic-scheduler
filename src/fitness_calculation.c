@@ -1,6 +1,6 @@
 /**
  *  \file fitness_calculation.c
- *  \brief This script contains the functions responsible for calculating fitness values for the population.
+ *  \brief This script contains the functions responsible for calculating fitness values for the population
  */
 #include <stdio.h>
 #include <stdlib.h>
@@ -14,11 +14,13 @@
 /**
  *  \brief Calculates how well the lecture fits into the assigned room
  *  
- *  \param [in] sd SemesterData contains all the information about the structs needed for this function
+ *  \param [in] sd SemesterData contains all the information about the structs
+ *  needed for this function
  *  \param [in] lect Pointer to lecture to calculate for
  *  \return Returns the fitness of the calculation
  *  
- *  \details This function checks the capacity of the room and the amount of students on the lecture and determins the penalty in fitness by comparing the two
+ *  \details This function checks the capacity of the room and the amount of
+ *  students on the lecture and determins the penalty in fitness by comparing the two
  */
 int calcfit_capacity(SemesterData *sd, Lecture *lect)
 {
@@ -167,7 +169,9 @@ int calcfit_doublebooking(Schedule *schedule, Lecture *lect)
  *  \param [in] lect Pointer to lecture to calculate
  *  \return Returns the fitness of the lecture distribution
  *  
- *  \details Goes through each lecture and comparing it to another lecture in a schedule. When a lecture has been compared, it is flagged as such and will not be compared again
+ *  \details Goes through each lecture and comparing it to another
+ *  lecture in a schedule. When a lecture has been compared, it is
+ *  flagged as such and will not be compared again
  */
 int calcfit_distribution_weekly(Schedule *schedule, Lecture *lect)
 {
@@ -217,7 +221,8 @@ int calcfit_distribution_weekly(Schedule *schedule, Lecture *lect)
  *  \param [in] lect Pointer to lecture to calculate
  *  \return Returns the fitness of the calculation
  *  
- *  \details Goes through each specialization on the course and calculates their fitness
+ *  \details Goes through each specialization on the
+ *  course and calculates their fitness
  */
 int calcfit_distribution_semester(Schedule *schedule, Lecture *lect)
 {
@@ -240,10 +245,13 @@ int calcfit_distribution_semester(Schedule *schedule, Lecture *lect)
  *  
  *  \param [in] schedule Pointer to a schedule
  *  \param [in] lect Pointer to lecture to calculate
- *  \param [in] sp Pointer to a specialization that is needed to obtain some information within the function
+ *  \param [in] sp Pointer to a specialization that is needed to obtain some
+ *  information within the function
  *  \return Returns the fitness of the calculation
  *  
- *  \details Goes through all lectures in a week within the specialization and see how well they are distributed. When a lecture is checked, it is flagged as such and will not be checked again
+ *  \details Goes through all lectures in a week within the specialization
+ *  and see how well they are distributed. When a lecture is checked, it is
+ *  flagged as such and will not be checked again
  */
 int calcfit_distribution_semester_inner(Schedule *schedule, Lecture *lect, Specialization *sp)
 {
@@ -291,7 +299,8 @@ int calcfit_distribution_semester_inner(Schedule *schedule, Lecture *lect, Speci
  *  \param [in] lect The specific lecture to calculate fitness for
  *  \return Returns the fitness of the lecture
  *  
- *  \details Performs all the fitness calculations on a specific lecture and returns the total fitness for that lecture
+ *  \details Performs all the fitness calculations on a specific
+ *  lecture and returns the total fitness for that lecture
  */
 int calcfit_lecture(Schedule *schedule, Lecture *lect)
 {
@@ -312,7 +321,8 @@ int calcfit_lecture(Schedule *schedule, Lecture *lect)
  *  \param [in] schedule The schedule to calculate fitness for
  *  \return Returns the fitness of the schedule
  *  
- *  \details Iterates through all lectures and add their fitness to a variables which is then returned
+ *  \details Iterates through all lectures and add their fitness
+ *  to a variables which is then returned
  */
 int calcfit_schedule(Schedule *schedule)
 {

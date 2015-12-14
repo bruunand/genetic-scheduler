@@ -1,6 +1,6 @@
 /**
- *  \file scheduler.c
- *  \brief The main script of the program, the magic starts here
+ *  \file genetic_algorithm.c
+ *  \brief This script contains the functions related to our algorithm
  */
 #include <stdio.h>
 #include <stdlib.h>
@@ -12,6 +12,14 @@
 #include "fitness_calculation.h"
 
 /* Run genetic algorithm */
+/**
+ *  \brief The main function of the algorithm
+ *  
+ *  \param [in] curGen The current generation
+ *  \param [in] sd SemesterData contains information needed by the function
+ *  
+ *  \details Here the algorithm is initiated
+ */
 void run_ga(Generation **curGen, SemesterData *sd)
 {
     int i, carriedOver, lowestFit;
@@ -59,11 +67,15 @@ void run_ga(Generation **curGen, SemesterData *sd)
     fclose(output);
 }
 
-/*
- * Select Schedules using Tournament selection.
- * Schedules (genomes) should be sorted by fitness at this point.
- * Returns amount of genomes carried over.
-*/
+/**
+ *  \brief Select Schedules using Tournament selection
+ *  
+ *  \param [in] curGen Pointer to the current generation
+ *  \param [in] newGen Pointer to the new generation
+ *  \return Returns amount of genomes carried over
+ *  
+ *  \details Schedules (genomes) should be sorted by fitness at this point
+ */
 int ga_select(Generation *curGen, Generation *newGen)
 {
     int carriedOver = 0, i, x, y;
@@ -81,7 +93,14 @@ int ga_select(Generation *curGen, Generation *newGen)
     return carriedOver;
 }
 
-/* Breed population from Schedules up to carryOver */
+/**
+ *  \brief Breed population from Schedules up to carryOver
+ *  
+ *  \param [in] gp Pointer to the generation to crossbreed
+ *  \param [in] carryOver The amount of genomes copied from the generation
+ *  
+ *  \details Finds two parents and compare the fitness of their lectures
+ */
 void ga_crossbreed(Generation *gp, int carryOver)
 {
     int i, j, parentA, parentB, selectedParent;
@@ -115,7 +134,13 @@ void ga_crossbreed(Generation *gp, int carryOver)
     }
 }
 
-/* Randomly mutate Schedules in a Generation */
+/**
+ *  \brief Randomly mutate Schedules in a Generation
+ *  
+ *  \param [in] gp Pointer to the generation to mutate
+ *  
+ *  \details Iterates through all lectures in all schedules and mutates randomly
+ */
 void ga_mutate(Generation *gp)
 {
     int i, j;
@@ -145,13 +170,11 @@ void ga_mutate(Generation *gp)
 }
 
 /**
- *  \brief Brief
+ *  \brief Compares the fitness of two schedules. Used by qsort
  *  
- *  \param [in] a Parameter_Description
- *  \param [in] b Parameter_Description
- *  \return Return_Description
- *  
- *  \details Details
+ *  \param [in] a The first schedule
+ *  \param [in] b The second schedule
+ *  \return Returns a number that tells qsort how to sort the schedules
  */
 int compare_schedule_fitness(const void *a, const void *b)
 {

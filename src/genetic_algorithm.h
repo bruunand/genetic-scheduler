@@ -1,3 +1,7 @@
+/**
+ *  \file genetic_algorithm.h
+ *  \brief This file contains prototypes required by the genetic_algorithm.c script
+ */
 void run_ga(Generation **curGen, SemesterData *sd);
 
 int ga_select(Generation *curGen, Generation *newGen);

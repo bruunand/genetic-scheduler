@@ -46,7 +46,8 @@ struct Teacher
 
 /**
  *  \struct OffTime
- *  \brief The OffTime struct contains a day and time period (0 or 1) where the teacher isn't available for a teacher
+ *  \brief The OffTime struct contains a day and time period (0 or 1) where
+ *  the teacher isn't available for a teacher
  *  
  *  \var OffTime::day
  *  A specific day the OffTime effects
@@ -119,7 +120,8 @@ struct Specialization
  *  This flag is set when a lecture has been calculated for room doublebooking
  *  
  *  \var Flags::doubleBookingLecture
- *  This flag is set when a lecture has been calculated for overlapping with another lecture from the same specialization
+ *  This flag is set when a lecture has been calculated for overlapping with
+ *  another lecture from the same specialization
  *  
  *  \var Flags::lectureCounted
  *  This flag is set when the lecture has been counted
@@ -247,7 +249,8 @@ struct Schedule
 
 /**
  *  \struct Generation
- *  \brief The Generation struct contains an array of schedules in the generation and a pointer to SemesterData which contains relevant information
+ *  \brief The Generation struct contains an array of schedules in the generation
+ *  and a pointer to SemesterData which contains relevant information
  *  
  *  \var int:fitness
  *  Combined fitness of generation
