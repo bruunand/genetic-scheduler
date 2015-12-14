@@ -20,7 +20,7 @@ const char* dayNames[] = {"Monday", "Tuesday", "Wednesday", "Thursday", "Friday"
  *  \param [in] gen The generation that contains the schedules
  *  \param [in] sd SemesterData contains information needed by the function
  *  
- *  \details *PENDING*
+ *  \details Allocates memory for the generation and adds schedules to the gen variable
  */
 void initialize_generation(Generation **gen, SemesterData *sd)
 {
@@ -67,7 +67,8 @@ void initialize_generation(Generation **gen, SemesterData *sd)
  *  \param [in] parentGen Pointer to the parent generation
  *  \param [in] scheduleIndex The index of the current schedule
  *  
- *  \details *PENDING*
+ *  \details Allocates memory for the lectures and then sets the parent generation
+ *  in the schedule to the given generation through parentGen
  */
 void initialize_schedule(Generation *parentGen, int scheduleIndex)
 {
@@ -87,8 +88,6 @@ void initialize_schedule(Generation *parentGen, int scheduleIndex)
  *  
  *  \param [in] dest Pointer to the destination Schedule
  *  \param [in] src Pointer to the source Schedule
- *  
- *  \details *PENDING*
  */
 void copy_schedule(Schedule *dest, Schedule *src)
 {
@@ -104,8 +103,6 @@ void copy_schedule(Schedule *dest, Schedule *src)
  *  
  *  \param [in] dest Pointer to the destination Generation
  *  \param [in] src Pointer to the source Generation
- *  
- *  \details *PENDING*
  */
 void copy_generation(Generation *dest, Generation *src)
 {
@@ -128,7 +125,8 @@ void copy_generation(Generation *dest, Generation *src)
  *  
  *  \param [in] schedule Pointer to the schedule that has issues
  *  
- *  \details *PENDING*
+ *  \details Resets schedule flags, gets fitness values and
+ *  prints any issues should there be any
  */
 void print_schedule_issues(Schedule *schedule)
 {
