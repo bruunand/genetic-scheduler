@@ -33,12 +33,12 @@
  *  The amount of days on one week
  */
 
-#define GENERATION_SIZE 100
+#define GENERATION_SIZE 250
 /**
  *  \def GENERATION_SIZE
  *  The amount of Schedules in one Generation
  */
-#define MAX_GENERATIONS 200
+#define MAX_GENERATIONS 10000
 /**
  *  \def MAX_GENERATIONS
  *  The maximum amount of generations till the program stops trying

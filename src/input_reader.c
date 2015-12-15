@@ -137,6 +137,15 @@ void handle_line(char *line, SemesterData *sd)
                 if (!teachers)
                     exit(ERROR_OUT_OF_MEMORY);
                 
+                if (curTeacherId >= sd->numTeachers)
+                {
+                    printf("Input error: Teacher %d does not exist (course: %s).\n",
+                        curTeacherId,
+                        courseName);
+                    
+                    exit(ERROR_INVALID_INPUT);
+                }
+                
                 teachers[numTeachers] = &sd->teachers[curTeacherId];
                 numTeachers++;
             }
@@ -208,7 +217,16 @@ void handle_line(char *line, SemesterData *sd)
                 courses = realloc(courses, (numCourses + 1) * sizeof(Course*));
                 if (!courses)
                     exit(ERROR_OUT_OF_MEMORY);
-
+                
+                if (curCourseId >= sd->numCourses)
+                {
+                    printf("Input error: Course %d does not exist (specialization: %s).\n",
+                        curCourseId,
+                        specName);
+                    
+                    exit(ERROR_INVALID_INPUT);
+                }
+                
                 courses[numCourses] = &sd->courses[curCourseId];
                 numCourses++;
             }
@@ -390,11 +408,8 @@ void validate_input(SemesterData *sd)
     for (i = 0; i < sd->numCourses; i++)
     {
         Course *curCourse = &sd->courses[i];
-        int am = get_students_on_course(sd, curCourse);
-        
-        printf("%d on %s\n", am, curCourse->name);
-        
-        if (am == 0)
+
+        if (get_students_on_course(sd, curCourse) == 0)
         {
             printf("Input error: %s has no assigned students.\n",
                 curCourse->name);

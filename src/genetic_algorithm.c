@@ -156,11 +156,11 @@ void ga_crossbreed(Generation *gp, int carryOver)
         for (j = 0; j < gp->sd->numLectures; j++)
         {
             /* Select best fit */
-            if (gp->schedules[parentA].lectures[j].fitness <= gp->schedules[parentB].lectures[j].fitness)
+            if (gp->schedules[parentA].lectures[j].fitness < gp->schedules[parentB].lectures[j].fitness)
                 selectedParent = parentA;
             else
                 selectedParent = parentB;
-
+            
             /* Copy lecture */
             gp->schedules[i].lectures[j] = gp->schedules[selectedParent].lectures[j];
         }

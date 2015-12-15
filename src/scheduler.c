@@ -30,7 +30,7 @@
 int main(void)
 {
     char specName[32];
-    int i, seed, startTime;
+    int i, j, k, l, seed, startTime;
     Generation *gen = 0;
     SemesterData sd;
 
@@ -39,8 +39,9 @@ int main(void)
  
     /*if (!scanf("%d", &seed))*/
 		seed = time(NULL);
+        /*seed = 1450193462;*/
     srand(seed);
-    
+        
     /* Set start time to now */
     startTime = time(NULL);
     
@@ -51,6 +52,32 @@ int main(void)
         exit(1);
     }
 
+    /* DEBUG */
+    for (i = 0; i < sd.numCourses; i++)
+    {
+        Course *curCourse = &sd.courses[i];
+        
+        printf("%s\nSpecs: ", curCourse->name);
+        
+        for (j = 0; j < sd.numSpecializations; j++)
+        {
+            Specialization *curSpec = &sd.specializations[j];
+            
+            for (k = 0; k < curSpec->numCourses; k++)
+                if (curSpec->courses[k] == curCourse)
+                    printf("%s ", curSpec->name);
+                
+        }
+        
+        printf("\n");
+        for (j = 0; j < curCourse->numTeachers; j++)
+        {
+            printf("%s ", curCourse->teachers[j]->name);
+        }
+        
+        printf("\n\n");
+    }
+    
     /* Calculate amount of Lectures (genes) */
     calc_amount_of_lectures(&sd);
     
@@ -59,6 +86,8 @@ int main(void)
     
     /* Print issues with best schedule */
     print_schedule_issues(&gen->schedules[0]);
+    printf("Final schedule has a fitness of %d\n", gen->schedules[0].fitness);
+    printf("Seed: %d\n", seed);
     
     /* Print best schedule for each specialization to file */
     for (i = 0; i < sd.numSpecializations; i++)
