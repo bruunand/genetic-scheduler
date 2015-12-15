@@ -1,32 +1,31 @@
 # AAU Scheduler Configuration
 #   [type] [value]
-set WEEKS 14
+set WEEKS 16
 
 # Add teachers
 #           '[name]'            [offDay period1 period2...]
 add TEACHER 'Lars Peter Jensen'
 add TEACHER 'Kurt Normark'
 add TEACHER 'Jacob Broe'
-add TEACHER 'Mr. Robot'
-add TEACHER 'Olav Geil'
 
 # Add rooms
-#        '[name]'        [#numSeats]
-add ROOM 'Lokale 3.14'   50
-add ROOM 'Auditorium 6'  170
-add ROOM 'Auditorium 7'  200
+#        '[name]'       [#numSeats]
+add ROOM 'Auditorium 1' 120
+add ROOM 'Auditorium 2' 115
+add ROOM 'Auditorium 3' 132
+add ROOM 'Auditorium 4' 132
+add ROOM 'Auditorium 5' 60
+add ROOM 'Auditorium 6' 163
+add ROOM 'Auditorium 7' 260
 
 # Add courses
-#          '[name]'                                     [#numLectures] [teachers...]
-add COURSE 'Problem Based Learning'                     12             0
-add COURSE 'Linear Algebra'                             22             2
-add COURSE 'Imperative Programming'                     14             1
-add COURSE 'Robot mechanics, Modelling, and Simulation' 30             3
-add COURSE 'Robot Programming'                          22             4
+#          '[name]'                                      [#numLectures] [teachers...]
+add COURSE 'Problem Based Learning 1'                    12             0
+add COURSE 'Linear Algebra 1'                            22             2
+add COURSE 'Imperative Programming 1'                     13             1
 
 # Add specializations
 # Names cannot contain forward- nor backslashes
 #                  '[name]'    [#numStudents] [courses...]
-add SPECIALIZATION 'SW1'       110            0 1 2
+add SPECIALIZATION 'SW1'       119            0 1 2
 add SPECIALIZATION 'DAT1'      50             0 1 2
-add SPECIALIZATION 'Robotics'  40             1 3 4
