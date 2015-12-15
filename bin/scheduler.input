@@ -80,43 +80,43 @@ add ROOM 'Auditorium 7' 260
 
 # Add courses
 #          '[name]'                                      [#numLectures] [teachers...]
-add COURSE 'Audio-Visual Sketching 1'                    -              0 1
+add COURSE 'Audio-Visual Sketching 1'                    16             0 1
 
-add COURSE 'Basic Chemistry 1'                           -              2 3
+add COURSE 'Basic Chemistry 1'                           17             2 3
 
-add COURSE 'Basic Programming 1'                         -              5
-add COURSE 'Basic Programming 2'                         -              6
+add COURSE 'Basic Programming 1'                         14             5
+add COURSE 'Basic Programming 2'                         14             6
 
-add COURSE 'Basic Electronics 1'                         -              4
+add COURSE 'Basic Electronics 1'                         15             4
 
 add COURSE 'Calculus 1'                                  22             7
 add COURSE 'Calculus 2'                                  22             8
 
-add COURSE 'Electric Learning 1'                         -              9
+add COURSE 'Electric Learning 1'                         24             9
 
 add COURSE 'Imperative Programming 1'                    13             11
 add COURSE 'Imperative Programming 2'                    13             12
 
-add COURSE 'Introduction to Mathematic Methods'          -              13 14
+add COURSE 'Introduction to Mathematic Methods'          16             13 14
 
-add COURSE 'Introduction to Product and Design Psychology' -            15 16 17
+add COURSE 'Introduction to Product and Design Psychology' 17           15 16 17
 
-add COURSE 'IT-Systems: Cultural Context 1'              -              18 19
+add COURSE 'IT-Systems: Cultural Context 1'              14             18 19
 
 add COURSE 'Linear Algebra 1'                            22             20
 add COURSE 'Linear Algebra 2'                            22             21
 add COURSE 'Linear Algebra 3'                            22             22
 add COURSE 'Linear Algebra 4'                            22             23
 
-add COURSE 'Operations Management and Organizations'     -              24 25 26
+add COURSE 'Operations Management and Organizations'     15             24 25 26
 
-add COURSE 'PV 1'                                        12             -
-add COURSE 'PV 2'                                        12             -
-add COURSE 'PV 3'                                        12             -
-add COURSE 'PV 4'                                        12             -
-add COURSE 'PV 5'                                        12             -
-add COURSE 'PV 6'                                        12             -
-add COURSE 'PV 7'                                        12             -
+add COURSE 'PV 1'                                        12             27
+add COURSE 'PV 2'                                        12             28
+add COURSE 'PV 3'                                        12             29
+add COURSE 'PV 4'                                        12             30
+add COURSE 'PV 5'                                        12             31
+add COURSE 'PV 6'                                        12             32
+add COURSE 'PV 7'                                        12             33
 
 # Add specializations
 # Names cannot contain forward- nor backslashes
@@ -135,7 +135,7 @@ add SPECIALIZATION 'PDP1'      22             2 23 11
 
 add SPECIALIZATION 'FYS1'      19             5 7 17
 add SPECIALIZATION 'NANO1'     18             5 7 25
-add SPECIALIZATION 'EGI1'      64             5 - 16
+add SPECIALIZATION 'EGI1'      64             5 16
 
 add SPECIALIZATION 'GBE1'      76             3 17 16
 add SPECIALIZATION 'BAIT1'     29             3 12 21
