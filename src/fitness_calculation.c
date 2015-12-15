@@ -28,9 +28,9 @@ int calcfit_capacity(SemesterData *sd, Lecture *lect)
     
     /* Functions, calculations and pointers used multiple times are assigned to local variables. */
     roomSeats = lect->assignedRoom->seats;
-    roomCap = MAX_OVER_CAPACITY * roomSeats;
+    roomCap = 1 + (MAX_OVER_CAPACITY * roomSeats);
     numStudents = get_students_on_course(sd, lect->assignedCourse);
-
+    
     /*
      * Fitness is increased every time by PENALTY_ROOM_TOO_SMALL per 5% room capacity exceeded.
      * Set to PENALTY_ROOM_TOO_BIG if half or less of the seats are used.

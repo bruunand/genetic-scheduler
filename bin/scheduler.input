@@ -77,6 +77,14 @@ add ROOM 'Auditorium 4' 132
 add ROOM 'Auditorium 5' 60
 add ROOM 'Auditorium 6' 163
 add ROOM 'Auditorium 7' 260
+add ROOM 'A416'         24
+add ROOM 'A414'         48
+add ROOM 'A413'         64
+add ROOM 'A315'         48
+add ROOM 'A314'         64
+add ROOM 'A309'         64
+add ROOM 'A223'         64
+add ROOM 'A206'         12
 
 # Add courses
 #          '[name]'                                      [#numLectures] [teachers...]

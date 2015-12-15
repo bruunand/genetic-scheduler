@@ -57,6 +57,9 @@ int main(void)
     /* Run genetic algorithm */
     run_ga(&gen, &sd);
     
+    /* Print issues with best schedule */
+    print_schedule_issues(&gen->schedules[0]);
+    
     /* Print best schedule for each specialization to file */
     for (i = 0; i < sd.numSpecializations; i++)
     {
@@ -70,6 +73,7 @@ int main(void)
     free_generation(gen);
     
     printf("Finished, ran for %d seconds.\n", time(NULL) - startTime);
+    getchar();
     
     return 0;
 }

@@ -20,6 +20,6 @@ gcc -g -c -ansi -pedantic -Wall src/genetic_algorithm.c -o obj/genetic_algorithm
 gcc -g -ansi -pedantic -Wall src/scheduler.c obj/html_output.o obj/fitness_calculation.o obj/input_reader.o obj/data_utility.o obj/genetic_algorithm.o -o bin/Scheduler.exe
 
 :: Compile test executable
-gcc -g -ansi -pedantic -Wall src/test.c obj/fitness_calculation.o obj/input_reader.o obj/data_utility.o -o bin/Test.exe
+gcc -g -ansi -pedantic -Wall src/test.c obj/html_output.o obj/fitness_calculation.o obj/input_reader.o obj/data_utility.o -o bin/Test.exe
 
 pause

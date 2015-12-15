@@ -7,18 +7,24 @@
 #include "input_reader.h"
 #include "data_utility.h"
 #include "fitness_calculation.h"
+#include "html_output.h"
 
 #define TEST_LECTURES_IN_COURSE 15
+#define TEST_NUM_WEEKS 4
+#define TEST_NUM_STUDENTS 160
 
-void test_calc_lecture_amount(SemesterData *sd)
+void test_calc_lecture_amount(SemesterData *sd, int expected)
 {
     calc_amount_of_lectures(sd);
-    assert(sd->numLectures == TEST_LECTURES_IN_COURSE);
+    printf("Lecture test: %d\n", sd->numLectures);
+    assert(sd->numLectures == expected);
 }
 
 void test_calcfit_capacity(SemesterData *sd, Lecture *lect)
 {
-    assert(calcfit_capacity(sd, lect) > 0);
+    int res = calcfit_capacity(sd, lect);
+    printf("Capacity test: %d\n", res);
+    assert(res > 0);
 }
 
 int main(void)
@@ -27,13 +33,17 @@ int main(void)
     Schedule *testSchedule;
     SemesterData sd;
     OffTime offTimes[2];
-    srand(1234);
     
+    /* Set seed to a constant value so we'll always use the same schedule.
+     * The test file will need to be updated if the generation
+     * initializer is changed.
+    */
+    srand(0);
+    
+    /* Setup test */
     memset(&sd, 0, sizeof(SemesterData));
     testGen->sd = &sd;
-    
-    /* Test for one week */
-    sd.numWeeks = 1;
+    sd.numWeeks = TEST_NUM_WEEKS;
 
     /* Teacher is unavailable on day 2, period 0 */
     offTimes[0].day = 2;
@@ -45,8 +55,9 @@ int main(void)
     offTimes[1].periods[0] = 0;
     offTimes[1].periods[1] = 1;
 
-    /* Add a room with 150 seats */
-    add_room(&sd, "Dummy Room", 150);
+    /* Add rooms */
+    add_room(&sd, "Dummy Room 1", 150);
+    add_room(&sd, "Dummy Room 2", 100);
     
     /* Add a teacher with two offtimes */
     add_teacher(&sd, "Dummy Teacher", 2, offTimes);
@@ -55,25 +66,14 @@ int main(void)
     add_course(&sd, "Dummy Course", TEST_LECTURES_IN_COURSE, sd.numTeachers, &sd.teachers);
     
     /* Add a specialization that has the Dummy Course */
-    add_specialization(&sd, "Dummy Specialization", 0, sd.numCourses, &sd.courses);
-    
-    /* Test calculation of Lecture amount */
-    test_calc_lecture_amount(&sd);
-    
+    add_specialization(&sd, "Dummy Specialization", TEST_NUM_STUDENTS, sd.numCourses, &sd.courses);
+
     /* Initialize test generation */
     initialize_generation(&testGen, &sd);
     testSchedule = &testGen->schedules[0];
     
-    /* Add test lectures */
-    set_lecture(&testSchedule->lectures[0], 2, 0, &sd.rooms[0], &sd.courses[0]);
-    set_lecture(&testSchedule->lectures[1], 3, 1, &sd.rooms[0], &sd.courses[0]);
-    
-    /* Test capacity function */
-    test_calcfit_capacity(&sd, &testSchedule->lectures[0]);
-    test_calcfit_capacity(&sd, &testSchedule->lectures[1]);
-    
-    /* Reset flags before testing */
-    reset_schedule_flags(testSchedule);
+    /* Write to file */
+    print_schedule_to_file(testSchedule, &sd.specializations[0], "testschedule.html");
     
     return 0;
 }

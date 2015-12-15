@@ -12,3 +12,5 @@ void add_teacher(SemesterData *sd, char *name, int numOffTimes, OffTime *offTime
 void add_room(SemesterData *sd, char *name, int seats);
 void add_course(SemesterData *sd, char *name, int totLectures, int numTeachers, Teacher **teachers);
 void add_specialization(SemesterData *sd, char *name, int numStudents, int numCourses, Course **courses);
+
+void validate_input(SemesterData *sd);

@@ -33,7 +33,7 @@
  *  The amount of days on one week
  */
 
-#define GENERATION_SIZE 500
+#define GENERATION_SIZE 100
 /**
  *  \def GENERATION_SIZE
  *  The amount of Schedules in one Generation
@@ -43,7 +43,7 @@
  *  \def MAX_GENERATIONS
  *  The maximum amount of generations till the program stops trying
  */
-#define MUTATION_CHANCE 10
+#define MUTATION_CHANCE 15
 /**
  *  \def MUTATION_CHANCE
  *  The chance of a mutation to happen
@@ -65,6 +65,11 @@
  *  \def ERROR_FILE_NULL_PTR
  *  Sent in the event that we cannot find a requested file
  */
+ #define ERROR_INVALID_INPUT 4
+/**
+ *  \def ERROR_INVALID_INPUT
+ *  Error caused by invalid user input
+ */
 
 #define MAX_OVER_CAPACITY 1.05
 /**
@@ -78,10 +83,10 @@
  */
 
 /* Penalties */
-#define PENALTY_ROOM_TOO_BIG      25
+#define PENALTY_ROOM_TOO_BIG      5
 /**
  *  \def PENALTY_ROOM_TOO_BIG
- *  Given if the room is larger than the amount of students
+ *  Given if the room is twice the amount of students
  */
 #define PENALTY_ROOM_TOO_SMALL    50
 /**
@@ -108,7 +113,7 @@
  *  \def PENALTY_DAILY_LIMIT
  *  Given if a specific lecture appeares more than once per day
  */
-#define PENALTY_WEEKLY_LIMIT      10
+#define PENALTY_WEEKLY_LIMIT      5
 /**
  *  \def PENALTY_WEEKLY_LIMIT
  *  Given if there are more lectures in one week than a defined number

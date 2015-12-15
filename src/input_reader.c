@@ -10,6 +10,7 @@
 #include "structs.h"
 #include "input_reader.h"
 #include "defs.h"
+#include "data_utility.h"
 
 /**
  *  \brief Initial function for the config reader
@@ -67,6 +68,9 @@ int read_config(char *fileName, SemesterData *sd)
     } while (c != EOF);
     
     fclose(fp);
+    
+    /* Validate input */
+    validate_input(sd);
        
     return 1;
 }
@@ -369,4 +373,41 @@ void add_specialization(SemesterData *sd, char *name, int numStudents, int numCo
     sd->specializations[specIndex].numStudents = numStudents;
     sd->specializations[specIndex].numCourses = numCourses;
     sd->specializations[specIndex].courses = courses;
+}
+
+/**
+ *  \brief Validates user input
+ *  
+ *  \param [in] sd Pointer to a SemesterData to validate
+ *  
+ *  \details Exits if user input is invalid
+ */
+void validate_input(SemesterData *sd)
+{
+    int errors = 0, i;
+    
+    /* Go through all course */
+    for (i = 0; i < sd->numCourses; i++)
+    {
+        Course *curCourse = &sd->courses[i];
+        int am = get_students_on_course(sd, curCourse);
+        
+        printf("%d on %s\n", am, curCourse->name);
+        
+        if (am == 0)
+        {
+            printf("Input error: %s has no assigned students.\n",
+                curCourse->name);
+            errors++;
+        }
+    }
+    
+    /* Exit if errors found */                
+    if (errors)
+    {
+        printf("%d input errors.\n", errors);
+        
+        exit(ERROR_INVALID_INPUT);
+    }
+    
 }
