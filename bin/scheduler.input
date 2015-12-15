@@ -10,7 +10,7 @@ add TEACHER 'Kasper Rodil'
 
 # Basic Chemistry
 add TEACHER 'Kim Larsen'
-add TEACHER 'Bent Rønsholdt'
+add TEACHER 'Bent Roensholdt'
 
 # Basic Electronics
 add TEACHER 'Ole Keil'
@@ -20,24 +20,27 @@ add TEACHER 'Rikke Gade'
 add TEACHER 'Anders Bruun'
 
 # Calculus
-add TEACHER 'Horia Cornean'
-add TEACHER 'Hans Olav Geil'
+# Horia is not available in the third week
+add TEACHER 'Horia Cornean' 10 1 1 11 1 1 12 1 1 13 1 1 14 1 1
+# Hans is not available in week 8
+add TEACHER 'Hans Olav Geil' 35 1 1 36 1 1 37 1 1 38 1 1 39 1 1
 
 # Electronic Learning
 add TEACHER 'Esben Skovsen'
 add TEACHER 'Carsten Bojesen'
 
 # Imperative Programming
-add TEACHER 'Kurt Normark'
+# Kurt Noermark is not available in the second week
+add TEACHER 'Kurt Normark' 5 1 1 6 1 1 7 1 1 8 1 1 9 1 1
 add TEACHER 'Jens Dalsgaard Nielsen'
 
 # Introduction to Mathematic Methods
-add TEACHER 'Esben Høg'
+add TEACHER 'Esben Hoeg'
 add TEACHER 'Emil Ottosen'
 
 # Introduction to Product and Design Psychology
 add TEACHER 'Nikita Kharlamov'
-add TEACHER 'Tina Øvad Pedersen'
+add TEACHER 'Tina oevad Pedersen'
 add TEACHER 'Rodrigo Ordonez'
 
 # IT-Systems
@@ -46,7 +49,8 @@ add TEACHER 'Tem Frank Andersen'
 
 # Linear Algebra
 add TEACHER 'Lisbeth Fajstrup'
-add TEACHER 'Jacob Broe'
+# Jacob Broe is not available the first two days 
+add TEACHER 'Jacob Broe' 0 1 1 1 1 1
 add TEACHER 'Nikolaj Hess-Nielsen'
 add TEACHER 'Diego Ruano'
 
@@ -59,14 +63,15 @@ add TEACHER 'Rikke Vestergaard Matthiesen'
 add TEACHER 'Claus Monrad Spliid'
 add TEACHER 'Karl Sperling'
 add TEACHER 'Lars Botin'
-add TEACHER 'Bettina Dahl Søndergaard'
-add TEACHER 'Lars Peter Jensen'
+add TEACHER 'Bettina Dahl Soendergaard'
+# Lars is only available the first lecture in the first week
+add TEACHER 'Lars Peter Jensen' 0 0 1 1 0 1 2 0 1 3 0 1 4 0 1
 add TEACHER 'Aida Guerra'
 add TEACHER 'Jette Holgaard'
 add TEACHER 'Lone Stub Pedersen'
 add TEACHER 'Mette Mosgaard'
 add TEACHER 'Troels Hegland'
-add TEACHER 'Pia Bøgelund'
+add TEACHER 'Pia Boegelund'
 
 # Add rooms
 #        '[name]'       [#numSeats]
@@ -81,9 +86,9 @@ add ROOM 'A416'         24
 add ROOM 'A414'         48
 add ROOM 'A413'         64
 add ROOM 'A315'         48
-add ROOM 'A314'         64
-add ROOM 'A309'         64
-add ROOM 'A223'         64
+#add ROOM 'A314'         64
+#add ROOM 'A309'         64
+#add ROOM 'A223'         64
 add ROOM 'A206'         12
 
 # Add courses

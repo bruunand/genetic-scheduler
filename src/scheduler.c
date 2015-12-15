@@ -72,7 +72,15 @@ int main(void)
         printf("\n");
         for (j = 0; j < curCourse->numTeachers; j++)
         {
-            printf("%s ", curCourse->teachers[j]->name);
+            Teacher *curTeacher = curCourse->teachers[j];
+            
+            printf("%s\n", curTeacher->name);
+            for (k = 0; k < curTeacher->numOffTimes; k++)
+            {
+                OffTime *curOffTime = &curTeacher->offTimes[k];
+                
+                printf("- %d (%d, %d)\n", curOffTime->day, curOffTime->periods[0], curOffTime->periods[1]);
+            }
         }
         
         printf("\n\n");
