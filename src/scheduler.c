@@ -46,7 +46,7 @@ int main(void)
     startTime = time(NULL);
     
     /* Read configuration file */
-    if (!read_config("scheduler.input", &sd))
+    if (!read_config("scheduler.cfg", &sd))
     {
         printf("Error: Could not read configuration file.\n");
         exit(1);

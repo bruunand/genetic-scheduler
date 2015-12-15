@@ -108,7 +108,7 @@ void print_title(FILE *f, const char* title)
  */
 void begin_print_data(FILE *f, const char* str)
 {
-    fprintf(f, "\t\t<td>%s", str);
+    fprintf(f, "\t\t<td height=\"100px\">%s", str);
 }
 
 /**
