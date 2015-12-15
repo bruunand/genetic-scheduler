@@ -35,7 +35,7 @@ void run_ga(Generation **curGen, SemesterData *sd)
     initialize_generation(curGen,   sd);
     initialize_generation(&nextGen, sd);
             
-    for (i = 0; i < MAX_GENERATIONS; i++)
+    for (i = 0; i <= MAX_GENERATIONS; i++)
     {
         /* Calculate fitness of current generation */
         calcfit_generation(*curGen);
@@ -48,7 +48,7 @@ void run_ga(Generation **curGen, SemesterData *sd)
         printf("%3d: %5d (%5d)\n", i + 1, lowestFit, (*curGen)->fitness / GENERATION_SIZE);
         fprintf(output, "%d\t%d\t%d\n", i + 1, lowestFit, (*curGen)->fitness / GENERATION_SIZE);
         
-        if (lowestFit == 0)
+        if (lowestFit == 0 || i == MAX_GENERATIONS)
             break;
         
         /* Selection */
