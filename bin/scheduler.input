@@ -120,10 +120,10 @@ add COURSE 'Operations Management and Organizations'     15             24 25 26
 add COURSE 'PV 1'                                        12             27
 add COURSE 'PV 2'                                        12             28
 add COURSE 'PV 3'                                        12             29
-add COURSE 'PV 4'                                        12             30
-add COURSE 'PV 5'                                        12             31
-add COURSE 'PV 6'                                        12             32
-add COURSE 'PV 7'                                        12             33
+add COURSE 'PV 4'                                        12             32 35
+add COURSE 'PV 5'                                        12             32
+add COURSE 'PV 6'                                        12             36
+add COURSE 'PV 7'                                        12             37 38
 
 # Add specializations
 # Names cannot contain forward- nor backslashes
@@ -144,7 +144,7 @@ add SPECIALIZATION 'FYS1'      19             5 7 16
 add SPECIALIZATION 'NANO1'     18             5 7 23
 add SPECIALIZATION 'EGI1'      64             5 17
 
-add SPECIALIZATION 'GBE1'      76             3 17 15
+add SPECIALIZATION 'GBE1'      76             3 15 17
 add SPECIALIZATION 'BAIT1'     29             3 12 20
 add SPECIALIZATION 'INF1'      35             3 12 20
 
