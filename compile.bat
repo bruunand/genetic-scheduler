@@ -4,7 +4,7 @@ set SRCDIR=src
 set OBJDIR=obj
 set BINDIR=bin
 set EXENAME=Scheduler
-set FLAGS=-g -ansi -pedantic -Wall
+set FLAGS=-g -ansi -pedantic -Wall -O3 -Wextra
 
 mkdir %BINDIR%
 mkdir %OBJDIR%
