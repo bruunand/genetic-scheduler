@@ -33,13 +33,13 @@ int calcfit_capacity(SemesterData *sd, Lecture *lect)
     
     /*
      * Fitness is increased every time by PENALTY_ROOM_TOO_SMALL per 5% room capacity exceeded.
-     * Set to PENALTY_ROOM_TOO_BIG if half or less of the seats are used.
+     * Set to PENALTY_ROOM_TOO_BIG if the room is too big
     */
     if (numStudents > roomCap)
         fitness = PENALTY_ROOM_TOO_SMALL * ((numStudents - roomCap) / (roomCap - roomSeats));
-    else if ((roomSeats / numStudents) >= 2)
+    else if ((roomSeats / numStudents) >= 3)
         fitness = PENALTY_ROOM_TOO_BIG;
-
+    
     return fitness;
 }
 
@@ -72,7 +72,7 @@ int calcfit_teacher_availability(Schedule *schedule, Lecture *lect)
         /* Test if they have another lecture at this time */
         for (j = 0; j < schedule->parentGen->sd->numLectures; j++)
         {
-            Lecture *curLect = &schedule->lectures[i];
+            Lecture *curLect = &schedule->lectures[j];
             
             /* Skip lecture being tested */
             if (curLect == lect)
@@ -107,7 +107,7 @@ int calcfit_doublebooking(Schedule *schedule, Lecture *lect)
 {
     Specialization **specs;
     int fitness = 0, numSpecs, i, j;
-        
+
     /* Test room doublebooking */
     for(i = 0; i < schedule->parentGen->sd->numLectures; i++)
     {

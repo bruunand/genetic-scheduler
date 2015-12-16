@@ -33,12 +33,12 @@
  *  The amount of days on one week
  */
 
-#define GENERATION_SIZE 250
+#define GENERATION_SIZE 125
 /**
  *  \def GENERATION_SIZE
  *  The amount of Schedules in one Generation
  */
-#define MAX_GENERATIONS 10000
+#define MAX_GENERATIONS 100
 /**
  *  \def MAX_GENERATIONS
  *  The maximum amount of generations till the program stops trying
@@ -96,7 +96,7 @@
 #define PENALTY_DOUBLEBOOKING     200
 /**
  *  \def PENALTY_DOUBLEBOOKING
- *  Given in case of room being doublebooked
+ *  Given in case of room or specialization being doublebooked
  */
 #define PENALTY_TEACHER_BOOKED    200
 /**
