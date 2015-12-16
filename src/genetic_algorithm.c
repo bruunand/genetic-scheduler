@@ -22,7 +22,7 @@
  */
 void run_ga(Generation **curGen, SemesterData *sd)
 {
-    int i, carriedOver, lowestFit;
+    int i, carriedOver, lowestFit, avgFit, worstFit;
     FILE *output;
     Generation *nextGen = 0;
     
@@ -45,8 +45,12 @@ void run_ga(Generation **curGen, SemesterData *sd)
 
         /* Print best schedule */
         lowestFit = (*curGen)->schedules[0].fitness;
-        printf("%3d: %d (%5d)\n", i, lowestFit,  (*curGen)->fitness / GENERATION_SIZE);
-        fprintf(output, "%d\t%d\t%d\n", i, lowestFit, (*curGen)->fitness / GENERATION_SIZE);
+        avgFit = (*curGen)->fitness / GENERATION_SIZE;
+        worstFit = (*curGen)->schedules[GENERATION_SIZE - 1].fitness;
+        
+        printf("%3d: %d < %d (%5d)\n", i, lowestFit, worstFit, avgFit);
+        
+        fprintf(output, "%d\t%d\t%d\t%d\n", i, lowestFit, avgFit, worstFit);
         
         if (lowestFit == 0 || i == MAX_GENERATIONS)
             break;
