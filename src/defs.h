@@ -33,17 +33,17 @@
  *  The amount of days on one week
  */
 
-#define GENERATION_SIZE 125
+#define GENERATION_SIZE 250
 /**
  *  \def GENERATION_SIZE
  *  The amount of Schedules in one Generation
  */
-#define MAX_GENERATIONS 100
+#define MAX_GENERATIONS 500
 /**
  *  \def MAX_GENERATIONS
  *  The maximum amount of generations till the program stops trying
  */
-#define MUTATION_CHANCE 15
+#define MUTATION_CHANCE 30
 /**
  *  \def MUTATION_CHANCE
  *  The chance of a mutation to happen
