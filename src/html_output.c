@@ -189,7 +189,8 @@ void print_period(Schedule *schedule, Specialization *sp, FILE *f, int periodId,
             /* Check if there's already a course on this hour and day*/
             if (foundMatches)
             {
-                printf("Warning: Overlap on %d, %s at %s\n",
+                printf("Warning: Specialization %s is doublebooked on %d, %s at %s\n",
+                    sp->name,
                     lect->day,
                     get_name_of_day(lect->day),
                     get_name_of_period(lect->period));
@@ -230,7 +231,6 @@ void print_period(Schedule *schedule, Specialization *sp, FILE *f, int periodId,
  */
 void print_schedule_to_file(Schedule *schedule, Specialization *sp, char* fileName)
 {
-    
     int i, j;
     FILE *f;
 

@@ -5,8 +5,8 @@
 int read_config(char *fileName, SemesterData *data);
 void handle_line(char *line, SemesterData *data);
 
-int read_int(char *line, int *position, int *out);
-int read_multiple_words(char *line, int *position, char *out);
+int read_int(char *line, unsigned int *position, int *out);
+int read_multiple_words(char *line, unsigned int *position, char *out);
 
 void add_teacher(SemesterData *sd, char *name, int numOffTimes, OffTime *offTimes);
 void add_room(SemesterData *sd, char *name, int seats);

@@ -87,7 +87,7 @@ int read_config(char *fileName, SemesterData *sd)
 void handle_line(char *line, SemesterData *sd)
 {
     char command[16], typeName[16];
-    int p = 0; /* Keeps track of our current position in the string */
+    unsigned int p = 0; /* Keeps track of our current position in the string */
 
     /* Read command */
     if (!sscanf(line + p, "%s", command))
@@ -247,7 +247,7 @@ void handle_line(char *line, SemesterData *sd)
  *  \details The function goes through the string (line) until there are no more characters.
  *  It then converts the content of the string to int and outputs it to the out variable
  */
-int read_int(char* line, int* position, int* out)
+int read_int(char* line, unsigned int* position, int* out)
 {
     char outStr[16];
 
@@ -281,7 +281,7 @@ int read_int(char* line, int* position, int* out)
  *  \details This function reads from the line string and outputs
  *  everything between two apostrophes to the output string
  */
-int read_multiple_words(char* line, int* position, char* out)
+int read_multiple_words(char* line, unsigned int* position, char* out)
 {
     /* Do not go beyond the bounds of the string */
     if (*position >= strlen(line))

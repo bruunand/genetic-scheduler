@@ -22,8 +22,7 @@ int main(void)
     Schedule *testSchedule;
     SemesterData sd;
     Lecture testLecture;
-    int i;
-    
+
     /* Set seed to a constant value so we'll always use the same schedule.
      * The test file will need to be updated if the generation
      * initializer is changed.

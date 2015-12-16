@@ -348,10 +348,62 @@ int get_specializations_on_course(SemesterData *sd, Course *course, Specializati
 /**
  *  \brief Brief
  *  
- *  \param [in] gp Parameter_Description
+ *  \param [in] schedule Pointer to a Schedule
  *  \return Return_Description
  *  
  *  \details Details
+ */
+void print_doublebooked_rooms(Schedule *schedule)
+{
+    int i, j;
+    
+    reset_schedule_flags(schedule);
+    
+    for (i = 0; i < schedule->parentGen->sd->numLectures; i++)
+    {
+        Lecture *outerLect = &schedule->lectures[i];
+        
+        if (outerLect->flags.doubleBookingRoom)
+            continue;
+            
+        for (j = 0; j < schedule->parentGen->sd->numLectures; j++)
+        {
+            Lecture *innerLect = &schedule->lectures[j];
+            
+            /* Don't check for both lectures */
+            if (i != j)
+                continue;
+
+            /* Check if same course */
+            if (outerLect->assignedCourse == innerLect->assignedCourse)
+                continue;
+            
+            /* Check if on same day */
+            if (outerLect->day != innerLect->day || outerLect->period != innerLect->period)
+                continue;
+            
+            /* Check if same room */
+            if (outerLect->assignedRoom != innerLect->assignedRoom)
+                continue;
+            
+            innerLect->flags.doubleBookingRoom = 1;
+            
+            printf("Warning: Room %s is doublebooked on %d, %s at %s\n",
+                outerLect->assignedRoom->name,
+                outerLect->day,
+                get_name_of_day(outerLect->day),
+                get_name_of_period(outerLect->period));
+        }
+    }
+}
+
+
+/**
+ *  \brief Brief
+ *  
+ *  \param [in] gp Pointer to a generation
+ *  
+ *  \details Free memory allocated for generation
  */
 void free_generation(Generation *gp)
 {

@@ -30,20 +30,16 @@
 int main(void)
 {
     char specName[32];
-    int i, j, k, l, seed, startTime;
+    int i, seed, startTime;
     Generation *gen = 0;
     SemesterData sd;
 
-    /* Null all SemesterData values */
     memset(&sd, 0, sizeof(SemesterData));
- 
-    /*if (!scanf("%d", &seed))*/
-		seed = time(NULL);
-        /*seed = 1450193462;*/
-    srand(seed);
-        
-    /* Set start time to now */
+    
     startTime = time(NULL);
+        
+    seed = startTime;
+    srand(seed);
     
     /* Read configuration file */
     if (!read_config("scheduler.cfg", &sd))
@@ -52,50 +48,26 @@ int main(void)
         exit(1);
     }
 
-    /* DEBUG */
-    for (i = 0; i < sd.numCourses; i++)
-    {
-        Course *curCourse = &sd.courses[i];
-        
-        printf("%s\nSpecs: ", curCourse->name);
-        
-        for (j = 0; j < sd.numSpecializations; j++)
-        {
-            Specialization *curSpec = &sd.specializations[j];
-            
-            for (k = 0; k < curSpec->numCourses; k++)
-                if (curSpec->courses[k] == curCourse)
-                    printf("%s ", curSpec->name);
-                
-        }
-        
-        printf("\n");
-        for (j = 0; j < curCourse->numTeachers; j++)
-        {
-            Teacher *curTeacher = curCourse->teachers[j];
-            
-            printf("%s\n", curTeacher->name);
-            for (k = 0; k < curTeacher->numOffTimes; k++)
-            {
-                OffTime *curOffTime = &curTeacher->offTimes[k];
-                
-                printf("- %d (%d, %d)\n", curOffTime->day, curOffTime->periods[0], curOffTime->periods[1]);
-            }
-        }
-        
-        printf("\n\n");
-    }
-    
     /* Calculate amount of Lectures (genes) */
     calc_amount_of_lectures(&sd);
     
     /* Run genetic algorithm */
     run_ga(&gen, &sd);
     
-    /* Print issues with best schedule */
-    print_schedule_issues(&gen->schedules[0]);
-    printf("Final schedule has a fitness of %d\n", gen->schedules[0].fitness);
-    printf("Seed: %d\n", seed);
+    /* Print final schedule fitness */
+    printf("\nFinal schedule has a fitness of %d (seed: %d)\n",
+        gen->schedules[0].fitness,
+        seed);
+        
+    /* List issues with best schedule */
+    if (gen->schedules[0].fitness > 0)
+    {
+        printf("Schedule issues:\n");
+        print_schedule_issues(&gen->schedules[0]);
+        
+        print_doublebooked_rooms(&gen->schedules[0]);
+    }
+    printf("\n");
     
     /* Print best schedule for each specialization to file */
     for (i = 0; i < sd.numSpecializations; i++)
@@ -109,7 +81,8 @@ int main(void)
     free_semesterdata(&sd);
     free_generation(gen);
     
-    printf("Finished, ran for %d seconds.\n", time(NULL) - startTime);
+    printf("\nFinished, ran for %d seconds.\n", time(NULL) - startTime);
+    printf("Press enter to continue..\n");
     getchar();
     
     return 0;

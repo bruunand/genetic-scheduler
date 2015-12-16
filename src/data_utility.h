@@ -28,6 +28,8 @@ void calc_amount_of_lectures(SemesterData *sd);
 
 int get_specializations_on_course(SemesterData *sd, Course *course, Specialization ***specs);
 
+void print_doublebooked_rooms(Schedule *schedule);
+
 void free_generation(Generation *gp);
 
 void free_semesterdata(SemesterData *sd);
