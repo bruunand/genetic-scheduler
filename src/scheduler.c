@@ -81,7 +81,7 @@ int main(void)
     free_semesterdata(&sd);
     free_generation(gen);
     
-    printf("\nFinished, ran for %d seconds.\n", time(NULL) - startTime);
+    printf("\nFinished, ran for %d seconds.\n", (int)(time(NULL) - startTime));
     printf("Press enter to continue..\n");
     getchar();
     
