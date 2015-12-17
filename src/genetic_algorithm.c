@@ -11,7 +11,6 @@
 #include "data_utility.h"
 #include "fitness_calculation.h"
 
-/* Run genetic algorithm */
 /**
  *  \brief The main function of the algorithm
  *  
@@ -43,13 +42,12 @@ void run_ga(Generation **curGen, SemesterData *sd)
         /* Sort current generation by fitness */
         qsort((*curGen)->schedules, GENERATION_SIZE, sizeof(Schedule), compare_schedule_fitness);
 
-        /* Print best schedule */
+        /* Get lowest, average, worst */
         lowestFit = (*curGen)->schedules[0].fitness;
         avgFit = (*curGen)->fitness / GENERATION_SIZE;
         worstFit = (*curGen)->schedules[GENERATION_SIZE - 1].fitness;
         
         printf("%3d: %d < %d (%5d)\n", i, lowestFit, worstFit, avgFit);
-        
         fprintf(output, "%d\t%d\t%d\t%d\n", i, lowestFit, avgFit, worstFit);
         
         if (lowestFit == 0 || i == MAX_GENERATIONS)
