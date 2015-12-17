@@ -1,6 +1,6 @@
 /**
  *  \file input_reader.c
- *  \brief This script is responsible for reading the data file
+ *  \brief This script is responsible for reading the input file
  */
 #include <stdio.h>
 #include <stdlib.h>

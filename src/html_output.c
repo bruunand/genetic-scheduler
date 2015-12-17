@@ -1,6 +1,6 @@
 /**
  *  \file html_output.c
- *  \brief The html output script is responsible for the html schedules that is being generated
+ *  \brief The html output script is responsible for the html schedules that are being generated
  */
 #include <stdio.h>
 #include <stdlib.h>

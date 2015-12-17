@@ -9,7 +9,7 @@
 #include <assert.h>
 
 #include "structs.h"
-#include "scheduler.h"
+/* #include "scheduler.h" */
 #include "input_reader.h"
 #include "data_utility.h"
 #include "fitness_calculation.h"

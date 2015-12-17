@@ -8,7 +8,7 @@
 
 /**
  *  \struct Room
- *  \brief The Room struct contains the name of a specific room
+ *  \brief The Room struct contains the name and the amount of seats of a specific room
  *  
  *  \var Room::name
  *  The name of the room
@@ -31,7 +31,7 @@ struct Room
  *  The name of the teacher
  *  
  *  \var Teacher::numOffTimes
- *  The number of OffTimes the teacher has_denorm
+ *  The number of OffTimes the teacher has
  *  
  *  \var Teacher::offTimes
  *  Array of OffTimes
@@ -47,7 +47,7 @@ struct Teacher
 /**
  *  \struct OffTime
  *  \brief The OffTime struct contains a day and time period (0 or 1) where
- *  the teacher isn't available for a teacher
+ *  the teacher isn't available
  *  
  *  \var OffTime::day
  *  A specific day the OffTime effects
@@ -142,19 +142,19 @@ struct Flags
  *  \brief The Lecture struct contains information about a specific lecture
  *  
  *  \var Lecture::day
- *  The day the lecture is on
+ *  The day on which the lecture is on
  *  
  *  \var Lecture::period
- *  The period of the day the lecture is on
+ *  The period of the day on which the lecture is on
  *  
  *  \var Lecture::assignedRoom
  *  Pointer to the room assigned to the lecture
  *  
  *  \var Lecture::assignedCourse
- *  Pointer to the course the lecture is part of
+ *  Pointer to the course which the lecture is part of
  *  
  *  \var Lecture::flags
- *  Link to lecture flags
+ *  A collection of flags to provide information on how the lectures fitness is to be calculated
  *  
  *  \var Lecture::fitness
  *  Last calculated fitness value

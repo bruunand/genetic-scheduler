@@ -188,7 +188,7 @@ void reset_schedule_flags(Schedule *schedule)
 }
 
 /**
- *  \brief Set members of a lecture struct
+ *  \brief Set members of a Lecture struct
  *  
  *  \param [in] lect The lecture we want to work with
  *  \param [in] day The new value for day
@@ -205,7 +205,7 @@ void set_lecture(Lecture *lect, int day, int period, Room *room, Course *course)
 }
 
 /**
- *  \brief Check if a teacher has offtime on a given day and period
+ *  \brief Check if a teacher is off work on a given day and period
  *  
  *  \param [in] sd SemesterData contains some information needed by the function
  *  \param [in] teacher Pointer to the teacher we are checking
@@ -346,12 +346,12 @@ int get_specializations_on_course(SemesterData *sd, Course *course, Specializati
 }
 
 /**
- *  \brief Brief
+ *  \brief Prints all cases of a doublebooked room
  *  
  *  \param [in] schedule Pointer to a Schedule
- *  \return Return_Description
- *  
- *  \details Details
+ *
+ *  \details Goes through all information related to a schedule
+ *  and prints all cases of a doublebooked room
  */
 void print_doublebooked_rooms(Schedule *schedule)
 {
@@ -399,7 +399,7 @@ void print_doublebooked_rooms(Schedule *schedule)
 
 
 /**
- *  \brief Brief
+ *  \brief Free all memory associated with a given generation
  *  
  *  \param [in] gp Pointer to a generation
  *  
@@ -417,13 +417,13 @@ void free_generation(Generation *gp)
 }
 
 /**
- *  \brief Free all memory associated with the SemesterData struct.
- *  Dynamically allocated arrays inside the structs are also freed
+ *  \brief Free all memory associated with the semester data variable
  *  
- *  \param [in] sd Parameter_Description
- *  \return Return_Description
  *  
- *  \details Details
+ *  \param [in] sd Pointer to semester data
+ *
+ *  
+ *  \details Dynamically allocated arrays inside the structs are also freed
  */
 void free_semesterdata(SemesterData *sd)
 {
@@ -465,7 +465,7 @@ void free_semesterdata(SemesterData *sd)
 }
 
 /**
- *  \brief Gets a name of a period (08:15-12:00 or 12:30-16:15)
+ *  \brief Gets the name of a period (08:15-12:00 or 12:30-16:15)
  *  
  *  \param [in] periodId The ID of the period to check
  *  \return Returns the name of a period specified by the periodId parameter
@@ -482,7 +482,7 @@ const char* get_name_of_period(int periodId)
 }
 
 /**
- *  \brief Gets a name of a day
+ *  \brief Gets the name of a day
  *  
  *  \param [in] dayId The ID of the day to check
  *  \return Returns the name of a day specified by the dayId parameter

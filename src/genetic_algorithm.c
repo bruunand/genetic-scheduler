@@ -11,6 +11,7 @@
 #include "data_utility.h"
 #include "fitness_calculation.h"
 
+/* Run genetic algorithm */
 /**
  *  \brief The main function of the algorithm
  *  
@@ -70,13 +71,13 @@ void run_ga(Generation **curGen, SemesterData *sd)
 }
 
 /**
- *  \brief Select Schedules using Tournament selection
+ *  \brief Select schedules using Tournament selection
  *  
  *  \param [in] curGen Pointer to the current generation
  *  \param [in] newGen Pointer to the new generation
  *  \return Returns amount of genomes carried over
  *  
- *  \details Schedules (genomes) should be sorted by fitness at this point
+ *  \details schedules (genomes) should be sorted by fitness at this point
  */
 int ga_select(Generation *curGen, Generation *newGen)
 {
@@ -129,7 +130,7 @@ int ga_select(Generation *curGen, Generation *newGen)
 }
 
 /**
- *  \brief Breed population from Schedules up to carryOver
+ *  \brief Breed population from schedules up to carryOver
  *  
  *  \param [in] gp Pointer to the generation to crossbreed
  *  \param [in] carryOver The amount of genomes copied from the generation

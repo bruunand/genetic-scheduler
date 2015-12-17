@@ -1,6 +1,6 @@
 /**
  *  \file fitness_calculation.c
- *  \brief This script contains the functions responsible for calculating fitness values for the population
+ *  \brief This script contains the functions responsible for calculating fitness values for a generation
  */
 #include <stdio.h>
 #include <stdlib.h>
@@ -316,7 +316,7 @@ int calcfit_lecture(Schedule *schedule, Lecture *lect)
 }
 
 /**
- *  \brief Calculate fitness for a schedule/genome
+ *  \brief Calculate fitness for a schedule (genome)
  *  
  *  \param [in] schedule The schedule to calculate fitness for
  *  \return Returns the fitness of the schedule

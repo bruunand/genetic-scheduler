@@ -19,7 +19,7 @@
 #define TABLE_WIDTH 100.0f
 /**
  *  \def TABLE_WIDTH
- *  The The width of the table on the web page
+ *  The width of the table on the web page
  */
 
 #define MAX_PERIODS   2
@@ -30,13 +30,13 @@
 #define DAYS_PER_WEEK 5
 /**
  *  \def DAYS_PER_WEEK
- *  The amount of days on one week
+ *  The amount of days in one week
  */
 
 #define GENERATION_SIZE 250
 /**
  *  \def GENERATION_SIZE
- *  The amount of Schedules in one Generation
+ *  The amount of Schedules in one generation
  */
 #define MAX_GENERATIONS 500
 /**
@@ -86,12 +86,12 @@
 #define PENALTY_ROOM_TOO_BIG      5
 /**
  *  \def PENALTY_ROOM_TOO_BIG
- *  Given if the room is twice the amount of students
+ *  Given if the room supports twice the amount of students
  */
 #define PENALTY_ROOM_TOO_SMALL    50
 /**
  *  \def PENALTY_ROOM_TOO_SMALL
- *  Given if the room is smaller than the amount of students
+ *  Given if the room is smaller than required by the amount of students
  */
 #define PENALTY_DOUBLEBOOKING     200
 /**
