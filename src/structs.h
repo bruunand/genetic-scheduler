@@ -81,6 +81,7 @@ struct Course
 {
     char name[64];
     int totLectures;
+    int maxWeekNum;
     
     int numTeachers;
     struct Teacher **teachers;

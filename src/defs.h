@@ -123,6 +123,11 @@
  *  \def PENALTY_SEMESTER_DISTRIB
  *  Given if there are many lectures by the end of a semester
  */
+#define PENALTY_PAST_MAX_WEEK 500
+/**
+ *  \def PENALTY_PAST_MAX_WEEK
+ *  Given if a lecture is past the max week for the course
+ */
 
 #define MIN(a,b) (((a)<(b))?(a):(b))
 /**

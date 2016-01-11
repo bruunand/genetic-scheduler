@@ -231,6 +231,15 @@ int calcfit_distribution_semester(Schedule *schedule, Lecture *lect)
     
     numSpecs = get_specializations_on_course(schedule->parentGen->sd, lect->assignedCourse, &specs);
     
+    /* Check if lecture is past max week */
+    if (lect->assignedCourse->maxWeekNum != 0)
+    {
+        int lectureWeekIndex = lect->day / DAYS_PER_WEEK;
+        
+        if (lectureWeekIndex >= lect->assignedCourse->maxWeekNum)
+            fitness += PENALTY_PAST_MAX_WEEK;
+    }
+    
     /* Get fitness for all specializations */
     for (i = 0; i < numSpecs; i++)
         fitness += calcfit_distribution_semester_inner(schedule, lect, specs[i]);
