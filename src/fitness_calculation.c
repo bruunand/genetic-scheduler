@@ -208,7 +208,7 @@ int calcfit_distribution_weekly(Schedule *schedule, Lecture *lect)
     /* Compute fitness */
     if (totCoursePerDay > 1)
         fitness += MIN(500, pow(PENALTY_DAILY_LIMIT, totCoursePerDay - 1));
-    if (totCoursePerWeek > 3)
+    if (totCoursePerWeek > 2)
         fitness += MIN(500, pow(PENALTY_WEEKLY_LIMIT, totCoursePerWeek - 3));
     
     return fitness;
@@ -288,8 +288,8 @@ int calcfit_distribution_semester_inner(Schedule *schedule, Lecture *lect, Speci
         curLect->flags.semesterCounted = 1;
     }
 
-    /* Distribute most lectures in first 3/4 of the semester */
-    if (weekNum > schedule->parentGen->sd->numWeeks * 3 / 4)
+    /* Distribute most lectures in first 2/3 of the semester */
+    if (weekNum > schedule->parentGen->sd->numWeeks * 2 / 3)
         maxLecturesCurWeek = (MAX_LECTURES_PER_WEEK - (weekNum + 1) * ((float) (MAX_LECTURES_PER_WEEK - 1) / schedule->parentGen->sd->numWeeks));
     else
         maxLecturesCurWeek = MAX_LECTURES_PER_WEEK;

@@ -118,12 +118,12 @@
  *  \def PENALTY_WEEKLY_LIMIT
  *  Given if there are more lectures in one week than a defined number
  */
-#define PENALTY_SEMESTER_DISTRIB  50
+#define PENALTY_SEMESTER_DISTRIB  100
 /**
  *  \def PENALTY_SEMESTER_DISTRIB
  *  Given if there are many lectures by the end of a semester
  */
-#define PENALTY_PAST_MAX_WEEK 500
+#define PENALTY_PAST_MAX_WEEK 200
 /**
  *  \def PENALTY_PAST_MAX_WEEK
  *  Given if a lecture is past the max week for the course

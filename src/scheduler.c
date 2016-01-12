@@ -30,7 +30,7 @@
 int main(void)
 {
     char specName[32];
-    int i, seed, startTime;
+    int i, j, seed, startTime;
     Generation *gen = 0;
     SemesterData sd;
 
@@ -77,6 +77,29 @@ int main(void)
         printf("Writing to file %s..\n", specName);
         print_schedule_to_file(&gen->schedules[0], &sd.specializations[i], specName);
     }
+    
+    /* Print average lectures per week */
+    FILE *f = fopen("average.txt", "w+");
+    
+    for (i = 0; i < sd.numWeeks; i++)
+    {
+        int lecturesCurWeek = 0;
+        
+        for (j = 0; j < sd.numLectures; j++)
+        {
+            if (gen->schedules[0].lectures[j].day / DAYS_PER_WEEK == i)
+            {
+                lecturesCurWeek++;
+            }
+        }
+        
+        printf("%.2f\n", lecturesCurWeek / (float) sd.numSpecializations);
+        
+        fprintf(f, "%d\t%.2f\n", i + 1, lecturesCurWeek / (float) sd.numSpecializations);
+        
+    }
+    
+    fclose(f);
     
     free_semesterdata(&sd);
     free_generation(gen);
