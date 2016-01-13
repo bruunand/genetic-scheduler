@@ -29,6 +29,7 @@
  */
 int main(void)
 {
+    FILE *out;
     char specName[32];
     int i, j, seed, startTime;
     Generation *gen = 0;
@@ -39,6 +40,7 @@ int main(void)
     startTime = time(NULL);
         
     seed = startTime;
+    seed = 1452719315;
     srand(seed);
     
     /* Read configuration file */
@@ -79,7 +81,7 @@ int main(void)
     }
     
     /* Print average lectures per week */
-    FILE *f = fopen("average.txt", "w+");
+    out = fopen("debug.txt", "w+");
     
     for (i = 0; i < sd.numWeeks; i++)
     {
@@ -92,14 +94,11 @@ int main(void)
                 lecturesCurWeek++;
             }
         }
-        
-        printf("%.2f\n", lecturesCurWeek / (float) sd.numSpecializations);
-        
-        fprintf(f, "%d\t%.2f\n", i + 1, lecturesCurWeek / (float) sd.numSpecializations);
-        
+
+        fprintf(out, "%d\t%.2f\n", i + 1, lecturesCurWeek / (float) sd.numSpecializations);
     }
     
-    fclose(f);
+    fclose(out);
     
     free_semesterdata(&sd);
     free_generation(gen);

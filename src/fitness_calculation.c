@@ -209,7 +209,7 @@ int calcfit_distribution_weekly(Schedule *schedule, Lecture *lect)
     if (totCoursePerDay > 1)
         fitness += MIN(500, pow(PENALTY_DAILY_LIMIT, totCoursePerDay - 1));
     if (totCoursePerWeek > 2)
-        fitness += MIN(500, pow(PENALTY_WEEKLY_LIMIT, totCoursePerWeek - 3));
+        fitness += MIN(500, pow(PENALTY_WEEKLY_LIMIT, totCoursePerWeek - 2));
     
     return fitness;
 }

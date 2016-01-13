@@ -51,7 +51,7 @@ void run_ga(Generation **curGen, SemesterData *sd)
         printf("%3d: %d < %d (%5d)\n", i, lowestFit, worstFit, avgFit);
         fprintf(output, "%d\t%d\t%d\t%d\n", i, lowestFit, avgFit, worstFit);
         
-        if (lowestFit == 0 || i == MAX_GENERATIONS)
+        if (lowestFit <= 40 || i == MAX_GENERATIONS)
             break;
         
         /* Selection */

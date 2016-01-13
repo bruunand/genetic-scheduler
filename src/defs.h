@@ -38,7 +38,7 @@
  *  \def GENERATION_SIZE
  *  The amount of Schedules in one generation
  */
-#define MAX_GENERATIONS 2000
+#define MAX_GENERATIONS 500
 /**
  *  \def MAX_GENERATIONS
  *  The maximum amount of generations till the program stops trying
