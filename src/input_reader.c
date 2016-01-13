@@ -119,7 +119,7 @@ void handle_line(char *line, SemesterData *sd)
         if (!strcmp(typeName, "COURSE"))
         {
             char courseName[32];
-            int totLectures, curTeacherId, numTeachers = 0;
+            int totLectures, maxWeekNum, curTeacherId, numTeachers = 0;
             Teacher **teachers = 0;
             
             /* Read name of course */
@@ -128,6 +128,10 @@ void handle_line(char *line, SemesterData *sd)
 
             /* Read num. lectures */
             if (!read_int(line, &p, &totLectures))
+                return;
+            
+            /* Read num. lectures */
+            if (!read_int(line, &p, &maxWeekNum))
                 return;
             
             /* Read teachers into an array */
@@ -150,7 +154,7 @@ void handle_line(char *line, SemesterData *sd)
                 numTeachers++;
             }
             
-            add_course(sd, courseName, totLectures, numTeachers, teachers);
+            add_course(sd, courseName, totLectures, maxWeekNum, numTeachers, teachers);
         }
         else if(!strcmp(typeName, "TEACHER"))
         {
@@ -352,7 +356,7 @@ void add_room(SemesterData *sd, char *name, int seats)
  *  
  *  \details Allocates the memory needed and updates relevant variables and values
  */
-void add_course(SemesterData *sd, char *name, int totLectures, int numTeachers, Teacher **teachers)
+void add_course(SemesterData *sd, char *name, int totLectures, int maxWeekNum, int numTeachers, Teacher **teachers)
 {
     /* Reallocate memory for the new count */
     int courseIndex = sd->numCourses++;
@@ -365,6 +369,7 @@ void add_course(SemesterData *sd, char *name, int totLectures, int numTeachers, 
     sd->courses[courseIndex].totLectures = totLectures;
     sd->courses[courseIndex].numTeachers = numTeachers;
     sd->courses[courseIndex].teachers = teachers;
+    sd->courses[courseIndex].maxWeekNum = maxWeekNum;
 }
 
 /**
