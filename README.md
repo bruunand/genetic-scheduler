@@ -1,8 +1,4 @@
-# P1-projekt
-## Semesterplanlægning på AAU
-
-# P1-Project
-## Semesterplanning on AAU
+# genetic-scheduler
 Through an analysis of the planning process for a first year semester at the Faculty of Engineering and Science at Aalborg University, it is found that creating a schedule for lectures is a lengthy, manual process. 
 
 Based on this analysis, a program to ease this process by automating the schedule creation is designed and implemented. The program utilizes a genetic algorithm to create a schedule of lectures, while ensuring that the schedule complies with the applicable constraints. 
